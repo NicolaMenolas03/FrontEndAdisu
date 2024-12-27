@@ -1,16 +1,23 @@
 import React from 'react';
-import { View, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
+
+
+
 export default function App() {
   return (
+<TouchableOpacity
+  onPress={() => {
+    window.location.href = 'login.tsx';
+  }} style={styles.TouchableOpacity}>
     <View style={{ 
       flex: 1, 
       backgroundColor: "#FFFFFF",
       }}>
       <Image
-        source={require("@/assets/images/LogoAdisu.jpg")}
+        //source={require("@/assets/images/LogoAdisu.png")}
         style={LogoAdisu.headerImage}
       />
       {/* Cerchio in alto a sinistra */}
@@ -18,6 +25,7 @@ export default function App() {
       {/* Cerchio in basso a destra */}
       <View style={Circle.Bottom}></View>
     </View>
+    </TouchableOpacity>  
   );
 }
 
@@ -31,6 +39,12 @@ const LogoAdisu = StyleSheet.create({
   },
 });
 
+const styles = StyleSheet.create({
+  TouchableOpacity: {
+    width: width,
+    height: height,
+  },
+});
 const Circle = StyleSheet.create({
   Top: {
     position: "absolute",
