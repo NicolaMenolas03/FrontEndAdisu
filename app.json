@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "FrontEndAdisu",
-    "slug": "FrontEndAdisu",
+    "slug": "frontendadisu",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "61d0082c-e15a-47d6-a511-2e539dc0ca1d"
+      }
+    },
+    "owner": "studentapp"
   }
 }
