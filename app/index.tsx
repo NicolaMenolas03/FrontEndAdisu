@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -10,15 +10,15 @@ export default function App() {
   return (
 <TouchableOpacity
   onPress={() => {
-    window.location.href = 'login.tsx';
+    window.location.href = 'login';
   }} style={styles.TouchableOpacity}>
-    <View style={{ 
-      flex: 1, 
+    <View style={{
+      flex: 1,
       backgroundColor: "#FFFFFF",
       }}>
       <Image
-        //source={require("@/assets/images/LogoAdisu.png")}
-        style={LogoAdisu.headerImage}
+        source={require("@/assets/images/LogoAdisu.png")}
+        style={styles.headerImage}
       />
       {/* Cerchio in alto a sinistra */}
       <View style={Circle.Top}></View>
@@ -29,20 +29,21 @@ export default function App() {
   );
 }
 
-const LogoAdisu = StyleSheet.create({
-  headerImage: {
-    alignSelf: 'center',
-    flex: 1,
-    resizeMode: "contain",
-    width: width * 0.5, // 50% of screen width
-    height: height * 0.2, // 20% of screen height
-  },
-});
 
 const styles = StyleSheet.create({
   TouchableOpacity: {
     width: width,
     height: height,
+  },
+
+
+  headerImage: {
+    alignSelf: "center",
+    marginBottom: 20,
+    resizeMode: "contain",
+    width: 200, // 50% of screen width
+    height: 200, // 20% of screen height
+ 
   },
 });
 const Circle = StyleSheet.create({
@@ -65,5 +66,3 @@ const Circle = StyleSheet.create({
     borderTopLeftRadius: 1000, // half of the width to make a circle
   },
 });
-
-

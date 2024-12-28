@@ -1,15 +1,13 @@
 import React from 'react';
-import { Text, View, StyleSheet ,TouchableOpacity ,Image} from 'react-native';
+import { Text, View, StyleSheet ,TouchableOpacity ,Image ,} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import LogoAdisu from '@/components/logoAdisu';
 
 export default function Login() {
     return (
         <View style={styles.container}>
              
-             <Image
-                source={require('@/assets/images/LogoAdisu.png')}
-                style={styles.headerImage}
-            />
+            <LogoAdisu/>
 
             <Text style= {styles.title}>Login</Text>
             
@@ -31,13 +29,15 @@ export default function Login() {
                 <Text>Password dimenticata ? </Text>
             </TouchableOpacity>
             <TouchableOpacity   onPress={() => {
-                window.location.href = 'landingPage.tsx';
+                window.location.href = 'landingPage';
               }} style={styles.LoginButton}>   
 
             Login
             </TouchableOpacity>
-            <TouchableOpacity> {/* aggiungere il link alla pagina di registrazione*/}
-                <Text style= {styles.Registrati}>Non hai un account ? Registrati</Text>
+            <TouchableOpacity onPress={() => {
+                window.location.href = 'Registration';
+              }} >  
+                <Text style= {styles.Registrati}>Non hai un account ? <u>Registrati</u></Text>
             </TouchableOpacity>
         </View>
         
@@ -47,13 +47,32 @@ export default function Login() {
 
 const styles = StyleSheet.create({
     
- 
-    headerImage: {
-        alignSelf: 'center',
-        marginBottom: 20,
-        resizeMode: "contain",
-        width: 200, // 50% of screen width
-        height: 200, // 20% of screen height
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#FFFFFF',
+        marginTop: -70,
+    },
+
+    title: {
+        textIndent: '-152px',
+        textAlign: 'left',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontWeight: 'bold',
+        fontSize: 40,
+    },
+
+    input : {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1, 
+        margin: 10,
+        padding: 10,
+        borderRadius: 5,
+        width: 300,
         
     },
 
@@ -69,38 +88,13 @@ const styles = StyleSheet.create({
     },
         
 
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#FFFFFF',
-    },
-
-    input : {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1, 
-        margin: 10,
-        padding: 10,
-        borderRadius: 5,
-        width: 300,
-        
-    },
-
-    title: {
-        textIndent: '-152px',
-        textAlign: 'left',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontWeight: 'bold',
-        fontSize: 40,
-    },
 
     Registrati: {
         marginTop: 20,
-        color: '#007FFF',
+        color: 'black',
         fontWeight: 'bold',
-        fontSize: 15,
+        fontSize: 13,
+
+
     },
 });
