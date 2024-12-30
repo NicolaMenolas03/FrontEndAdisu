@@ -16,6 +16,9 @@ interface AuthResponse {
     username: string;
     email: string;
     password: string;
+    password2: string;
+    first_name: string;
+    last_name: string;
   }
 
 
@@ -48,9 +51,17 @@ export const apiService = {
 
 export const authService = {
     register: (data: RegisterData): Promise<AxiosResponse<AuthResponse>> =>
-      apiClient.post('/register/', data),
-    login: (data: LoginData): Promise<AxiosResponse<AuthResponse>> =>
-      apiClient.post('/login/', data),
+      apiClient.post('/register/', data).then(response => {
+        return response;
+      }).catch(error => {
+        return error;
+      }),
+    login: (data: LoginData): Promise<AxiosResponse<AuthResponse>>  =>
+      apiClient.post<AuthResponse>('/login/', data).then(response => {
+        return response;
+      }).catch(error => {
+        return error;
+      }),
     refreshToken: (token: string): Promise<AxiosResponse<{ access: string }>> =>
       apiClient.post('/refresh/', { refresh: token }),
   };

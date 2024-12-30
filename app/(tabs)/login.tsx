@@ -2,8 +2,23 @@ import React from 'react';
 import { Text, View, StyleSheet ,TouchableOpacity ,Image ,} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import LogoAdisu from '@/components/logoAdisu';
+import { authService } from '@/services/api';
 
 export default function Login() {
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
+
+    const login = async () => {
+        let response = await authService.login({username: username, password: password});
+        if(response.status == 200) {
+            window.location.href = 'landingPage';
+        } else {
+            // TODO: Create un messaggio di errore
+            alert(response);
+        }
+    }   
+
+
     return (
         <View style={styles.container}>
              
@@ -15,23 +30,20 @@ export default function Login() {
                 placeholder="Email" 
                 maxLength={30}
                 style={styles.input}
-            
+                onChangeText={(text) => setUsername(text)}
             />
-
+    
             <TextInput 
-
                 placeholder="Password"   
                 maxLength={30}
                 secureTextEntry={true}
                 style={styles.input}
+                onChangeText={(text) => setPassword(text)}
             />
             <TouchableOpacity>
                 <Text>Password dimenticata ? </Text>
             </TouchableOpacity>
-            <TouchableOpacity   onPress={() => {
-                window.location.href = 'landingPage';
-              }} style={styles.LoginButton}>   
-
+            <TouchableOpacity onPress={login} style={styles.LoginButton}>   
             Login
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {

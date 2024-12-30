@@ -2,10 +2,34 @@ import React from 'react';
 import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { TextInput, Button, Text, Title } from 'react-native-paper';
 import LogoAdisu from '@/components/logoAdisu';
+import { authService } from '@/services/api';
 
 const { width, height } = Dimensions.get('window');
 
 export default function Registration() {
+
+    const [name, setName] = React.useState('');
+    const [surname, setSurname] = React.useState('');
+    const [username, setUsername] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [password2, setPassword2] = React.useState('');
+
+    const register = async () => {
+        let response = await authService.register({
+            first_name: name, last_name: surname, username: username, email: email, password: password,
+            password2: password2
+        });
+        if(response.status == 201) {
+            window.location.href = 'landingPage';
+        } else {
+            // TODO: Create un messaggio di errore
+            alert(response);
+        }
+    }
+
+
+    
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.container}>
@@ -15,38 +39,44 @@ export default function Registration() {
                     label="Name"
                     mode="outlined"
                     style={styles.input}
+                    onChangeText={(text) => setName(text)}
                 />
                 <TextInput
                     label="Surname"
                     mode="outlined"
                     style={styles.input}
+                    onChangeText={(text) => setSurname(text)}
                 />
                 <TextInput
                     label="Username"
                     mode="outlined"
                     style={styles.input}
+                    onChangeText={(text) => setUsername(text)}
                 />
                 <TextInput
                     label="Email"
                     mode="outlined"
                     keyboardType="email-address"
                     style={styles.input}
+                    onChangeText={(text) => setEmail(text)}
                 />
                 <TextInput
                     label="Password"
                     mode="outlined"
                     secureTextEntry
                     style={styles.input}
+                    onChangeText={(text) => setPassword(text)}
                 />
                 <TextInput
                     label="Confirm Password"
                     mode="outlined"
                     secureTextEntry
                     style={styles.input}
+                    onChangeText={(text) => setPassword2(text)}
                 />
                 <Button
                     mode="contained"
-                    onPress={() => { window.location.href = 'landingPage'; }}
+                    onPress={register}
                     style={styles.registerButton}
                 >
                     Register
