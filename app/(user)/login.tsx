@@ -11,7 +11,7 @@ type RootStackParamList = {
     landingPage: undefined;
   };
 
-export default function Login() {
+export default function login() {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [usernameError, setUsernameError] = React.useState(false);

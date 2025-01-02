@@ -3,10 +3,27 @@ import HomeButton from '@/components/homeButton';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet,  Image, TouchableOpacity } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack'; // Importa il tipo di navigazione per lo stack
 
+type RootStackParamList = {
+  Libreria: undefined;
+  Mensa: undefined;
+  BorsaDiStudio: undefined;
+};
     
 export default function landingPage() {
-    
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+              
+              const navigateToBorsaDiStudio = () => {
+                navigation.navigate('BorsaDiStudio');
+              }
+              const navigateToMensa = () => {
+                navigation.navigate('Mensa');
+              }
+              const navigateToLibreria = () => {
+                navigation.navigate('Libreria');
+              }
     const currentYear = new Date().getFullYear(); // Get the current year
     const [startYear, setStartYear] = useState(currentYear); // Stato per l'anno corrente
 
@@ -57,11 +74,9 @@ export default function landingPage() {
 
       {/* Icone */}
       <View style={styles.icone}>
-      
-                    <HomeButton text="Borsa di studio" iconName="school" />
-                    <HomeButton text="Mensa" iconName="food" />
-                    <HomeButton text="Biblioteca" iconName="library" />
-               
+                <HomeButton text="Borsa di studio" iconName="school" onPress={navigateToBorsaDiStudio} />
+                <HomeButton text="Mensa" iconName="food"  onPress={navigateToMensa}/>
+                <HomeButton text="Biblioteca" iconName="library"  onPress={navigateToLibreria}/>
       </View>
 
       {/* News */}
