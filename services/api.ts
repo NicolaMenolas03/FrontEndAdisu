@@ -30,8 +30,8 @@ const apiClient = axios.create({
 });
 
 export const apiService = {
-  get: <T>(endpoint: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
-    apiClient.get<T>(endpoint, config),
+  get: <T>(endpoint: string, params?: Record<string, any>, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
+    apiClient.get<T>(endpoint, { ...config, params }),
 
   post: <T, U = unknown>(
     endpoint: string,
@@ -56,7 +56,7 @@ export const authService = {
       }).catch(error => {
         return error;
       }),
-    login: (data: LoginData): Promise<AxiosResponse<AuthResponse>>  =>
+    login: (data: LoginData)  =>
       apiClient.post<AuthResponse>('/login/', data).then(response => {
         return response;
       }).catch(error => {
