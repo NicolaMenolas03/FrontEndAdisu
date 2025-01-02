@@ -24,7 +24,7 @@ const Stack = createStackNavigator<RootStackParamList>(); // Definizione dello s
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomePage">
+      <Stack.Navigator initialRouteName="HomeScreen">
       <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="BorsaDiStudio" component={BorsaDiStudio} />
