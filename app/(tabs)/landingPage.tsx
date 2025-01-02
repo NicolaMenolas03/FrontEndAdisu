@@ -1,3 +1,5 @@
+
+import HomeButton from '@/components/homeButton';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet,  Image, TouchableOpacity } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -38,7 +40,7 @@ export default function landingPage() {
                 <TouchableOpacity onPress={decrementYear} style={styles.arrowLeft}>
                     <Text style={styles.arrow}>{"<"}</Text>
                 </TouchableOpacity>
-                <Text style={styles.year}>{`${startYear}/${startYear + 1}`}</Text>
+                <Text style={styles.yearTitle}>{`${startYear}/${startYear + 1}`}</Text>
                 <TouchableOpacity onPress={incrementYear} style={styles.arrowRight}>
                     <Text style={styles.arrow}>{">"}</Text>
                 </TouchableOpacity>
@@ -47,20 +49,19 @@ export default function landingPage() {
     {/* Servizi */}
         <View style={styles.servizi}>
         
-        <Text style={styles.year}>Servizi</Text>
-        <Text style={styles.year}>Guarda Tutto {'>'}</Text>
+        <Text style={styles.serviziTitle}>Servizi</Text>
+        
 
       </View>
 
 
       {/* Icone */}
       <View style={styles.icone}>
-              {/*Qui dentro per ogni icona posso creare 3 tag diversi all'interno di un solo contenitore 
-              e posso gestire la distanza fra le icone con space-between nello stile
-              Oppure usare gia questa view come contenitore generale*/}
-
-          <Text>Icone con indirizzamento      </Text>
-        
+      
+                    <HomeButton text="Borsa di studio" iconName="school" />
+                    <HomeButton text="Mensa" iconName="food" />
+                    <HomeButton text="Biblioteca" iconName="library" />
+               
       </View>
 
       {/* News */}
@@ -140,11 +141,12 @@ const styles = StyleSheet.create({
         fontSize: 24,
         marginHorizontal: 20,
     },
-    year: {
-        fontSize: 19, 
-        fontWeight: 'bold', 
-        fontFamily: 'Monospace', 
-        color: '#333', 
+    yearSelector: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        marginBottom: 20,
     },
 
     
@@ -157,12 +159,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'orange',
     },
 
+    yearTitle: {
+        fontSize: 15,    
+    },
+
+    serviziTitle: {
+        fontSize: 15,
+    },
     
     icone: {
-        flex: 4,
-        gap: 4,
-        display: 'flex',
-        backgroundColor: 'lightblue',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+        marginBottom: 20,
     },
     news: {
         flex: 4,

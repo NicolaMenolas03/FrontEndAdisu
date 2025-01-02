@@ -10,6 +10,7 @@ export default function Login() {
 
     const login = async () => {
         let response = await authService.login({username: username, password: password});
+        console.log(response);
         if(response.status == 200) {
             window.location.href = 'landingPage';
         } else {
