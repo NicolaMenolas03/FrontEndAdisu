@@ -3,8 +3,15 @@ import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { TextInput, Button, Text, Title } from 'react-native-paper';
 import LogoAdisu from '@/components/logoAdisu';
 import { authService } from '@/services/api';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack'; // Importa il tipo di navigazione per lo stack
 
 const { width, height } = Dimensions.get('window');
+
+type RootStackParamList = {
+    Registration: undefined;
+    landingPage: undefined;
+  };
 
 export default function Registration() {
 
@@ -15,13 +22,19 @@ export default function Registration() {
     const [password, setPassword] = React.useState('');
     const [password2, setPassword2] = React.useState('');
 
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+      
+      const navigateTolandingPage = () => {
+        navigation.navigate('landingPage');
+      }
+
     const register = async () => {
         let response = await authService.register({
             first_name: name, last_name: surname, username: username, email: email, password: password,
             password2: password2
         });
         if(response.status == 201) {
-            window.location.href = 'landingPage';
+            navigateTolandingPage;
         } else {
             // TODO: Create un messaggio di errore
             alert(response);
