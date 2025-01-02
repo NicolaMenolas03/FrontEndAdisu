@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View, StyleSheet ,TouchableOpacity ,Image ,} from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
 import LogoAdisu from '@/components/logoAdisu';
 import { authService } from '@/services/api';
 
@@ -11,58 +11,51 @@ export default function Login() {
     const [passwordError, setPasswordError] = React.useState(false);
 
     const login = async () => {
-        let response = await authService.login({username: username, password: password});
-        if(response.status == 200) {
+        let response = await authService.login({ username: username, password: password });
+        if (response.status == 200) {
             window.location.href = 'landingPage';
         } else {
             setUsernameError(!!response.response.data.username);
             setPasswordError(!!response.response.data.password);
         }
-    }   
-
+    };
 
     return (
         <View style={styles.container}>
-             
-            <LogoAdisu/>
-
-            <Text style= {styles.title}>Login</Text>
-            
-            <TextInput 
-                id="username"
-                placeholder="Username" 
-                maxLength={30}
-                style={[styles.input, usernameError && styles.errorInput]}
-                onChangeText={(text) => setUsername(text)}
+            <LogoAdisu />
+            <Text style={styles.title}>Login</Text>
+            <TextInput
+                mode='outlined'
+                label="Username"
+                value={username}
+                onChangeText={setUsername}
+                error={usernameError}
+                style={styles.input}
+                theme={{ colors: { primary: '#007BFF' } }}
             />
-    
-            <TextInput 
-                id="password"
-                placeholder="Password"   
-                maxLength={30}
-                secureTextEntry={true}
-                style={[styles.input, passwordError && styles.errorInput]}
-                onChangeText={(text) => setPassword(text)}
+            <TextInput
+                mode='outlined'
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                error={passwordError}
+                secureTextEntry
+                style={styles.input}
+                theme={{ colors: { primary: '#007BFF' } }}
             />
-            <TouchableOpacity>
-                <Text>Password dimenticata ? </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={login} style={styles.LoginButton}>   
-            Login
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-                window.location.href = 'Registration';
-              }} >  
-                <Text style= {styles.Registrati}>Non hai un account ? <u>Registrati</u></Text>
-            </TouchableOpacity>
+            <Button 
+                mode="contained" 
+                onPress={login}
+                style={styles.buttonContent}
+                theme={{ colors: { primary: '#007BFF' } }} 
+                 >
+                Login
+            </Button>
         </View>
-        
-        
     );
 }
 
 const styles = StyleSheet.create({
-    
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -72,43 +65,21 @@ const styles = StyleSheet.create({
         marginTop: -70,
     },
     title: {
-        textIndent: '-152px',
-        textAlign: 'left',
-        justifyContent: 'center',
-        alignItems: 'center',
+        fontSize: 24,
+        marginBottom: 20,
         fontWeight: 'bold',
-        fontSize: 40,
     },
-    input : {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1, 
-        margin: 10,
+    input: {
+        width: '100%',
+        marginBottom: 20,
+    },
+    button: {
+        width: '100%',
         padding: 10,
-        borderRadius: 5,
-        width: 300,
+        alignItems: 'center',
         
     },
-    LoginButton: {
-        backgroundColor: '#007FFF',
-        padding: 10,
-        borderRadius: 5,
-        width: 300,
-        alignItems: 'center',
-        marginTop: 10,
-        color: 'white',
-        fontFamily: 'Roboto',
-    },
-    Registrati: {
-        marginTop: 20,
-        color: 'black',
-        fontWeight: 'bold',
-        fontSize: 13,
-
-
-    },
-    errorInput: {
-        borderColor: 'red',
-        borderWidth: 1,
+    buttonContent: {
+        width: '60%',
     },
 });
