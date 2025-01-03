@@ -2,13 +2,13 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native'; // Contenitore principale della navigazione.
 import { createStackNavigator } from '@react-navigation/stack'; // Stack Navigator.
 import landingPage from '../(tabs)/landingPage'; // Import landingPage component
-import BorsaDiStudio from '../(tabs)/BorsaDiStudioPage'; // Import BorsaDiStudio component
-import DatiBorsaDiStudio from '../(tabs)/DatiBorsaDiStudio'; // Import DatiBorsaDiStudio component
-import SimulazioneBorsaDiStudio from '../(tabs)/SimulazioneBorsaDiStudio'; // Import SimulazioneBorsaDiStudio component
+import BorsaDiStudio from '../BorsaDiStudio/BorsaDiStudioPage'; // Import BorsaDiStudio component
+import DatiBorsaDiStudio from '../BorsaDiStudio/DatiBorsaDiStudio'; // Import DatiBorsaDiStudio component
+import SimulazioneBorsaDiStudio from '../BorsaDiStudio/SimulazioneBorsaDiStudio'; // Import SimulazioneBorsaDiStudio component
 import login from '../(user)/login'; // Import SimulazioneBorsaDiStudio component
 import Registration from '../(user)/Registration'; // Import SimulazioneBorsaDiStudio component
 import HomePage from '../(user)/HomePage'; // Import HomePage component
-import Mensa from '../(tabs)/Mensa'; // Import HomePage component
+import Mensa from '../Mensa/Mensa'; // Import HomePage component
 
 
 type RootStackParamList = {

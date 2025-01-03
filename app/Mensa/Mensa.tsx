@@ -2,29 +2,41 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, Keyboard, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Navbar from '../../components/Navbar'; // Update the path to the correct location
-import { useCRUD } from '@/hooks/useCRUD';
 
 interface Mensa {
-    id: number;
-    name: string;
-    address: string;
-    city: string;
-    province: string;
+    nome: string;
+    indirizzo: string;
+    citta: string;
+    provincia: string;
 }
 
 const Mensa = () => {
-    const { data, loading, error, createItem, updateItem, deleteItem } = useCRUD<Mensa>('/canteen/');
     const [mensaName, setMensaName] = useState('');
     const [searchResults, setSearchResults] = useState<Mensa[]>([]);
-    const mensaList: Mensa[] = data;
+    const [filteredMensaList, setFilteredMensaList] = useState<Mensa[]>([]);
 
+    const mensaList: Mensa[] = [
+        { nome: 'Mensa Centrale', indirizzo: 'Via Centrale 1', citta: 'Bari', provincia: 'BA' },
+        { nome: 'Mensa Sud', indirizzo: 'Via Sud 2', citta: 'Bari', provincia: 'BA' },
+        { nome: 'Mensa Nord', indirizzo: 'Via Nord 3', citta: 'Bari', provincia: 'BA' },
+        { nome: 'Mensa Est', indirizzo: 'Via Est 4', citta: 'Bari', provincia: 'BA' },
+        { nome: 'Mensa Ovest', indirizzo: 'Via Ovest 5', citta: 'Bari', provincia: 'BA' },
+    ];
+
+    const searchMensa = () => {
+        if (mensaName.trim()) {
+            const results = mensaList.filter(mensa => mensa.nome.toLowerCase().includes(mensaName.toLowerCase()));
+            setSearchResults(results);
+            Keyboard.dismiss();
+        }
+    };
 
     const filterMensaList = (query: string) => {
         if (query) {
-            const results = mensaList.filter(mensa => mensa.name.toLowerCase().includes(query.toLowerCase()));
-            setSearchResults(results);
+            const results = mensaList.filter(mensa => mensa.nome.toLowerCase().includes(query.toLowerCase()));
+            setFilteredMensaList(results);
         } else {
-            setSearchResults(mensaList);
+            setFilteredMensaList([]);
         }
         setMensaName(query);
     };
@@ -53,20 +65,41 @@ const Mensa = () => {
                             placeholder="Inserisci il nome della mensa"
                             style={styles.input}
                         />
+                        {filteredMensaList.length > 0 && (
+                            <FlatList
+                                data={filteredMensaList}
+                                keyExtractor={(item) => item.nome}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity onPress={() => {
+                                        setMensaName(item.nome);
+                                        setFilteredMensaList([]);
+                                    }}>
+                                        <View style={styles.suggestionItem}>
+                                            <Text style={styles.itemText}>{item.nome}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                )}
+                                style={styles.suggestionList}
+                            />
+                        )}
+                        <TouchableOpacity onPress={searchMensa} style={styles.searchButton}>
+                            <Text style={styles.searchButtonText}>Cerca</Text>
+                        </TouchableOpacity>
                     </View>
 
                     {/* Mensa List */}
                     <View style={styles.mensaList}>
                         {searchResults.map((mensa, index) => (
                             <View key={index} style={styles.mensaItem}>
-                                <Text style={styles.mensaName}>{mensa.name}</Text>
-                                <Text>{mensa.address}</Text>
-                                <Text>{mensa.city}, {mensa.province}</Text>
+                                <Text style={styles.mensaName}>{mensa.nome}</Text>
+                                <Text>{mensa.indirizzo}</Text>
+                                <Text>{mensa.citta}, {mensa.provincia}</Text>
                             </View>
                         ))}
                     </View>
                 </View>
             </ScrollView>
+
             {/* Navbar */}
             <Navbar />
         </View>
@@ -117,7 +150,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         padding: 10,
         borderRadius: 5,
-        backgroundColor: '#fff',
     },
     searchButton: {
         backgroundColor: '#007FFF',
