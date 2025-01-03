@@ -28,7 +28,7 @@ export default function login() {
     };
 
     const login = async () => {
-        let response = await authService.login({ username: username, password: password });
+        let response = await authService.login({ username: username, password: password }) as { status: number, response: { data: { username?: string, password?: string } } };
         if (response.status == 200) {
             navigateToLandingPage();
         } else {
