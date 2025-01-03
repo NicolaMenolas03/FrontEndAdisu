@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
     },
     input: {
-        width: '100%',
+        width: '70%',
         marginBottom: 20,
     },
     LoginButton: {
@@ -111,5 +111,6 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: 'bold',
         fontSize: 13,
+        backgroundColor: '#FFFFFF',
     },
 });
