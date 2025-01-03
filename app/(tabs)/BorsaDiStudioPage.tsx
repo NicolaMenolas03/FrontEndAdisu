@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet,Text, View, TouchableOpacity, Image } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import Navbar from '@/components/Navbar';
 
 type RootStackParamList = {
   LandingPage: undefined;
@@ -45,20 +46,7 @@ export default function BorsaDiStudioPage() {
 
 
        {/* Barra di navigazione */}
-            <View style={styles.navBar}>
-              <TouchableOpacity style={styles.navButton} onPress={() => {
-                window.location.href = 'pag1'}}>
-                <Text style={styles.navText}>Icona 1</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.navButton} onPress={() => {
-                window.location.href = 'pag1'}}>
-                <Text style={styles.navText}>Home</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.navButton} onPress={() => {
-                window.location.href = 'pag1'}}>
-                <Text style={styles.navText}>Icona 2</Text>
-              </TouchableOpacity>
-            </View>
+      <Navbar></Navbar>
     </View>
   );
 }
@@ -105,26 +93,5 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-
-  navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 60,
-    backgroundColor: '#f5f5f5',
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-  },
-  navButton: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  navText: {
-    fontSize: 16,
-    color: '#6200ee',
   },
 });
