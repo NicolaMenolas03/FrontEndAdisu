@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   box: {
     width: '100%',
     height: 40,
-    backgroundColor: '#6200ee',
+    backgroundColor: '#0660ff',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#6200ee',
+    color: '#0660ff',
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -245,8 +245,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   toggleButtonSelected: {
-    backgroundColor: '#6200ee',
-    borderColor: '#6200ee',
+    backgroundColor: '#0660ff',
+    borderColor: '#0660ff',
   },
   toggleButtonText: {
     color: '#333',

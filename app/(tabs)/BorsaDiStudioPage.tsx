@@ -22,6 +22,7 @@ export default function BorsaDiStudioPage() {
     };
   return (
     <View style={styles.container}>
+      <Text style={styles.sectionTitle}>Dati Borsa di Studio</Text>
       {/* Icona profilo in alto a destra */}
       <TouchableOpacity style={styles.profileButton} onPress={navigateToDatiBorsaDiStudio}>
         <Image
@@ -52,6 +53,13 @@ export default function BorsaDiStudioPage() {
 }
 
 const styles = StyleSheet.create({
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#0660ff',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
