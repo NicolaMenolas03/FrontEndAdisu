@@ -1,4 +1,3 @@
-
 import HomeButton from '@/components/homeButton';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet,  Image, TouchableOpacity } from 'react-native';

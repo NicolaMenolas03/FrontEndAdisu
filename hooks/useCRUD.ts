@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AxiosError } from 'axios';
-import { apiService } from '../services/api';
+import { apiService, loadStoredToken } from '../services/api';
 
 export const useCRUD = <T extends { id: number }>(endpoint: string) => {
   const [data, setData] = useState<T[]>([]);
@@ -54,6 +54,7 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
   };
 
   useEffect(() => {
+    loadStoredToken()
     fetchData();
   }, [endpoint]);
 
