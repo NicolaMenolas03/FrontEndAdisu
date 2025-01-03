@@ -96,7 +96,7 @@ export default function Registration() {
                     theme={{ colors: { primary: '#007BFF' } }}
                 />
                  <TouchableOpacity onPress={register} style={styles.RegisterButton}>
-                                <Text style={styles.RegisterButtonText}>Login</Text>
+                                <Text style={styles.RegisterButtonText}>Registrati</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={navigateToLogin}>
                                 <Text style={styles.Login}>

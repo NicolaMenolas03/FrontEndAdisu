@@ -27,7 +27,7 @@ const Stack = createStackNavigator<RootStackParamList>(); // Definizione dello s
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomePage">
+      <Stack.Navigator initialRouteName="Mensa">
         <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="login" component={login} />
         <Stack.Screen name="Registration" component={Registration} />

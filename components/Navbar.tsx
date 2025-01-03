@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack'; // Importa il tipo di navigazione per lo stack
+import landingPage from '@/app/(tabs)/landingPage';
 
 type RootStackParamList = {
     landingPage: undefined;
@@ -11,9 +12,11 @@ type RootStackParamList = {
     News: undefined;
 };
 
+interface NavbarProps {
+    namePage: string;
+}
 
-
-const Navbar = () => {
+const Navbar = ({namePage}:NavbarProps) => {
 
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
@@ -34,20 +37,16 @@ const Navbar = () => {
     return (
         <View style={styles.navbar}>
             <TouchableOpacity style={styles.navButton} onPress={navigateToHome}>
-                <Icon name="home" size={24} color="white" />
-                <Text style={styles.navText}>Home</Text>
+                <Icon name="home" size={30} color={namePage==='landingPage'?'white':'#6fa3ff'} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.navButton} onPress={navigateToNews}>
-                <Icon name="newspaper" size={24} color="white" />
-                <Text style={styles.navText}>News</Text>
+                <Icon name="newspaper" size={30} color="#6fa3ff" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.navButton} onPress={navigateToAssistenza}>
-                <Icon name="help-circle" size={24} color="white" />
-                <Text style={styles.navText}>Assistenza</Text>
+                <Icon name="help-circle" size={30} color="#6fa3ff" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.navButton} onPress={navigateToProfilo}>
-                <Icon name="account" size={24} color="white" />
-                <Text style={styles.navText}>Profilo</Text>
+                <Icon name="account" size={30} color="#6fa3ff" />
             </TouchableOpacity>
         </View>
     );
@@ -55,16 +54,21 @@ const Navbar = () => {
 
 const styles = StyleSheet.create({
     navbar: {
+        margin: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '100%',
+        width: '90%',
         paddingVertical: 10,
-        backgroundColor: '#007FFF',
+        backgroundColor: '#005dff',
         position: 'absolute',
         bottom: 0,
+        borderRadius: 40
     },
     navButton: {
+        backgroundColor: '',
+        borderRadius: 50,
         alignItems: 'center',
+        padding:10,
     },
     navText: {
         color: 'white',
