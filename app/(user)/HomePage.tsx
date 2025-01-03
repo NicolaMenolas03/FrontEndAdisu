@@ -37,7 +37,9 @@ export default function App() {
         duration: 1000,
         useNativeDriver: true,
       }),
-    ]).start(() => {navigateTologin});
+    ]).start(() => {
+      navigateTologin(); // Chiamata corretta alla funzione navigateTologin
+    });
   };
 
   return (

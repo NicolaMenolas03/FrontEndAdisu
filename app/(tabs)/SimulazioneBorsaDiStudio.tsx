@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Importa il hook di navigazione
-import { StackNavigationProp } from '@react-navigation/stack'; // Importa il tipo di navigazione per lo stack
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import Navbar from '@/components/Navbar';
 
-
-// Definisci il tipo per le pagine di navigazione
 type RootStackParamList = {
   Home: undefined;
   Page1: undefined;
@@ -13,83 +12,85 @@ type RootStackParamList = {
 };
 
 export default function SimulazioneBorsaDiStudio() {
-  // Usa il hook useNavigation con il tipo di navigazione
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [showResults, setShowResults] = useState(false);
+
+  const handleSimulaPress = () => {
+    setShowResults(true);
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.scholarshipContainer}>
-      <Text style={styles.sectionTitle}>Dati Borsa di Studio</Text>
+    <View style={styles.container}>
+      <View style={styles.contentContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <Text style={styles.sectionTitle}>Dati Borsa di Studio</Text>
 
-      {/* Prima sezione */}
-      <View style={styles.sectionContainer}>
-        <Text style={styles.inputLabel}>Dati personali</Text>
-        <Text>Matricola</Text>
-        <TextInput style={styles.input} value="Matricola" editable={false} />
-        <Text>Tipo borsa di studio</Text>
-        <TextInput style={styles.input} value="Tipo borsa di studio" editable={false} />
-        <Text>Tipo studente</Text>
-        <TextInput style={styles.input} value="Tipo studente" editable={false} />
-        <Text>Fascia reddito</Text>
-        <TextInput style={styles.input} value="Fascia reddito" editable={false} />
-      </View>
-      <View style={styles.container}>
-      <TouchableOpacity style={styles.box}/>
-      <Text style={styles.boxText}>Simula</Text>
-      </View>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.inputLabel}>Dati personali</Text>
+            <Text>Matricola</Text>
+            <TextInput style={styles.input} value="Matricola" editable={false} />
+            <Text>Tipo borsa di studio</Text>
+            <TextInput style={styles.input} value="Tipo borsa di studio" editable={false} />
+            <Text>Tipo studente</Text>
+            <TextInput style={styles.input} value="Tipo studente" editable={false} />
+            <Text>Fascia reddito</Text>
+            <TextInput style={styles.input} value="Fascia reddito" editable={false} />
+          </View>
 
-      {/* Seconda sezione */}
-      <View style={styles.sectionContainerImport}>
-         
-        <Text style={styles.inputLabel}>Importi</Text>
-        <Text>Importo mensa</Text>
-        <TextInput style={styles.input} value="Importo mensa" editable={false} />
-        <Text>Importo alloggio</Text>
-        <TextInput style={styles.input} value="Importo alloggio" editable={false} />
-        <Text>Importo totale</Text>
-        <TextInput style={styles.input} value="Importo totale" editable={false} />
-      </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.box} onPress={handleSimulaPress}>
+              <Text style={styles.boxText}>Simula</Text>
+            </TouchableOpacity>
+          </View>
 
-      {/* Barra di navigazione */}
-      <View style={styles.navBar}>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Page1')}>
-          <Text style={styles.navText}>Icona 1</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Page2')}>
-          <Text style={styles.navText}>Icona 2</Text>
-        </TouchableOpacity>
+          {showResults && (
+            <View style={styles.sectionContainerImport}>
+              <Text style={styles.inputLabel}>Importi</Text>
+              <Text>Importo mensa</Text>
+              <TextInput style={styles.input} value="Importo mensa" editable={false} />
+              <Text>Importo alloggio</Text>
+              <TextInput style={styles.input} value="Importo alloggio" editable={false} />
+              <Text>Importo totale</Text>
+              <TextInput style={styles.input} value="Importo totale" editable={false} />
+            </View>
+          )}
+        </ScrollView>
       </View>
-    </ScrollView>
+      <Navbar />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-    
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  contentContainer: {
+    flex: 1,
+    paddingBottom: 60, // Aggiungi spazio per la navbar
+  },
+  scrollContent: {
+    padding: 20,
+  },
+  buttonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 5,
   },
-     box: {
-        width: '30%',
-        height: '100%',
-        backgroundColor: '#6200ee',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        marginVertical: '2%',
-      },
-    boxText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
-      },
-  scholarshipContainer: {
-    flex: 1,
-    padding: 20,
+  box: {
+    width: '100%',
+    height: 40,
+    backgroundColor: '#6200ee',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  boxText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   sectionTitle: {
     fontSize: 20,
@@ -98,8 +99,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-
-  sectionContainerImport:{
+  sectionContainerImport: {
     marginBottom: 30,
     padding: 15,
     borderWidth: 1,
@@ -128,25 +128,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
     paddingHorizontal: 10,
-  },
-  navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 60,
-    backgroundColor: '#f5f5f5',
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-  },
-  navButton: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  navText: {
-    fontSize: 16,
-    color: '#6200ee',
   },
 });
