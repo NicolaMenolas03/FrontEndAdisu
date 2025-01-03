@@ -28,16 +28,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="HomePage">
-      <Stack.Screen name="HomePage" component={HomePage} />
-      <Stack.Screen name="login" component={login} />
-      <Stack.Screen name="Registration" component={Registration} />
-      <Stack.Screen name="Mensa" component={Mensa} />
+        <Stack.Screen name="HomePage" component={HomePage} />
+        <Stack.Screen name="login" component={login} />
+        <Stack.Screen name="Registration" component={Registration} />
+        <Stack.Screen name="Mensa" component={Mensa} />
         <Stack.Screen name="landingPage" component={landingPage} />
         <Stack.Screen name="BorsaDiStudio" component={BorsaDiStudio} />
         <Stack.Screen name="DatiBorsaDiStudio" component={DatiBorsaDiStudio} />
         <Stack.Screen name="SimulazioneBorsaDiStudio" component={SimulazioneBorsaDiStudio} />
-        
-
       </Stack.Navigator>
     </NavigationContainer>
   );

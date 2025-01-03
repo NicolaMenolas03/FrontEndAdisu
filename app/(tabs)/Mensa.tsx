@@ -16,23 +16,15 @@ const Mensa = () => {
     const { data, loading, error, createItem, updateItem, deleteItem } = useCRUD<Mensa>('/canteen/');
     const [mensaName, setMensaName] = useState('');
     const [searchResults, setSearchResults] = useState<Mensa[]>([]);
-    const [filteredMensaList, setFilteredMensaList] = useState<Mensa[]>([]);
     const mensaList: Mensa[] = data;
 
-    const searchMensa = () => {
-        if (mensaName.trim()) {
-            const results = mensaList.filter(mensa => mensa.name.toLowerCase().includes(mensaName.toLowerCase()));
-            setSearchResults(results);
-            Keyboard.dismiss();
-        }
-    };
 
     const filterMensaList = (query: string) => {
         if (query) {
             const results = mensaList.filter(mensa => mensa.name.toLowerCase().includes(query.toLowerCase()));
-            setFilteredMensaList(results);
+            setSearchResults(results);
         } else {
-            setFilteredMensaList([]);
+            setSearchResults(mensaList);
         }
         setMensaName(query);
     };
@@ -61,26 +53,6 @@ const Mensa = () => {
                             placeholder="Inserisci il nome della mensa"
                             style={styles.input}
                         />
-                        {filteredMensaList.length > 0 && (
-                            <FlatList
-                                data={filteredMensaList}
-                                keyExtractor={(item) => item.id.toString()}
-                                renderItem={({ item }) => (
-                                    <TouchableOpacity onPress={() => {
-                                        setMensaName(item.name);
-                                        setFilteredMensaList([]);
-                                    }}>
-                                        <View style={styles.suggestionItem}>
-                                            <Text style={styles.itemText}>{item.name}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                )}
-                                style={styles.suggestionList}
-                            />
-                        )}
-                        <TouchableOpacity onPress={searchMensa} style={styles.searchButton}>
-                            <Text style={styles.searchButtonText}>Cerca</Text>
-                        </TouchableOpacity>
                     </View>
 
                     {/* Mensa List */}
@@ -95,7 +67,6 @@ const Mensa = () => {
                     </View>
                 </View>
             </ScrollView>
-
             {/* Navbar */}
             <Navbar />
         </View>
@@ -146,6 +117,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         padding: 10,
         borderRadius: 5,
+        backgroundColor: '#fff',
     },
     searchButton: {
         backgroundColor: '#007FFF',
