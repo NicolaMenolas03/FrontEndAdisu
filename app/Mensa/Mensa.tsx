@@ -17,57 +17,29 @@ import {
 import Navbar from "../../components/Navbar"; // Update the path to the correct location
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Title } from "react-native-paper";
+import { useCRUD } from "@/hooks/useCRUD";
 
 interface Mensa {
-    nome: string;
-    indirizzo: string;
-    citta: string;
-    provincia: string;
+    id: number;
+    name: string;
+    address: string;
+    city: string;
+    province: string;
 }
 
 const Mensa = () => {
+    const { data, error, loading, createItem, deleteItem, updateItem} = useCRUD<Mensa>("/canteen/");
     const [mensaName, setMensaName] = useState("");
     const [isFocused, setIsFocused] = useState(false);
     const [searchResults, setSearchResults] = useState<Mensa[]>([]);
     const [filteredMensaList, setFilteredMensaList] = useState<Mensa[]>([]);
 
-    const mensaList: Mensa[] = [
-        {
-            nome: "Mensa Centrale",
-            indirizzo: "Via Centrale 1",
-            citta: "Bari",
-            provincia: "BA",
-        },
-        {
-            nome: "Mensa Sud",
-            indirizzo: "Via Sud 2",
-            citta: "Bari",
-            provincia: "BA",
-        },
-        {
-            nome: "Mensa Nord",
-            indirizzo: "Via Nord 3",
-            citta: "Bari",
-            provincia: "BA",
-        },
-        {
-            nome: "Mensa Est",
-            indirizzo: "Via Est 4",
-            citta: "Bari",
-            provincia: "BA",
-        },
-        {
-            nome: "Mensa Ovest",
-            indirizzo: "Via Ovest 5",
-            citta: "Bari",
-            provincia: "BA",
-        },
-    ];
+    const mensaList: Mensa[] = data
 
     const searchMensa = () => {
         if (mensaName.trim()) {
             const results = mensaList.filter((mensa) =>
-                mensa.nome.toLowerCase().includes(mensaName.toLowerCase())
+                mensa.name.toLowerCase().includes(mensaName.toLowerCase())
             );
             setSearchResults(results);
             Keyboard.dismiss();
@@ -77,7 +49,7 @@ const Mensa = () => {
     const filterMensaList = (query: string) => {
         if (query) {
             const results = mensaList.filter((mensa) =>
-                mensa.nome.toLowerCase().includes(query.toLowerCase())
+                mensa.name.toLowerCase().includes(query.toLowerCase())
             );
             setSearchResults(results);
         } else {
@@ -134,10 +106,10 @@ const Mensa = () => {
                     <View style={styles.mensaList}>
                         {searchResults.map((mensa, index) => (
                             <View key={index} style={styles.mensaItem}>
-                                <Text style={styles.mensaName}>{mensa.nome}</Text>
-                                <Text>{mensa.indirizzo}</Text>
+                                <Text style={styles.mensaName}>{mensa.name}</Text>
+                                <Text>{mensa.address}</Text>
                                 <Text>
-                                    {mensa.citta}, {mensa.provincia}
+                                    {mensa.city}, {mensa.province}
                                 </Text>
                             </View>
                         ))}
