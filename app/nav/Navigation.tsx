@@ -9,6 +9,7 @@ import login from '../(user)/login'; // Import SimulazioneBorsaDiStudio componen
 import Registration from '../(user)/Registration'; // Import SimulazioneBorsaDiStudio component
 import HomePage from '../(user)/HomePage'; // Import HomePage component
 import Mensa from '../Mensa/Mensa'; // Import HomePage component
+import Pasti from '../Mensa/Pasti';
 
 
 type RootStackParamList = {
@@ -20,6 +21,9 @@ type RootStackParamList = {
   Registration: undefined;
   HomePage: undefined;
   Mensa: undefined;
+  Pasti: {
+    mensaId: string;
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>(); // Definizione dello stack con tipi.
@@ -32,6 +36,7 @@ export default function App() {
         <Stack.Screen name="login" component={login} />
         <Stack.Screen name="Registration" component={Registration} />
         <Stack.Screen name="Mensa" component={Mensa} />
+        <Stack.Screen name="Pasti" component={Pasti} />
         <Stack.Screen name="landingPage" component={landingPage} />
         <Stack.Screen name="BorsaDiStudio" component={BorsaDiStudio} />
         <Stack.Screen name="DatiBorsaDiStudio" component={DatiBorsaDiStudio} />
