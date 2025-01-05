@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCRUD } from "@/hooks/useCRUD";
 import LogoAdisuERegione from '@/components/logoAdisuERegione';
@@ -12,34 +12,69 @@ type RootStackParamList = {
 interface Pasti {
     id: number;
     name: string;
-    decsription: string;
+    description: string;
     price: number;
     type: string;
+    gluten: string;
+    crustaceans: string;
+
 }
 type PastiScreenRouteProp = RouteProp<RootStackParamList, 'Pasti'>;
 
 const FoodCard = ({ meal }: { meal: Pasti }) => (
     <View style={styles.card}>
         <Text style={styles.cardTitle}>{meal.name}</Text>
-        <Text style={styles.cardDescription}>{meal.decsription}</Text>
+        <Text style={styles.cardDescription}>{meal.description}</Text>
         <Text style={styles.cardPrice}>€ {meal.price}</Text>
+        {meal.gluten === "True" && <Image 
+                            source={require('../../assets/icons/icons8-grano-94.png')}
+                            style={styles.categoryIcon}
+                        />}
+        {meal.crustaceans === "True" &&<Image 
+                            source={require('../../assets/icons/icons8-gambero-94.png')}
+                            style={styles.categoryIcon}
+                        />}
     </View>
 );
 
 const Pasti = () => {
     
-    const [selectedCategory, setSelectedCategory] = useState<string>('first');
+    const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const route = useRoute<PastiScreenRouteProp>();
     const { mensaId } = route.params;
     const { data, error, loading } = useCRUD<Pasti>(`/daily_meals/${mensaId}/get_meals_by_id/`); // Note the Pasti[] type
-    console.log(data, typeof data);
-    
-    const filteredMeals = data.filter((meal) => meal.type === selectedCategory) || [];
+
+    console.log(data);
+
+    const searchMeals = () => {
+        if (selectedCategory === 'all') 
+            return data;
+        else
+            return data.filter((meal) => meal.type === selectedCategory)
+    }
+    const filteredMeals = searchMeals();
 
     const categories = [
-        { id: 'first', label: 'Primi' },
-        { id: 'second', label: 'Secondi' },
-        { id: 'sweet', label: 'Dolci' }
+        { 
+            id: 'all', 
+            label: 'Tutto', 
+            img: require('../../assets/icons/icons8-cibo-fast-food-cibo-di-strada-10-94.png')
+        },
+        { 
+            id: 'first', 
+            label: 'Primi',
+            img: require('../../assets/icons/icons8-spaghetti-94.png')
+        },
+        { 
+            id: 'second', 
+            label: 'Secondi',
+            img: require('../../assets/icons/icons8-paleodieta-94.png')
+        },
+        { 
+            id: 'sweet', 
+            label: 'Dolci',
+            img: require('../../assets/icons/icons8-dolce-94.png')
+        }
     ];
 
     return (
@@ -57,6 +92,10 @@ const Pasti = () => {
                         ]}
                         onPress={() => setSelectedCategory(category.id)}
                     >
+                        <Image 
+                            source={category.img}
+                            style={styles.categoryIcon}
+                        />
                         <Text style={[
                             styles.categoryText,
                             selectedCategory === category.id && styles.selectedText
@@ -92,19 +131,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 10,
-        backgroundColor: '#f5f5f5',
     },
     categoryTab: {
         padding: 10,
         borderRadius: 20,
-        minWidth: 100,
+        minWidth: 80,
         alignItems: 'center',
     },
     selectedTab: {
-        backgroundColor: '#003366',
+        backgroundColor: '#005dff',
     },
     categoryText: {
-        fontSize: 16,
+        fontSize: 12,
         color: '#333',
     },
     selectedText: {
@@ -138,12 +176,17 @@ const styles = StyleSheet.create({
     },
     cardPrice: {
         fontSize: 16,
-        color: '#003366',
+        color: '#005dff',
         fontWeight: 'bold',
     },
     loadingText: {
         textAlign: 'center',
         padding: 20,
+    },
+    categoryIcon: {
+        width: 28,
+        height: 28,
+        marginBottom: 5,
     },
 });
 
