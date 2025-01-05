@@ -1,12 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
-import { TextInput, Button, Text, Title } from 'react-native-paper';
+import { TextInput, Text, Title } from 'react-native-paper';
 import LogoAdisu from '@/components/logoAdisu';
 import { authService } from '@/services/api';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack'; // Importa il tipo di navigazione per lo stack
-
-const { width, height } = Dimensions.get('window');
+import { useRouter } from "expo-router";
+const { width } = Dimensions.get('window');
 
 type RootStackParamList = {
     Registration: undefined;
@@ -21,16 +19,9 @@ export default function Registration() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [password2, setPassword2] = React.useState('');
+    const router = useRouter();
 
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-    const navigateTolandingPage = () => {
-        navigation.navigate('landingPage');
-    };
-
-    const navigateToLogin = () => {
-        navigation.navigate('login');
-    };
 
     const register = async () => {
         let response = await authService.register({
@@ -38,7 +29,7 @@ export default function Registration() {
             password2: password2
         });
         if (response.status == 201) {
-            navigateTolandingPage();
+            router.push("/landingPage")
         } else {
             // TODO: Create un messaggio di errore
             alert(response);
@@ -98,9 +89,9 @@ export default function Registration() {
                  <TouchableOpacity onPress={register} style={styles.RegisterButton}>
                                 <Text style={styles.RegisterButtonText}>Registrati</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={navigateToLogin}>
+                            <TouchableOpacity onPress={()=>router.push("/login")}>
                                 <Text style={styles.Login}>
-                                    Non hai un account ? <u>Login</u>
+                                    Non hai un account ? <Text style={{ textDecorationLine: 'underline' }}>Login</Text>
                                 </Text>
                             </TouchableOpacity>
             </View>

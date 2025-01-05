@@ -1,30 +1,15 @@
 import React from 'react';
 import { StyleSheet,Text, View, TouchableOpacity, Image } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 import Navbar from '@/components/Navbar';
+import { router } from 'expo-router';
 
-type RootStackParamList = {
-  LandingPage: undefined;
-  DatiBorsaDiStudio: undefined;
-  SimulazioneBorsaDiStudio: undefined;
-};
 
 export default function BorsaDiStudioPage() {
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-   
-
-    const navigateToSimulazioneBorsaDiStudio = () => {
-      navigation.navigate('SimulazioneBorsaDiStudio');
-    }
-    const navigateToDatiBorsaDiStudio = () => {
-      navigation.navigate('DatiBorsaDiStudio');
-      console.log(navigation);
-    };
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Dati Borsa di Studio</Text>
       {/* Icona profilo in alto a destra */}
-      <TouchableOpacity style={styles.profileButton} onPress={navigateToDatiBorsaDiStudio}>
+      <TouchableOpacity style={styles.profileButton} onPress={()=>router.push("/BorsaDiStudio/BorsaDiStudioPage")}>
         <Image
           source={{ uri: 'https://via.placeholder.com/40' }} // Sostituisci con il link della tua immagine profilo
           style={styles.profileImage}
@@ -33,13 +18,13 @@ export default function BorsaDiStudioPage() {
 
       {/* Pulsanti centrali */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.box}  onPress={navigateToDatiBorsaDiStudio}>
+        <TouchableOpacity style={styles.box}  onPress={()=>router.push("/BorsaDiStudio/DatiBorsaDiStudio")}>
           <Text style={styles.boxText}>Dati Borsa di studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.box} onPress={navigateToSimulazioneBorsaDiStudio}>
+        <TouchableOpacity style={styles.box} onPress={()=>router.push("/BorsaDiStudio/DatiBorsaDiStudio")}>
           <Text style={styles.boxText}>Richiesta Borsa di studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.box} onPress={navigateToSimulazioneBorsaDiStudio}>
+        <TouchableOpacity style={styles.box} onPress={()=>router.push("/BorsaDiStudio/SimulazioneBorsaDiStudio")}>
           <Text style={styles.boxText}>Simulazione Borsa di studio</Text>
         </TouchableOpacity>
       </View>
@@ -47,7 +32,7 @@ export default function BorsaDiStudioPage() {
 
 
        {/* Barra di navigazione */}
-      <Navbar></Navbar>
+      <Navbar namePage="BorsaDiStudioPage"></Navbar>
     </View>
   );
 }

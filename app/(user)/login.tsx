@@ -1,36 +1,21 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { TextInput as PaperTextInput, Button } from 'react-native-paper';
+import { TextInput as PaperTextInput } from 'react-native-paper';
 import LogoAdisu from '@/components/logoAdisu';
 import { authService } from '@/services/api';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useRouter } from "expo-router";
 
-type RootStackParamList = {
-    Registration: undefined;
-    landingPage: undefined;
-};
-
-export default function login() {
+export default function Login() {
+    const router = useRouter();
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [usernameError, setUsernameError] = React.useState(false);
     const [passwordError, setPasswordError] = React.useState(false);
 
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
-    const navigateToRegistration = () => {
-        navigation.navigate('Registration');
-    };
-
-    const navigateToLandingPage = () => {
-        navigation.navigate('landingPage');
-    };
-
-    const login = async () => {
-        let response = await authService.login({ username: username, password: password }) as { status: number, response: { data: { username?: string, password?: string } } };
+    const handleLogin = async () => {
+        let response = await authService.login({ username: username, password: password }) as { status: Number, response: { data: { username?: String, password?: String } } };
         if (response.status == 200) {
-            navigateToLandingPage();
+            router.push("/(tabs)/landingPage");
         } else {
             setUsernameError(!!response.response.data.username);
             setPasswordError(!!response.response.data.password);
@@ -45,7 +30,7 @@ export default function login() {
                 mode="outlined"
                 label="Username"
                 value={username}
-                onChangeText={setUsername}
+                onChangeText={text => setUsername(text)}
                 error={usernameError}
                 style={styles.input}
                 theme={{ colors: { primary: '#007BFF' } }}
@@ -54,7 +39,7 @@ export default function login() {
                 mode="outlined"
                 label="Password"
                 value={password}
-                onChangeText={setPassword}
+                onChangeText={text => setPassword(text)}
                 error={passwordError}
                 secureTextEntry
                 style={styles.input}
@@ -63,13 +48,14 @@ export default function login() {
             <TouchableOpacity>
                 <Text>Password dimenticata ? </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={login} style={styles.LoginButton}>
-                <Text style={styles.LoginButtonText}>Login</Text>
+            <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
+                <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={navigateToRegistration}>
-                <Text style={styles.Registrati}>
-                    Non hai un account ? <u>Registrati</u>
-                </Text>
+            <TouchableOpacity onPress={() => router.push("/Registration")}>
+            <Text style={[styles.Registrati, { textDecorationLine: 'underline' }]}>
+                Non hai un account ? Registrati
+            </Text>
+
             </TouchableOpacity>
         </View>
     );
@@ -94,7 +80,7 @@ const styles = StyleSheet.create({
         width: '70%',
         marginBottom: 20,
     },
-    LoginButton: {
+    loginButton: {
         backgroundColor: '#007FFF',
         padding: 10,
         borderRadius: 10,
@@ -102,7 +88,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 10,
     },
-    LoginButtonText: {
+    loginButtonText: {
         color: 'white',
         fontWeight: 'bold',
     },
@@ -112,5 +98,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 13,
         backgroundColor: '#FFFFFF',
+    },
+    errorText: {
+        color: 'red',
+        marginBottom: 10,
     },
 });

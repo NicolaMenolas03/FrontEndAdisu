@@ -1,24 +1,14 @@
 import React, { useRef } from 'react';
-import { View, Image, StyleSheet, Dimensions, TouchableOpacity, Animated } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { View, StyleSheet, Dimensions, TouchableOpacity, Animated } from 'react-native';
 const { width, height } = Dimensions.get('window');
-
-
-type RootStackParamList = {
-    login: undefined;
-};
+import { useRouter } from "expo-router";
 
 export default function App() {
   const topCircleAnim = useRef(new Animated.Value(0)).current;
   const bottomCircleAnim = useRef(new Animated.Value(0)).current;
   const logoOpacity = useRef(new Animated.Value(1)).current;
-
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const navigateTologin = () => {
-    navigation.navigate('login');
-  };
-
+  const router = useRouter();
+ 
   const handlePress = () => {
     // Animazione di uscita
     Animated.parallel([
@@ -38,7 +28,8 @@ export default function App() {
         useNativeDriver: true,
       }),
     ]).start(() => {
-      navigateTologin(); // Chiamata corretta alla funzione navigateTologin
+      // Naviga alla schermata di login quando l'animazione finisce
+      router.push("/login");
     });
   };
 

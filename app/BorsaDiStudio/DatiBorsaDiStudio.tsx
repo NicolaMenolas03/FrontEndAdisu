@@ -1,7 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
-import { StackNavigationProp } from '@react-navigation/stack'; 
 import Navbar from '@/components/Navbar';
 
 // Definisci il tipo per le pagine di navigazione
@@ -11,11 +9,7 @@ type RootStackParamList = {
 
 export default function DatiBorsaDiStudio() {
   // Usa il hook useNavigation con il tipo di navigazione
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  
-  const navigateToSimulazioneBorsaDiStudio = () => {
-    navigation.navigate('SimulazioneBorsaDiStudio');
-  }
+
 
   return (
     <View style={styles.container}>
@@ -49,7 +43,7 @@ export default function DatiBorsaDiStudio() {
       </ScrollView>
       
       {/* Barra di navigazione */}
-        <Navbar />
+        <Navbar namePage={''}/>
     </View>
   );
 }

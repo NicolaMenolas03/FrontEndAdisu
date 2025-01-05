@@ -1,13 +1,6 @@
-import { registerRootComponent } from 'expo';
+import { Redirect } from "expo-router";
 
-import Navigation from './nav/Navigation';
-
-import { ExpoRoot } from 'expo-router';
-
-// Must be exported or Fast Refresh won't update the context
-export function App() {
-  const ctx = require.context('./app');
-  return <ExpoRoot context={ctx} />;
+export default function Index() {
+  // Reindirizza automaticamente alla pagina "HomePage"
+  return <Redirect href="/HomePage" />;
 }
-
-registerRootComponent(Navigation);

@@ -231,7 +231,7 @@ export default function SimulazioneBorsaDiStudio() {
           )}
         </ScrollView>
       </View>
-      <Navbar />
+      <Navbar namePage={''} />
     </View>
   );
 }

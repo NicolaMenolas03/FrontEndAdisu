@@ -2,27 +2,13 @@ import HomeButton from '@/components/homeButton';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet,  Image, TouchableOpacity } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack'; // Importa il tipo di navigazione per lo stack
+import Navbar from '@/components/Navbar';
+import { router } from 'expo-router';
 
-type RootStackParamList = {
-  Libreria: undefined;
-  Mensa: undefined;
-  BorsaDiStudio: undefined;
-};
+
     
 export default function landingPage() {
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
               
-              const navigateToBorsaDiStudio = () => {
-                navigation.navigate('BorsaDiStudio');
-              }
-              const navigateToMensa = () => {
-                navigation.navigate('Mensa');
-              }
-              const navigateToLibreria = () => {
-                navigation.navigate('Libreria');
-              }
     const currentYear = new Date().getFullYear(); // Get the current year
     const [startYear, setStartYear] = useState(currentYear); // Stato per l'anno corrente
 
@@ -73,9 +59,9 @@ export default function landingPage() {
 
       {/* Icone */}
       <View style={styles.icone}>
-                <HomeButton text="Borsa di studio" iconName="school" onPress={navigateToBorsaDiStudio} />
-                <HomeButton text="Mensa" iconName="food"  onPress={navigateToMensa}/>
-                <HomeButton text="Biblioteca" iconName="library"  onPress={navigateToLibreria}/>
+                <HomeButton text="Borsa di studio" iconName="school" onPress={() => router.push("/BorsaDiStudio/BorsaDiStudioPage")}/>
+                <HomeButton text="Mensa" iconName="food"  onPress={() => router.push("/Mensa/Mensa")}/>
+                <HomeButton text="Biblioteca" iconName="library" onPress={() => router.push("/Mensa/Mensa")}/>
       </View>
 
       {/* News */}
@@ -86,8 +72,8 @@ export default function landingPage() {
       </View>
 
       {/* navbar */}
-      <View style={styles.navbar}>
-      <Text>navbar</Text>
+      <View>
+      <Navbar namePage='landingPage'></Navbar>
       </View>
     </View>
 
@@ -200,9 +186,4 @@ const styles = StyleSheet.create({
         flex: 3,
         backgroundColor: 'white',
     },
-    navbar: {
-        flex: 1,
-        backgroundColor: 'lightgreen',
-    },
-    
 });

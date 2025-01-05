@@ -1,16 +1,7 @@
+import { router } from 'expo-router';
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack'; // Importa il tipo di navigazione per lo stack
-import landingPage from '@/app/(tabs)/landingPage';
-
-type RootStackParamList = {
-    landingPage: undefined;
-    Profilo: undefined;
-    Assistenza: undefined;
-    News: undefined;
-};
 
 interface NavbarProps {
     namePage: string;
@@ -18,34 +9,18 @@ interface NavbarProps {
 
 const Navbar = ({namePage}:NavbarProps) => {
 
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
-    const navigateToHome = () => {
-    navigation.navigate('landingPage');}
-
-    
-    const navigateToNews = () => {
-        navigation.navigate('landingPage');}
-
-    const navigateToAssistenza = () => {
-        navigation.navigate('landingPage');}
-
-    const navigateToProfilo = () => {
-        navigation.navigate('landingPage');}
-    
-
     return (
         <View style={styles.navbar}>
-            <TouchableOpacity style={styles.navButton} onPress={navigateToHome}>
+            <TouchableOpacity style={styles.navButton} onPress={()=>router.push("/(tabs)/landingPage")}>
                 <Icon name="home" size={30} color={namePage==='landingPage'?'white':'#6fa3ff'} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navButton} onPress={navigateToNews}>
+            <TouchableOpacity style={styles.navButton} onPress={()=>router.push("/News")}>
                 <Icon name="newspaper" size={30} color="#6fa3ff" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navButton} onPress={navigateToAssistenza}>
+            <TouchableOpacity style={styles.navButton} onPress={()=>router.push("/Assistenza")}>
                 <Icon name="help-circle" size={30} color="#6fa3ff" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navButton} onPress={navigateToProfilo}>
+            <TouchableOpacity style={styles.navButton} onPress={()=>router.push("/Profilo")}>
                 <Icon name="account" size={30} color="#6fa3ff" />
             </TouchableOpacity>
         </View>

@@ -20,16 +20,8 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Title } from "react-native-paper";
 import { useCRUD } from "@/hooks/useCRUD";
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationEventMap, StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
 
-type RootStackParamList = {
-    Pasti: { mensaId: string };
-    // Add other routes here if needed
-};
-
-type MensaScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Pasti'>;
-type MensaScreenRouteProp = RouteProp<RootStackParamList, 'Pasti'>;
+import { router } from "expo-router";
 
 interface Mensa {
     id: number;
@@ -40,7 +32,6 @@ interface Mensa {
 }
 
 const Mensa = () => {
-    const navigation = useNavigation<MensaScreenNavigationProp>();
     const { data, error, loading, createItem, deleteItem, updateItem } = useCRUD<Mensa>("/canteen/");
     const [mensaName, setMensaName] = useState("");
     const [isFocused, setIsFocused] = useState(false);
@@ -71,7 +62,7 @@ const Mensa = () => {
     };
 
     const navigateToPasti = (mensaId: string) => {
-        navigation.navigate('Pasti', { mensaId });
+        router.push(`/Mensa/Pasti?mensaId=${mensaId}`);
     };
 
     return (
