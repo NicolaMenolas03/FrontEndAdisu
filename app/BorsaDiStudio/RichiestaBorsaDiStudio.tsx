@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Button, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import CheckBox from '@react-native-community/checkbox';
+import { StyleSheet, Text, View, TextInput, Picker, CheckBox, ScrollView, Button, TouchableOpacity } from 'react-native';
 import Navbar from '@/components/Navbar';
 
 export default function BorsaDiStudioPage() {
-  const [selectedEsami, setSelectedEsami] = useState<{ nome: string; data: string; cfu: number }[]>([]);
+  const [selectedEsami, setSelectedEsami] = useState([]);
   const [esami, setEsami] = useState([
     { nome: 'Matematica 1', data: '01/01/2023', cfu: 6 },
     { nome: 'Fisica', data: '15/02/2023', cfu: 8 },
     { nome: 'Programmazione', data: '10/03/2023', cfu: 9 },
   ]);
 
-  const addEsame = (esame: { nome: string; data: string; cfu: number }) => {
+  const addEsame = (esame) => {
     setSelectedEsami([...selectedEsami, esame]);
   };
 
-  const removeEsame = (index: number) => {
+  const removeEsame = (index) => {
     setSelectedEsami(selectedEsami.filter((_, i) => i !== index));
   };
 
