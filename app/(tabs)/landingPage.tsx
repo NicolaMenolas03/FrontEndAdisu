@@ -21,21 +21,7 @@ export default function landingPage() {
     };
 
     return (    
-    <View style={styles.container}>
-
-
-      {/* header */}
-      <View style={styles.header}>
-      <Image
-            source={require('@/assets/images/LogoRegionePuglia.png')}
-            style={styles.PugliaLogo}
-        />
-        <Image
-            source={require('@/assets/images/LogoAdisu.png')}
-            style={styles.headerImage}
-        />
-        </View>
-
+    <View style={styles.container}>      
 
         {/* Scroll dell'anno*/}
         <View style={styles.ScrollAnno}>

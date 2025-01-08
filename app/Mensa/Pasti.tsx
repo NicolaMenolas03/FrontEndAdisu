@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions, Modal } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCRUD } from "@/hooks/useCRUD";
-import LogoAdisuERegione from '@/components/logoAdisuERegione';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { router } from 'expo-router';
 
 type RootStackParamList = {
-  Pasti: {
-    mensaId: string;
-  };
+    Pasti: {
+        mensaId: string;
+        mensaName: string;
+    };
 };
 interface Pasti {
     id: number;
@@ -20,54 +22,64 @@ interface Pasti {
 
 }
 type PastiScreenRouteProp = RouteProp<RootStackParamList, 'Pasti'>;
+const { width } = Dimensions.get('window');
+const iconSize = width * 0.08;
 
-const FoodCard = ({ meal }: { meal: Pasti }) => (
-    <View style={styles.card}>
-        <Image 
-            source={require('../../assets/images/placeholder-food.png')}
-            style={styles.foodImage}
-        />
-        <View style={styles.cardContent}>
-            <Text style={styles.cardTitle}>{meal.name}</Text>
-            
-            <View style={styles.allergenRow}>
-                {meal.gluten === "True" && 
-                    <Image 
-                        source={require('../../assets/icons/icons8-grano-94.png')}
-                        style={styles.allergenIcon}
-                    />
-                }
-                {meal.crustaceans === "True" &&
-                    <Image 
-                        source={require('../../assets/icons/icons8-gambero-94.png')}
-                        style={styles.allergenIcon}
-                    />
-                }
-            </View>
-            
-            <Text style={styles.cardDescription}>{meal.description}</Text>
-            
-            <View style={styles.bottomRow}>
-                <Text style={styles.cardPrice}>€ {meal.price}</Text>
-                <TouchableOpacity style={styles.addButton}>
-                    <Text style={styles.addButtonText}>+</Text>
-                </TouchableOpacity>
+
+
+const FoodCard = ({ meal }: { meal: Pasti}) => {
+
+    return (
+        <View style={styles.card}>
+            <Image
+                source={require('../../assets/images/placeholder-food.png')}
+                style={styles.foodImage}
+            />
+            <View style={styles.cardContent}>
+                <Text style={styles.cardTitle}>{meal.name}</Text>
+
+                <View style={styles.allergenRow}>
+                    {meal.gluten === "True" &&
+                        <Image
+                            source={require('../../assets/icons/icons8-grano-94.png')}
+                            style={styles.allergenIcon}
+                        />
+                    }
+                    {meal.crustaceans === "True" &&
+                        <Image
+                            source={require('../../assets/icons/icons8-gambero-94.png')}
+                            style={styles.allergenIcon}
+                        />
+                    }
+                </View>
+
+                <Text style={styles.cardDescription}>{meal.description}</Text>
+
+                <View style={styles.bottomRow}>
+                    <Text style={styles.cardPrice}>€ {meal.price}</Text>
+                    <TouchableOpacity style={styles.addButton}>
+                        <Text style={styles.addButtonText}>+</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
-    </View>
-);
+    );
+};
 
 const Pasti = () => {
-    
-    const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const route = useRoute<PastiScreenRouteProp>();
-    const { mensaId } = route.params;
+    const { mensaId, mensaName } = route.params;
+
+    const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const { data, error, loading } = useCRUD<Pasti>(`/daily_meals/${mensaId}/get_meals_by_id/`); // Note the Pasti[] type
 
-    console.log(data);
+
+    const navigateToMensa = () => {
+        router.push(`/Mensa/Mensa`);
+    };
 
     const searchMeals = () => {
-        if (selectedCategory === 'all') 
+        if (selectedCategory === 'all')
             return data;
         else
             return data.filter((meal) => meal.type === selectedCategory)
@@ -75,23 +87,23 @@ const Pasti = () => {
     const filteredMeals = searchMeals();
 
     const categories = [
-        { 
-            id: 'all', 
-            label: 'Tutto', 
+        {
+            id: 'all',
+            label: 'Tutto',
             img: require('../../assets/icons/icons8-cibo-fast-food-cibo-di-strada-10-94.png')
         },
-        { 
-            id: 'first', 
+        {
+            id: 'first',
             label: 'Primi',
             img: require('../../assets/icons/icons8-spaghetti-94.png')
         },
-        { 
-            id: 'second', 
+        {
+            id: 'second',
             label: 'Secondi',
             img: require('../../assets/icons/icons8-paleodieta-94.png')
         },
-        { 
-            id: 'sweet', 
+        {
+            id: 'sweet',
             label: 'Dolci',
             img: require('../../assets/icons/icons8-dolce-94.png')
         }
@@ -99,8 +111,18 @@ const Pasti = () => {
 
     return (
         <View style={styles.container}>
-            <LogoAdisuERegione />
-            
+
+            <View style={styles.containerMensa}>
+                <Icon
+                    name="arrow-left"
+                    size={28}
+                    color="#007FFF"
+                    style={styles.icon}
+                    onPress={navigateToMensa}
+                />
+                <Text>{mensaName}</Text>
+            </View>
+
             {/* Categories Tabs */}
             <View style={styles.categoriesContainer}>
                 {categories.map(category => (
@@ -112,7 +134,7 @@ const Pasti = () => {
                         ]}
                         onPress={() => setSelectedCategory(category.id)}
                     >
-                        <Image 
+                        <Image
                             source={category.img}
                             style={styles.categoryIcon}
                         />
@@ -143,9 +165,63 @@ const Pasti = () => {
 };
 
 const styles = StyleSheet.create({
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    cartBadgeText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    cartBadge: {
+        position: 'absolute',
+        top: -5,
+        right: -10,
+        backgroundColor: 'red',
+        borderRadius: 10,
+        width: 20,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    cartContainer: {
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#007FFF',
+        borderRadius: 30,
+        width: 60,
+        height: 60,
+        marginTop: -30, // Solleva il cerchio sopra la navbar
+        borderWidth: 5,
+        borderColor: '#f5f5f5',
+    },
+    navbar: {
+        margin: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '90%',
+        paddingVertical: 10,
+        backgroundColor: '#005dff',
+        position: 'absolute',
+        bottom: 0,
+        borderRadius: 40
+
+    },
+    navButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',
+    },
+    containerMensa: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
     },
     categoriesContainer: {
         flexDirection: 'row',
@@ -230,24 +306,110 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 0,
+        display: 'flex',
     },
     addButtonText: {
-        color: '#fff',
+        color: 'white',
         fontSize: 24,
-        lineHeight: 24,
+        fontWeight: 'bold',
+        lineHeight: 28,
         textAlign: 'center',
-        includeFontPadding: false,
         textAlignVertical: 'center',
-        marginTop: -2, 
+        includeFontPadding: false,
+        marginTop: -2, // Fine-tune vertical alignment
     },
     loadingText: {
         textAlign: 'center',
         padding: 20,
     },
+    icon: {
+        marginRight: 10,
+    },
     categoryIcon: {
         width: 28,
         height: 28,
         marginBottom: 5,
+    },
+    cartButton: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        zIndex: 1,
+    },
+    badge: {
+        position: 'absolute',
+        right: -6,
+        top: -6,
+        backgroundColor: 'red',
+        borderRadius: 10,
+        width: 20,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    badgeText: {
+        color: 'white',
+        fontSize: 12,
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    cartItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    quantityContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    quantityButton: {
+        fontSize: 20,
+        paddingHorizontal: 10,
+    },
+    quantity: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+    },
+    totalContainer: {
+        padding: 20,
+        borderTopWidth: 1,
+        borderTopColor: '#eee',
+    },
+    totalText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    checkoutButton: {
+        backgroundColor: '#003366',
+        padding: 15,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    checkoutButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+    itemName: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    itemPrice: {
+        fontSize: 16,
+        color: '#333',
     },
 });
 

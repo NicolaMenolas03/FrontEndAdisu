@@ -1,9 +1,11 @@
+import React from 'react';
 import { Image, View, Dimensions, StyleSheet } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
-const LogoAdisuERegione = () => {
+const LogoAdisuERegione = ({ children }: { children: React.ReactNode }) => {
     return (
+        <>
         <View style={styles.container}>
             <Image
                 source={require('@/assets/images/LogoRegionePuglia.png')}
@@ -13,14 +15,17 @@ const LogoAdisuERegione = () => {
                 source={require('@/assets/images/LogoAdisu.png')}
                 style={styles.logo}
             />
+            
         </View>
+        {children}
+        </>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: height * 0.15,
+        height: height * 0.10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

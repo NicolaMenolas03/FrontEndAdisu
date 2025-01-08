@@ -1,26 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
     StyleSheet,
-    Image,
     TextInput,
     ScrollView,
     TouchableOpacity,
-    Keyboard,
-    FlatList,
-    Button,
 } from "react-native";
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import Navbar from "../../components/Navbar"; // Update the path to the correct location
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Title } from "react-native-paper";
 import { useCRUD } from "@/hooks/useCRUD";
-import { useNavigation } from '@react-navigation/native';
-
 import { router } from "expo-router";
 
 interface Mensa {
@@ -37,17 +30,13 @@ const Mensa = () => {
     const [isFocused, setIsFocused] = useState(false);
     const [searchResults, setSearchResults] = useState<Mensa[]>([]);
 
-    const mensaList: Mensa[] = data
+    const mensaList: Mensa[] = data;
 
-    const searchMensa = () => {
-        if (mensaName.trim()) {
-            const results = mensaList.filter((mensa) =>
-                mensa.name.toLowerCase().includes(mensaName.toLowerCase())
-            );
-            setSearchResults(results);
-            Keyboard.dismiss();
+    useEffect(() => {
+        if (data) {
+            setSearchResults(data);
         }
-    };
+    }, [data]);
 
     const filterMensaList = (query: string) => {
         if (query) {
@@ -61,8 +50,8 @@ const Mensa = () => {
         setMensaName(query);
     };
 
-    const navigateToPasti = (mensaId: string) => {
-        router.push(`/Mensa/Pasti?mensaId=${mensaId}`);
+    const navigateToPasti = (mensaId: string, mensaName: string) => {
+        router.push(`/Mensa/Pasti?mensaId=${mensaId}&mensaName=${mensaName}`);
     };
 
     return (
@@ -108,6 +97,12 @@ const Mensa = () => {
                     <View style={styles.mensaList}>
                         {searchResults.map((mensa, index) => (
                             <View key={index} style={styles.mensaItem}>
+                                <Icon
+                                    name="google-maps"
+                                    size={24}
+                                    color="#005dff"
+                                    style={styles.iconMaps}
+                                />
                                 <View style={styles.mensaInfo}>
                                     <Text style={styles.mensaName}>{mensa.name}</Text>
                                     <Text>{mensa.address}</Text>
@@ -117,11 +112,11 @@ const Mensa = () => {
                                 </View>
                                 <TouchableOpacity
                                     style={styles.goButton}
-                                    onPress={() => navigateToPasti(mensa.id.toString())}
+                                    onPress={() => navigateToPasti(mensa.id.toString(), mensa.name)}
                                 >
                                     <Text style={styles.buttonText}><Icon
                                         name="arrow-right"
-                                        size={25}
+                                        size={20}
                                         color="wihte"
                                     /></Text>
                                 </TouchableOpacity>
@@ -132,8 +127,6 @@ const Mensa = () => {
                 </View>
             </ScrollView>
 
-            {/* Navbar */}
-            <Navbar namePage="landingPage" />
         </View>
     );
 };
@@ -226,6 +219,10 @@ const styles = StyleSheet.create({
     icon: {
         paddingRight: 10,
     },
+    iconMaps: {
+        paddingRight: 10,
+        top: 0,
+    },
     headerImage: {
         width: wp("20%"),
         height: hp("10%"),
@@ -238,9 +235,8 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        height: "100%",
-        paddingLeft: 10,
-        borderColor: "transparent",
+        backgroundColor: 'transparent',
+        borderWidth: 0,  
     },
     searchButton: {
         backgroundColor: "#007FFF",
