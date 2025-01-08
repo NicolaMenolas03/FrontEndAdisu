@@ -20,20 +20,28 @@ const HomeButton = ({ text, iconName,onPress }: propsHomeButton) => {
 
 const stylesButton = StyleSheet.create({
     iconButton: {
-        width: wp('15%'), // 25% of screen width
-        height: wp('15%'), // 25% of screen width to make it square
-        backgroundColor: '#007FFF',
+        width: wp('25%%'), // 25% of screen width
+        height: wp('25%'), // 25% of screen width to make it square
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
-        margin: 10,
+        borderRadius: 20,
+        elevation: 4,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
     },
     icon: {
+        marginTop: 14,
         marginBottom: 5,
+        color: '#007fff',
     },
     iconText: {
-        color: 'white',
+        padding: 3,
+        margin:3,
+        color: '#007fff',
         textAlign: 'center',
+        fontWeight: 'bold',
     },
 });
 
