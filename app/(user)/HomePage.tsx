@@ -29,7 +29,7 @@ export default function App() {
       }),
     ]).start(() => {
       // Naviga alla schermata di login quando l'animazione finisce
-      router.push("/login");
+      router.push("/Onboarding");
     });
   };
 

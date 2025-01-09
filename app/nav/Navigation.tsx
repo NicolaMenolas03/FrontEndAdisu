@@ -6,6 +6,7 @@ export default function App() {
   return (
     <Stack>
         <Stack.Screen name="HomePage" />
+        <Stack.Screen name="Onboarding" />
         <Stack.Screen name="Login" />
         <Stack.Screen name="Registration"  />
         <Stack.Screen name="Mensa"  />
