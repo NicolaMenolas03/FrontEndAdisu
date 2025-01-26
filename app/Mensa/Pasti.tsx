@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions, Modal } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions, Modal, Animated, FlatList } from 'react-native';
+import { Link, RouteProp, useRoute } from '@react-navigation/native';
 import { useCRUD } from "@/hooks/useCRUD";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from 'expo-router';
@@ -11,14 +11,24 @@ type RootStackParamList = {
         mensaName: string;
     };
 };
+
+interface Allergeni {
+    id: number;
+    name: string;
+}
+
+const allergens: { [key: string]: any } = {
+    "Pesce": require('../../assets/icons/icons8-gambero-94.png'),
+    "Glutine": require('../../assets/icons/icons8-grano-94.png'),
+}
+
 interface Pasti {
     id: number;
     name: string;
     description: string;
     price: number;
     type: string;
-    gluten: string;
-    crustaceans: string;
+    allergens: Allergeni[];
 
 }
 type PastiScreenRouteProp = RouteProp<RootStackParamList, 'Pasti'>;
@@ -39,17 +49,13 @@ const FoodCard = ({ meal }: { meal: Pasti}) => {
                 <Text style={styles.cardTitle}>{meal.name}</Text>
 
                 <View style={styles.allergenRow}>
-                    {meal.gluten === "True" &&
-                        <Image
-                            source={require('../../assets/icons/icons8-grano-94.png')}
+                    {
+                    meal.allergens.map((allergen) => {
+                        return (<Image
+                            source={allergens[allergen.name]}
                             style={styles.allergenIcon}
-                        />
-                    }
-                    {meal.crustaceans === "True" &&
-                        <Image
-                            source={require('../../assets/icons/icons8-gambero-94.png')}
-                            style={styles.allergenIcon}
-                        />
+                        />)
+                    })
                     }
                 </View>
 
@@ -73,9 +79,39 @@ const Pasti = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const { data, error, loading } = useCRUD<Pasti>(`/daily_meals/${mensaId}/get_meals_by_id/`); // Note the Pasti[] type
 
+    const slideAnim = useRef(new Animated.Value(0)).current;
+    const fadeAnim = useRef(new Animated.Value(1)).current;
+
+    const handleCategoryChange = (category: string) => {
+        // Fade out current items
+        Animated.sequence([
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 150,
+                useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 150,
+                useNativeDriver: true,
+            })
+        ]).start();
+
+        // Slide indicator
+        Animated.spring(slideAnim, {
+            toValue: categories.findIndex(cat => cat.id === category) * (width / categories.length),
+            useNativeDriver: true,
+        }).start();
+
+        setSelectedCategory(category);
+    };
 
     const navigateToMensa = () => {
         router.push(`/Mensa/Mensa`);
+    };
+
+    const navigateToLeandingPage = () => {
+        router.push(`/(tabs)/landingPage`);
     };
 
     const searchMeals = () => {
@@ -120,7 +156,16 @@ const Pasti = () => {
                     style={styles.icon}
                     onPress={navigateToMensa}
                 />
-                <Text>{mensaName}</Text>
+                <Text>
+                    <TouchableOpacity onPress={navigateToMensa} style={styles.breadcrumbItem}>
+                        Home 
+                    </TouchableOpacity>/ 
+                    <TouchableOpacity onPress={navigateToMensa} style={styles.breadcrumbItem}>
+                        Mensa 
+                    </TouchableOpacity>/
+                        <Text style={styles.breadcrumbItem}>Pasti</Text>
+                    </Text>
+                
             </View>
 
             {/* Categories Tabs */}
@@ -209,6 +254,10 @@ const styles = StyleSheet.create({
         borderRadius: 40
 
     },
+    breadcrumbItem:{
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
     navButton: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -217,6 +266,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        paddingVertical: 10,
     },
     containerMensa: {
         flexDirection: 'row',
@@ -238,8 +288,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#005dff',
     },
     categoryText: {
-        fontSize: 12,
-        color: '#333',
+        fontSize: 16,
+        color: '#666',
     },
     selectedText: {
         color: '#fff',
