@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions, Modal, Animated, FlatList } from 'react-native';
-import { Link, RouteProp, useRoute } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCRUD } from "@/hooks/useCRUD";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from 'expo-router';
+import { TypePasti } from '../../lib/definitions';
+import FoodCard from '@/components/foodCard';
 
 type RootStackParamList = {
     Pasti: {
@@ -12,106 +14,18 @@ type RootStackParamList = {
     };
 };
 
-interface Allergeni {
-    id: number;
-    name: string;
-}
-
-const allergens: { [key: string]: any } = {
-    "Pesce": require('../../assets/icons/icons8-gambero-94.png'),
-    "Glutine": require('../../assets/icons/icons8-grano-94.png'),
-}
-
-interface Pasti {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    type: string;
-    allergens: Allergeni[];
-
-}
 type PastiScreenRouteProp = RouteProp<RootStackParamList, 'Pasti'>;
 const { width } = Dimensions.get('window');
-const iconSize = width * 0.08;
-
-
-
-const FoodCard = ({ meal }: { meal: Pasti}) => {
-
-    return (
-        <View style={styles.card}>
-            <Image
-                source={require('../../assets/images/placeholder-food.png')}
-                style={styles.foodImage}
-            />
-            <View style={styles.cardContent}>
-                <Text style={styles.cardTitle}>{meal.name}</Text>
-
-                <View style={styles.allergenRow}>
-                    {
-                    meal.allergens.map((allergen) => {
-                        return (<Image
-                            source={allergens[allergen.name]}
-                            style={styles.allergenIcon}
-                        />)
-                    })
-                    }
-                </View>
-
-                <Text style={styles.cardDescription}>{meal.description}</Text>
-
-                <View style={styles.bottomRow}>
-                    <Text style={styles.cardPrice}>€ {meal.price}</Text>
-                    <TouchableOpacity style={styles.addButton}>
-                        <Text style={styles.addButtonText}>+</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </View>
-    );
-};
 
 const Pasti = () => {
     const route = useRoute<PastiScreenRouteProp>();
     const { mensaId, mensaName } = route.params;
 
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
-    const { data, error, loading } = useCRUD<Pasti>(`/daily_meals/${mensaId}/get_meals_by_id/`); // Note the Pasti[] type
-
-    const slideAnim = useRef(new Animated.Value(0)).current;
-    const fadeAnim = useRef(new Animated.Value(1)).current;
-
-    const handleCategoryChange = (category: string) => {
-        // Fade out current items
-        Animated.sequence([
-            Animated.timing(fadeAnim, {
-                toValue: 0,
-                duration: 150,
-                useNativeDriver: true,
-            }),
-            Animated.timing(fadeAnim, {
-                toValue: 1,
-                duration: 150,
-                useNativeDriver: true,
-            })
-        ]).start();
-
-        // Slide indicator
-        Animated.spring(slideAnim, {
-            toValue: categories.findIndex(cat => cat.id === category) * (width / categories.length),
-            useNativeDriver: true,
-        }).start();
-
-        setSelectedCategory(category);
-    };
+    const { data, error, loading } = useCRUD<TypePasti>(`/daily_meals/${mensaId}/get_meals_by_id/`); // Note the Pasti[] type
 
     const navigateToMensa = () => {
         router.push(`/Mensa/Mensa`);
-    };
-
-    const navigateToLeandingPage = () => {
-        router.push(`/(tabs)/landingPage`);
     };
 
     const searchMeals = () => {
@@ -126,22 +40,22 @@ const Pasti = () => {
         {
             id: 'all',
             label: 'Tutto',
-            img: require('../../assets/icons/icons8-cibo-fast-food-cibo-di-strada-10-94.png')
+            img: require('../../../assets/icons/icons8-cibo-fast-food-cibo-di-strada-10-94.png')
         },
         {
             id: 'first',
             label: 'Primi',
-            img: require('../../assets/icons/icons8-spaghetti-94.png')
+            img: require('../../../assets/icons/icons8-spaghetti-94.png')
         },
         {
             id: 'second',
             label: 'Secondi',
-            img: require('../../assets/icons/icons8-paleodieta-94.png')
+            img: require('../../../assets/icons/icons8-paleodieta-94.png')
         },
         {
             id: 'sweet',
             label: 'Dolci',
-            img: require('../../assets/icons/icons8-dolce-94.png')
+            img: require('../../../assets/icons/icons8-dolce-94.png')
         }
     ];
 
@@ -299,74 +213,6 @@ const styles = StyleSheet.create({
     },
     cardsContainer: {
         padding: 10,
-    },
-    card: {
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        marginBottom: 15,
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-    },
-    foodImage: {
-        width: '100%',
-        height: 150,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-    },
-    cardContent: {
-        padding: 15,
-    },
-    cardTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
-    allergenRow: {
-        flexDirection: 'row',
-        gap: 10,
-        marginBottom: 10,
-    },
-    allergenIcon: {
-        width: 20,
-        height: 20,
-    },
-    cardDescription: {
-        fontSize: 14,
-        color: '#666',
-        marginBottom: 10,
-    },
-    bottomRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    cardPrice: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#005dff',
-    },
-    addButton: {
-        backgroundColor: '#005dff',
-        width: 32,
-        height: 32,
-        borderRadius: 16,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 0,
-        display: 'flex',
-    },
-    addButtonText: {
-        color: 'white',
-        fontSize: 24,
-        fontWeight: 'bold',
-        lineHeight: 28,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        includeFontPadding: false,
-        marginTop: -2, // Fine-tune vertical alignment
     },
     loadingText: {
         textAlign: 'center',

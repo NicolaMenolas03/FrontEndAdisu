@@ -15,22 +15,16 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Title } from "react-native-paper";
 import { useCRUD } from "@/hooks/useCRUD";
 import { router } from "expo-router";
+import { TypeMensa } from "../lib/definitions";
 
-interface Mensa {
-    id: number;
-    name: string;
-    address: string;
-    city: string;
-    province: string;
-}
 
 const Mensa = () => {
-    const { data, error, loading, createItem, deleteItem, updateItem } = useCRUD<Mensa>("/canteen/");
+    const { data, error, loading, createItem, deleteItem, updateItem } = useCRUD<TypeMensa>("/canteen/");
     const [mensaName, setMensaName] = useState("");
     const [isFocused, setIsFocused] = useState(false);
-    const [searchResults, setSearchResults] = useState<Mensa[]>([]);
+    const [searchResults, setSearchResults] = useState<TypeMensa[]>([]);
 
-    const mensaList: Mensa[] = data;
+    const mensaList: TypeMensa[] = data;
 
     useEffect(() => {
         if (data) {

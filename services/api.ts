@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthResponse, LoginData, RegisterData } from '@/app/lib/definitions';
 
 const API_BASE_URL = 'http://127.0.0.1:8000/api';
 export let accessToken: string | undefined;
@@ -54,24 +55,7 @@ export const loadStoredToken = async () => {
   }
 };
 
-interface AuthResponse {
-    access: string;
-    refresh: string;
-  }
-  
-  interface LoginData {
-    username: string;
-    password: string;
-  }
-  
-  interface RegisterData {
-    username: string;
-    email: string;
-    password: string;
-    password2: string;
-    first_name: string;
-    last_name: string;
-  }
+
 
 export const apiService = {
   get: <T>(endpoint: string, params?: Record<string, any>, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> =>
