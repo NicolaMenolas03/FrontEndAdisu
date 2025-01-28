@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
+        backgroundColor: 'transparent', // Make container background transparent
     },
     title: {
         fontSize: 24,
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
         padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
+        backgroundColor: '#fff', // Add white background to meal items only
     },
     unavailable: {
         color: 'red',

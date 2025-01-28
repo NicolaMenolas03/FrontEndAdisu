@@ -40,7 +40,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                     style={styles.navButton}
                     onPress={() => navigateToLeandingPage()}
                 >
-                    <Ionicons name="home-outline" size={24} color="#333" />
+                    <Ionicons name="home-outline" size={24} color="#FFFFFF" />
                 </TouchableOpacity>
 
                 <TouchableOpacity 
@@ -48,7 +48,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                     onPress={() => navigateToCart()}
                 >
                     <View style={styles.cartContainer}>
-                        <Ionicons name="cart-outline" size={24} color="#333" />
+                        <Ionicons name="cart-outline" size={24} color="#FFFFFF" />
                         {cartItems > 0 && (
                             <View style={styles.badge}>
                                 <Text style={styles.badgeText}>{cartItems}</Text>
@@ -61,7 +61,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                     style={styles.navButton}
                     onPress={() => router.push('/orders')}
                 >
-                    <Ionicons name="list-outline" size={24} color="#333" />
+                    <Ionicons name="list-outline" size={24} color="#FFFFFF" />
                 </TouchableOpacity>
             </View>
         </View>
@@ -71,29 +71,42 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
     },
     content: {
         flex: 1,
+        paddingBottom: 60, // Exact height of navbar without extra padding
     },
     navbar: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems: 'center',
-        backgroundColor: '#fff',
+        alignItems: 'center', // Add this to center items vertically
+        width: '90%',
+        backgroundColor: '#005dff',
+        borderRadius: 40,
+        alignSelf: 'center',
         height: 60,
-        borderTopWidth: 1,
-        borderTopColor: '#eee',
+        marginHorizontal: 20,
+        marginBottom: 10,
+        position: 'absolute',
+        bottom: 10,
     },
     navButton: {
+        borderRadius: 50,
+        alignItems: 'center',
+        justifyContent: 'center', // Add this to center icons
         padding: 10,
+        height: '100%', // Make buttons full height
     },
     cartContainer: {
         position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     badge: {
         position: 'absolute',
-        right: -6,
-        top: -6,
+        top: -8,
+        right: -8,
         backgroundColor: 'red',
         borderRadius: 10,
         width: 20,
@@ -102,8 +115,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     badgeText: {
-        color: '#fff',
+        color: 'white',
         fontSize: 12,
         fontWeight: 'bold',
-    },
+    }
 });

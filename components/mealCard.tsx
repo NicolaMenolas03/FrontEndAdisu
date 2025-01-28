@@ -2,6 +2,7 @@ import {TypePasti } from '@/app/lib/definitions';
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Allergen from './allergen';
+import ImagePasto from './imagePasto';
 
 
 
@@ -9,10 +10,7 @@ const MealCard = ({ meal, quantity, incrementQuantity, decrementQuantity }: {mea
     
     return (
         <View style={styles.mealItem}>
-            <Image
-                source={require('@/assets/images/placeholder-food.png')}
-                style={styles.mealImage}
-            />
+            <ImagePasto meal={meal} style={styles.mealImage} />
             <Text style={styles.mealName}>{meal.name}</Text>
             <Allergen allergen={meal.allergens} />
             <View style={styles.quantityContainer}>
