@@ -120,12 +120,12 @@ export default function landingPage() {
         <HomeButton
           text="Mensa"
           iconName="fast-food"
-          onPress={() => router.push("/Mensa/Mensa")}
+          onPress={() => router.push("/Mensa/mensa")}
         />
         <HomeButton
           text="Biblioteca"
           iconName="library"
-          onPress={() => router.push("/Mensa/Mensa")}
+          onPress={() => router.push("/Mensa/mensa")}
         />
       </View>
 

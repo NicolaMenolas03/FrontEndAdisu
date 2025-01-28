@@ -7,6 +7,12 @@ const allergens: { [key: string]: any } = {
     "Glutine": require('../assets/icons/icons8-grano-94.png'),
 }
 
+const img: { [key: string]: any } = {
+    "first": require('../assets/images/16e29b6bc926727c49956cb32f27188d.jpg'),
+    "second": require('../assets/images/videogame-meat-icon-pack_23-2149840107.jpg'),
+    "sweet": require('../assets/images/3d-rendering-coffee-shop-icon_23-2149878997.jpeg'),
+}
+
 const FoodCard = ({ meal }: { meal: TypePasti}) => {
     const { addToCart } = useCart();
     
@@ -18,7 +24,7 @@ const FoodCard = ({ meal }: { meal: TypePasti}) => {
     return (
         <View style={styles.card}>
             <Image
-                source={require('../assets/images/placeholder-food.png')}
+                source={img[meal.type]}
                 style={styles.foodImage}
             />
             <View style={styles.cardContent}>

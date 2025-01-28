@@ -9,7 +9,7 @@ export default function Cart() {
     const [unavailableMeals, setUnavailableMeals] = useState<number[]>([]);
 
     const navigateToPasti = (mensaId: string) => {
-        router.push(`/Mensa/Pasti?mensaId=${mensaId}`);
+        router.push(`/Mensa/pasti?mensaId=${mensaId}`);
     };
 
 

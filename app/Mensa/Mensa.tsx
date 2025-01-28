@@ -45,7 +45,7 @@ const Mensa = () => {
     };
 
     const navigateToPasti = (mensaId: string, mensaName: string) => {
-        router.push(`/Mensa/Pasti?mensaId=${mensaId}&mensaName=${mensaName}`);
+        router.push(`/Mensa/pasti?mensaId=${mensaId}&mensaName=${mensaName}`);
     };
 
     return (

@@ -25,7 +25,7 @@ const Pasti = () => {
     const { data, error, loading } = useCRUD<TypePasti>(`/daily_meals/${mensaId}/get_meals_by_id/`); // Note the Pasti[] type
 
     const navigateToMensa = () => {
-        router.push(`/Mensa/Mensa`);
+        router.push(`/Mensa/mensa`);
     };
 
     const searchMeals = () => {
