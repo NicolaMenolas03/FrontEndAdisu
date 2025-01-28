@@ -3,6 +3,9 @@ import { useCart } from '../../../context/CartContext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { router } from 'expo-router';
+import MealCard from '@/components/mealCard';
+
+
 
 export default function Cart() {
     const { selectedMeals } = useCart();
@@ -12,6 +15,26 @@ export default function Cart() {
         router.push(`/Mensa/pasti?mensaId=${mensaId}`);
     };
 
+    const [quantities, setQuantities] = useState<{ [key: number]: number }>(
+        selectedMeals.reduce((acc, meal) => {
+            acc[meal.id] = 1; // Imposta la quantità iniziale a 1 per ogni pasto
+            return acc;
+        }, {} as { [key: number]: number })
+    );
+
+    const incrementQuantity = (id: number) => {
+        setQuantities((prevQuantities) => ({
+            ...prevQuantities,
+            [id]: prevQuantities[id] + 1,
+        }));
+    };
+
+    const decrementQuantity = (id: number) => {
+        setQuantities((prevQuantities) => ({
+            ...prevQuantities,
+            [id]: prevQuantities[id] > 1 ? prevQuantities[id] - 1 : 1, // Impedisce che la quantità scenda sotto 1
+        }));
+    };
 
     useEffect(() => {
         checkMealAvailability();
@@ -35,20 +58,29 @@ export default function Cart() {
                 <Text>
                     <TouchableOpacity onPress={() => {navigateToPasti(selectedMeals[0].canteens.toString())}}>
                         Pasti
-                    </TouchableOpacity>/
+                    </TouchableOpacity>
                 </Text>
 
             </View>
             <Text style={styles.title}>Il tuo carrello</Text>
-            <FlatList
+            
+            <FlatList 
                 data={selectedMeals}
                 renderItem={({ item }) => (
                     <View style={styles.mealItem}>
-                        <Text>{item.name}</Text>
+                        
+                        <MealCard
+                        meal = {item}
+                        quantity = {1}
+                        incrementQuantity={() => incrementQuantity(item.id)}
+                        decrementQuantity={() => decrementQuantity(item.id)}
+
+                        />
                         {unavailableMeals.includes(item.id) && (
                             <Text style={styles.unavailable}>Non disponibile</Text>
                         )}
                     </View>
+
                 )}
             />
         </View>

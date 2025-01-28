@@ -50,3 +50,4 @@ export type CartContextType = {
     selectedMeals: TypePasti[];
     addToCart: (meal: TypePasti) => void;
 };
+
