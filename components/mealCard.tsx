@@ -1,10 +1,12 @@
 import {TypePasti } from '@/app/lib/definitions';
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import Allergen from './allergen';
 
 
 
 const MealCard = ({ meal, quantity, incrementQuantity, decrementQuantity }: {meal: TypePasti, quantity : number, incrementQuantity : () => void,decrementQuantity : () => void }) => {
+    
     return (
         <View style={styles.mealItem}>
             <Image
@@ -12,6 +14,7 @@ const MealCard = ({ meal, quantity, incrementQuantity, decrementQuantity }: {mea
                 style={styles.mealImage}
             />
             <Text style={styles.mealName}>{meal.name}</Text>
+            <Allergen allergen={meal.allergens} />
             <View style={styles.quantityContainer}>
                 <TouchableOpacity onPress={incrementQuantity}>
                     <Text style={styles.quantityButton}>+</Text>

@@ -13,8 +13,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
-    const { cartItems } = useCart();
-
+    const { getTotalItems } = useCart();
+    const cartItems = getTotalItems();
     const navigateToLeandingPage = () => {
             router.push(`/(tabs)/landingPage`);
         };

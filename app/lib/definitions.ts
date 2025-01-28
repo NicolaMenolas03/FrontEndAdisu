@@ -45,9 +45,16 @@ export type RegisterData = {
 
 
 // Cart Context
-export type CartContextType = {
-    cartItems: number;
-    selectedMeals: TypePasti[];
-    addToCart: (meal: TypePasti) => void;
-};
+export type MealQuantities = {
+    [key: number]: {
+        meal: TypePasti;
+        quantity: number;
+    };
+}
 
+export type CartContextType = {
+    selectedMeals: MealQuantities;
+    addToCart: (meal: TypePasti) => void;
+    removeFromCart: (mealId: number) => void;
+    getTotalItems: () => number;
+};

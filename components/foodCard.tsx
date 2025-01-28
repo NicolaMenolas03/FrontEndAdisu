@@ -1,6 +1,7 @@
 import { TypePasti } from "@/app/lib/definitions";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useCart } from '../context/CartContext';
+import Allergen from "./allergen";
 
 const allergens: { [key: string]: any } = {
     "Pesce": require('../assets/icons/icons8-gambero-94.png'),
@@ -18,7 +19,6 @@ const FoodCard = ({ meal }: { meal: TypePasti}) => {
     
     const handleAddToCart = () => {
         addToCart(meal);
-        // ... other cart logic
     };
 
     return (
@@ -30,16 +30,7 @@ const FoodCard = ({ meal }: { meal: TypePasti}) => {
             <View style={styles.cardContent}>
                 <Text style={styles.cardTitle}>{meal.name}</Text>
 
-                <View style={styles.allergenRow}>
-                    {
-                    meal.allergens.map((allergen) => {
-                        return (<Image
-                            source={allergens[allergen.name]}
-                            style={styles.allergenIcon}
-                        />)
-                    })
-                    }
-                </View>
+                <Allergen allergen={meal.allergens} />
 
                 <Text style={styles.cardDescription}>{meal.description}</Text>
 

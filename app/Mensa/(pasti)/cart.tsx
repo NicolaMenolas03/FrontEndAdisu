@@ -8,32 +8,11 @@ import MealCard from '@/components/mealCard';
 
 
 export default function Cart() {
-    const { selectedMeals } = useCart();
+    const { selectedMeals, addToCart, removeFromCart } = useCart();
     const [unavailableMeals, setUnavailableMeals] = useState<number[]>([]);
 
     const navigateToPasti = (mensaId: string) => {
         router.push(`/Mensa/pasti?mensaId=${mensaId}`);
-    };
-
-    const [quantities, setQuantities] = useState<{ [key: number]: number }>(
-        selectedMeals.reduce((acc, meal) => {
-            acc[meal.id] = 1; // Imposta la quantità iniziale a 1 per ogni pasto
-            return acc;
-        }, {} as { [key: number]: number })
-    );
-
-    const incrementQuantity = (id: number) => {
-        setQuantities((prevQuantities) => ({
-            ...prevQuantities,
-            [id]: prevQuantities[id] + 1,
-        }));
-    };
-
-    const decrementQuantity = (id: number) => {
-        setQuantities((prevQuantities) => ({
-            ...prevQuantities,
-            [id]: prevQuantities[id] > 1 ? prevQuantities[id] - 1 : 1, // Impedisce che la quantità scenda sotto 1
-        }));
     };
 
     useEffect(() => {
@@ -43,7 +22,7 @@ export default function Cart() {
     const checkMealAvailability = async () => {
         try {
             const response = await axios.post('/daily_meals/check_meal_available/', {
-                ids: selectedMeals.map(meal => meal.id)
+                ids: selectedMeals
             });
             setUnavailableMeals(response.data.unavailable_meals);
         } catch (error) {
@@ -56,7 +35,7 @@ export default function Cart() {
             <View>
 
                 <Text>
-                    <TouchableOpacity onPress={() => {navigateToPasti(selectedMeals[0].canteens.toString())}}>
+                    <TouchableOpacity onPress={() => {navigateToPasti("2")}}>
                         Pasti
                     </TouchableOpacity>
                 </Text>
@@ -65,18 +44,18 @@ export default function Cart() {
             <Text style={styles.title}>Il tuo carrello</Text>
             
             <FlatList 
-                data={selectedMeals}
+                data={Object.values(selectedMeals)}
                 renderItem={({ item }) => (
                     <View style={styles.mealItem}>
                         
                         <MealCard
-                        meal = {item}
-                        quantity = {1}
-                        incrementQuantity={() => incrementQuantity(item.id)}
-                        decrementQuantity={() => decrementQuantity(item.id)}
+                        meal = {item.meal}
+                        quantity = {item.quantity}
+                        incrementQuantity={() => addToCart(item.meal)}
+                        decrementQuantity={() => removeFromCart(item.meal.id)}
 
                         />
-                        {unavailableMeals.includes(item.id) && (
+                        {unavailableMeals.includes(item.meal.id) && (
                             <Text style={styles.unavailable}>Non disponibile</Text>
                         )}
                     </View>
