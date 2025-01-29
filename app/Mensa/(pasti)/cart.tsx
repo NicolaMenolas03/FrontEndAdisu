@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import { useCart } from '../../../context/CartContext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -6,6 +6,9 @@ import { router } from 'expo-router';
 import MealCard from '@/components/mealCard';
 
 
+
+
+const { width } = Dimensions.get('window');
 
 export default function Cart() {
     const { selectedMeals, addToCart, removeFromCart } = useCart();
@@ -34,11 +37,7 @@ export default function Cart() {
         <View style={styles.container}>
             <View>
 
-                <Text>
-                    <TouchableOpacity onPress={() => {navigateToPasti("2")}}>
-                        Pasti
-                    </TouchableOpacity>
-                </Text>
+            
 
             </View>
             <Text style={styles.title}>Il tuo carrello</Text>
@@ -62,15 +61,22 @@ export default function Cart() {
 
                 )}
             />
+
+            <TouchableOpacity 
+                style={styles.confirmButton} 
+                onPress={() => {navigateToPasti("2")}}>
+                <Text style={styles.confirmButtonText}>Conferma ordine</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    
     container: {
         flex: 1,
         padding: 16,
-        backgroundColor: 'transparent', // Make container background transparent
+        backgroundColor: 'white', // Make container background transparent
     },
     title: {
         fontSize: 24,
@@ -85,5 +91,21 @@ const styles = StyleSheet.create({
     },
     unavailable: {
         color: 'red',
+    },
+
+    confirmButton: {
+        backgroundColor: '#005dff',
+        padding: 15,
+        borderRadius: 30,
+        width: width * 0.8, // 80% of screen width
+        alignSelf: 'center',
+        position: 'absolute',
+        bottom: 50, // Adjust based on navbar height + margin
+    },
+    confirmButtonText: {
+        color: '#FFF',
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: 'bold',
     }
 });

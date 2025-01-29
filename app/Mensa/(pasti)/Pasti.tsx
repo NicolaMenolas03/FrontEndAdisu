@@ -7,6 +7,8 @@ import { router } from 'expo-router';
 import { TypePasti } from '../../lib/definitions';
 import FoodCard from '@/components/foodCard';
 
+
+
 type RootStackParamList = {
     Pasti: {
         mensaId: string;
