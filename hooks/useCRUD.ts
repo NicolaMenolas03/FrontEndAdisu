@@ -34,7 +34,7 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
 
   const updateItem = async (id: number, updatedItem: Partial<T>) => {
     try {
-      await apiService.put<T, Partial<T>>(`${endpoint}/${id}/`, updatedItem);
+      await apiService.put<T, Partial<T>>(`${endpoint}${id}/`, updatedItem);
       setData((prev) =>
         prev.map((item) => (item.id === id ? { ...item, ...updatedItem } : item))
       );
@@ -46,7 +46,7 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
 
   const deleteItem = async (id: number) => {
     try {
-      await apiService.delete<T>(`${endpoint}/${id}/`);
+      await apiService.delete<T>(`${endpoint}${id}/`);
       setData((prev) => prev.filter((item) => item.id !== id));
     } catch (err) {
       const axiosError = err as AxiosError;

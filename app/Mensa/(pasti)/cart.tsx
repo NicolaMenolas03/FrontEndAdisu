@@ -19,7 +19,7 @@ export default function Cart() {
     });
 
     const { selectedMeals, addToCart, removeFromCart, canteen_id } = useCart();
-    const { createItem } = useCRUD<TypeBooking>("/booking/");
+    const { createItem, deleteItem} = useCRUD<TypeBooking>("/booking/");
 
     const mealList = Object.values(selectedMeals);
     
@@ -30,6 +30,8 @@ export default function Cart() {
         return format(today, "yyyy-MM-dd'T'HH:mm:ss");
     };
 
+
+  
     const confirmOrder = async () => {
         let response = await createItem({
             "collection_date": formatCollectionDate(selectedTime),
