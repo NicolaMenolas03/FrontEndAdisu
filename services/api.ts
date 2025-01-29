@@ -1,8 +1,22 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthResponse, LoginData, RegisterData } from '@/app/lib/definitions';
+import { Platform } from 'react-native';
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const getBaseUrl = () => {
+  if (__DEV__) {
+    // In sviluppo
+    if (Platform.OS === 'web') {
+      return 'http://127.0.0.1:8000/api';
+    } else {
+      return 'http://192.168.1.75:8000/api';  
+    }
+  } else {
+    // In produzione
+    return 'https://tuodominio.com/api';
+  }
+};
+const API_BASE_URL = getBaseUrl();
 export let accessToken: string | undefined;
 
 const apiClient = axios.create({

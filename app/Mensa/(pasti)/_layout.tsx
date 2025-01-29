@@ -23,6 +23,10 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
             router.push(`/Mensa/(pasti)/cart`);
     };
 
+    const navigateToOrders = () => {
+            router.push(`/Mensa/(pasti)/orders`);
+    };
+
 
     return (
         <View style={styles.container}>
@@ -45,7 +49,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 
                 <TouchableOpacity 
                     style={styles.navButton}
-                    onPress={() => navigateToCart()}
+                    onPress={navigateToCart}
                 >
                     <View style={styles.cartContainer}>
                         <Ionicons name="cart-outline" size={24} color="#FFFFFF" />

@@ -43,6 +43,25 @@ export type RegisterData = {
     last_name: string;
 }
 
+// Bookings
+export type TypeBooking = {
+    id: number;
+    user: number;
+    booking_date: string;
+    collection_date: string
+    status: string;
+    price: number;
+    total_price: number;
+}
+
+export type TypeBookingItem = {
+    id: number;
+    booking: TypeBooking;
+    meal: TypePasti;
+    quantity: number;
+    price: number;
+}
+
 
 // Cart Context
 export type MealQuantities = {
