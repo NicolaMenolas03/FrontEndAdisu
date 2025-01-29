@@ -14,6 +14,14 @@ export type TypePasti = {
     canteens: number;
 };
 
+export type TypePastiGioralieri = {
+    id: number;
+    available: boolean;
+    meal: TypePasti;
+    date: string;
+    canteen: TypeMensa;
+}
+
 // Mensa
 export type TypeMensa = {
     id: number;
@@ -52,6 +60,13 @@ export type TypeBooking = {
     status: string;
     price: number;
     total_price: number;
+    canteen: TypeMensa;
+    items?: Array<{
+        meal: number;
+        quantity: number;
+    }>;
+    canteen_id?: number;
+
 }
 
 export type TypeBookingItem = {
@@ -76,4 +91,6 @@ export type CartContextType = {
     addToCart: (meal: TypePasti) => void;
     removeFromCart: (mealId: number) => void;
     getTotalItems: () => number;
+    canteen_id?: number;
+    setCanteenId: (id: number) => void;
 };

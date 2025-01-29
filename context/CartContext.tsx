@@ -7,10 +7,13 @@ const CartContext = createContext<CartContextType>({
     addToCart: () => {},
     removeFromCart: () => {},
     getTotalItems: () => 0,
+    canteen_id: undefined,
+    setCanteenId: () => {},
 });
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
     const [selectedMeals, setSelectedMeals] = useState<MealQuantities>({});
+    const [canteen_id, setCanteenId] = useState<number | undefined>(undefined);
 
     const addToCart = (meal: TypePasti) => {
         setSelectedMeals(prev => {
@@ -48,7 +51,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             selectedMeals, 
             addToCart, 
             removeFromCart,
-            getTotalItems 
+            getTotalItems,
+            canteen_id,
+            setCanteenId,
         }}>
             {children}
         </CartContext.Provider>

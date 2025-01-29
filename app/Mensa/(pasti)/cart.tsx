@@ -1,49 +1,69 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import { useCart } from '../../../context/CartContext';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { router } from 'expo-router';
+import { useEffect, useState } from 'react';;
 import MealCard from '@/components/mealCard';
+import { useCRUD } from '@/hooks/useCRUD';
+import { TypeBooking, TypePastiGioralieri } from '@/app/lib/definitions';
+import { apiService } from '@/services/api';
+import { Picker } from '@react-native-picker/picker';
+import { format } from 'date-fns';
+import { router } from 'expo-router';
 
-
-
-
-const { width } = Dimensions.get('window');
 
 export default function Cart() {
-    const { selectedMeals, addToCart, removeFromCart } = useCart();
     const [unavailableMeals, setUnavailableMeals] = useState<number[]>([]);
+    const [selectedTime, setSelectedTime] = useState('10:00');
+    const timeSlots = Array.from({ length: 12 }, (_, i) => {
+        const hour = i + 11;
+        return `${hour}:00`;
+    });
 
-    const navigateToPasti = (mensaId: string) => {
-        router.push(`/Mensa/pasti?mensaId=${mensaId}`);
+    const { selectedMeals, addToCart, removeFromCart, canteen_id } = useCart();
+    const { createItem } = useCRUD<TypeBooking>("/booking/");
+
+    const mealList = Object.values(selectedMeals);
+    
+    const formatCollectionDate = (time: string) => {
+        const today = new Date();
+        const [hours] = time.split(':');
+        today.setHours(parseInt(hours), 0, 0);
+        return format(today, "yyyy-MM-dd'T'HH:mm:ss");
+    };
+
+    const confirmOrder = async () => {
+        let response = await createItem({
+            "collection_date": formatCollectionDate(selectedTime),
+            "items": mealList.map((item) => ({ "meal": item.meal.id, "quantity": item.quantity })), 
+            "canteen_id": canteen_id,
+        })
+        if (response) {
+            router.push(`/Mensa/(pasti)/orders?id=${response.id}`);
+        }
     };
 
     useEffect(() => {
         checkMealAvailability();
     }, []);
-
+    
     const checkMealAvailability = async () => {
         try {
-            const response = await axios.post('/daily_meals/check_meal_available/', {
-                ids: selectedMeals
+            const response = await apiService.post<TypePastiGioralieri[]>('daily_meals/check_meal_available/', {
+                ids: mealList.map((item) => item.meal.id),
             });
-            setUnavailableMeals(response.data.unavailable_meals);
+            setUnavailableMeals(response.data.map((item) => item.id));
         } catch (error) {
             console.error('Error checking meal availability:', error);
         }
     };
-    console.log(selectedMeals);
+
     return (
         <View style={styles.container}>
             <View>
-
-            
-
             </View>
             <Text style={styles.title}>Il tuo carrello</Text>
             
             <FlatList 
-                data={Object.values(selectedMeals)}
+                data={mealList}
                 renderItem={({ item }) => (
                     <View style={styles.mealItem}>
                         
@@ -62,11 +82,23 @@ export default function Cart() {
                 )}
             />
 
-            <TouchableOpacity 
-                style={styles.confirmButton} 
-                onPress={() => {navigateToPasti("2")}}>
-                <Text style={styles.confirmButtonText}>Conferma ordine</Text>
-            </TouchableOpacity>
+            <View style={styles.bottomContainer}>
+                <Picker
+                    selectedValue={selectedTime}
+                    style={styles.timePicker}
+                    onValueChange={(itemValue) => setSelectedTime(itemValue)}
+                >
+                    {timeSlots.map((time) => (
+                        <Picker.Item key={time} label={time} value={time} />
+                    ))}
+                </Picker>
+
+                <TouchableOpacity 
+                    style={styles.confirmButton} 
+                    onPress={() => {confirmOrder()}}>
+                    <Text style={styles.confirmButtonText}>Conferma ordine</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -94,18 +126,27 @@ const styles = StyleSheet.create({
     },
 
     confirmButton: {
-        backgroundColor: '#005dff',
+        backgroundColor: '#007AFF',
         padding: 15,
-        borderRadius: 30,
-        width: width * 0.8, // 80% of screen width
-        alignSelf: 'center',
-        position: 'absolute',
-        bottom: 50, // Adjust based on navbar height + margin
+        borderRadius: 8,
+        width: '55%',
     },
     confirmButtonText: {
-        color: '#FFF',
+        color: 'white',
         textAlign: 'center',
         fontSize: 16,
         fontWeight: 'bold',
-    }
+    },
+    bottomContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        marginBottom: 20,
+    },
+    timePicker: {
+        width: '40%',
+        height: 50,
+        borderRadius: 8,
+    },
 });

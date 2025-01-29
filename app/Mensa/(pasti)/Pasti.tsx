@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from 'expo-router';
 import { TypePasti } from '../../lib/definitions';
 import FoodCard from '@/components/foodCard';
+import { useCart } from '@/context/CartContext';
 
 
 
@@ -20,8 +21,11 @@ type PastiScreenRouteProp = RouteProp<RootStackParamList, 'Pasti'>;
 const { width } = Dimensions.get('window');
 
 const Pasti = () => {
+    const { setCanteenId } = useCart();
     const route = useRoute<PastiScreenRouteProp>();
     const { mensaId, mensaName } = route.params;
+
+    setCanteenId(parseInt(mensaId));
 
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const { data, error, loading } = useCRUD<TypePasti>(`/daily_meals/${mensaId}/get_meals_by_id/`); // Note the Pasti[] type
