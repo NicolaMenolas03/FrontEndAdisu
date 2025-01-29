@@ -13,8 +13,11 @@ export default function App() {
         <Stack.Screen name="landingPage"/>
         <Stack.Screen name="BorsaDiStudio"  />
         <Stack.Screen name="DatiBorsaDiStudio" />
-        <Stack.Screen name="RichiestaBorsaDiStudio"/>
         <Stack.Screen name="SimulazioneBorsaDiStudio"/>
+        <Stack.Screen name="RichiestaBorsaDiStudio"/>
+        <Stack.Screen name="DatiAnagrafici"/>
+        <Stack.Screen name="DatiResidenza"/>
+        <Stack.Screen name="DatiScolastici"/>
       </Stack>
   );
 }
