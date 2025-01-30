@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { TextInput, Button, Card } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
-import Navbar from '@/components/Navbar';
-import { useRouter } from 'expo-router'; // Ensure correct import for router
+import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import HomePage from '@/components/HomePage';
 
 export default function DatiAnagraficiPage() {
-  const router = useRouter(); // Declare the router variable
+  const router = useRouter();
 
   const [formDatiAnagrafici, setformDatiAnagrafici] = useState({
     nome: '',
@@ -21,145 +21,120 @@ export default function DatiAnagraficiPage() {
   useEffect(() => {
     const loadformDatiAnagrafici = async () => {
       try {
-        const savedformDatiAnagrafici = await AsyncStorage.getItem('formDatiAnagrafici');
-        if (savedformDatiAnagrafici) {
-          setformDatiAnagrafici(JSON.parse(savedformDatiAnagrafici));
+        const savedData = await AsyncStorage.getItem('formDatiAnagrafici');
+        if (savedData) {
+          setformDatiAnagrafici(JSON.parse(savedData));
         }
       } catch (error) {
-        console.error('Failed to load form data', error);
+        console.error('Errore nel caricamento dei dati', error);
       }
     };
 
     loadformDatiAnagrafici();
   }, []);
 
-  const handleInputChange = async (field: string, value: string | boolean) => {
-    const updatedformDatiAnagrafici = { ...formDatiAnagrafici, [field]: value };
-    setformDatiAnagrafici(updatedformDatiAnagrafici);
+  const handleInputChange = async (field: string, value: any) => {
+    const updatedData = { ...formDatiAnagrafici, [field]: value };
+    setformDatiAnagrafici(updatedData);
     try {
-      await AsyncStorage.setItem('formDatiAnagrafici', JSON.stringify(updatedformDatiAnagrafici));
+      await AsyncStorage.setItem('formDatiAnagrafici', JSON.stringify(updatedData));
     } catch (error) {
-      console.error('Failed to save form data', error);
+      console.error('Errore nel salvataggio dei dati', error);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View>
-          <Text style={styles.sectionTitle}>Dati Anagrafici</Text>
-
-          <Text style={styles.label1}>Nome</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <HomePage />
+      <Text style={styles.title}>Dati Anagrafici</Text>
+      <Card style={styles.card}>
+        <Card.Content>
           <TextInput
-            style={styles.input}
-            placeholder="Nome"
+            label="Nome"
             value={formDatiAnagrafici.nome}
             onChangeText={(text) => handleInputChange('nome', text)}
-          />
-          <Text style={styles.label1}>Cognome</Text>
-          <TextInput
+            mode="outlined"
             style={styles.input}
-            placeholder="Cognome"
+          />
+          <TextInput
+            label="Cognome"
             value={formDatiAnagrafici.cognome}
             onChangeText={(text) => handleInputChange('cognome', text)}
+            mode="outlined"
+            style={styles.input}
           />
-          <Text style={styles.label1}>Sesso</Text>
+          <Text style={styles.label}>Sesso</Text>
           <Picker
-            style={styles.picker}
             selectedValue={formDatiAnagrafici.sesso}
             onValueChange={(itemValue) => handleInputChange('sesso', itemValue)}
+            style={styles.picker}
           >
             <Picker.Item label="Seleziona Sesso" value="" />
             <Picker.Item label="Maschio" value="Maschio" />
             <Picker.Item label="Femmina" value="Femmina" />
             <Picker.Item label="Altro" value="Altro" />
           </Picker>
-          <Text style={styles.label1}>Età di Nascita</Text>
           <TextInput
-            style={styles.input}
-            placeholder="Età di Nascita"
-            keyboardType="numeric"
+            label="Età di Nascita"
             value={formDatiAnagrafici.etaNascita}
             onChangeText={(text) => handleInputChange('etaNascita', text)}
-          />
-          <Text style={styles.label1}>Cittadinanza</Text>
-          <TextInput
+            mode="outlined"
+            keyboardType="numeric"
             style={styles.input}
-            placeholder="Cittadinanza"
+          />
+          <TextInput
+            label="Cittadinanza"
             value={formDatiAnagrafici.cittadinanza}
             onChangeText={(text) => handleInputChange('cittadinanza', text)}
+            mode="outlined"
+            style={styles.input}
           />
-
-          <View style={styles.checkboxContainer}>
-            
-            <Text style={styles.label}>Disabilità</Text>
-          </View>
-        </View>
-      
-
-      <TouchableOpacity style={styles.nextButton} onPress={()=>router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza")}>
-        <Text style={styles.nextButtonText}>Successivo</Text>
-      </TouchableOpacity>
-      </ScrollView>
-    </View>
+        </Card.Content>
+      </Card>
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="contained"
+          buttonColor="#005dff"
+          onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza')}
+        >
+          Successivo
+        </Button>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  label1: {
+  container: {
+    padding: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  label:{
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginTop: 10,
   },
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-  scrollContainer: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 20,
+  title: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#0660ff',
-    marginBottom: 20,
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: 'white',
+    padding: 15,
+    marginBottom: 20,
   },
   input: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
     marginBottom: 15,
   },
   picker: {
-    width: '100%',
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
     marginBottom: 15,
   },
-  checkboxContainer: {
+  buttonContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  label: {
-    marginLeft: 8,
-  },
-  nextButton: {
-    backgroundColor: '#0660ff',
-    padding: 15,
-    borderRadius: 5,
-    width: '90%',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  nextButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    justifyContent: 'center',
+    marginTop: 20,
   },
 });

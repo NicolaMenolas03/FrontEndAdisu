@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Button, FlatList } from 'react-native';
-import Navbar from '@/components/Navbar';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { TextInput, Button, Card, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import HomePage from '../../../components/HomePage';
 
 interface Esame {
   materia: string;
@@ -32,7 +33,6 @@ export default function DatiEsamePage() {
         console.error('Failed to load form data', error);
       }
     };
-
     loadformDatiScolatici();
   }, []);
 
@@ -55,116 +55,117 @@ export default function DatiEsamePage() {
     try {
       const formData = { ...formDatiScolatici, esami };
       await AsyncStorage.setItem('formDatiEsame', JSON.stringify(formData));
-      console.log('Dati esame salvati');
-      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame'); // O la pagina finale
+      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame');
     } catch (error) {
       console.error('Errore nel salvataggio dei dati', error);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.sectionTitle}>Dati Esame</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <HomePage />
+      <Text style={styles.title}>Dati Esame</Text>
+      <Card style={styles.card}>
+        <Card.Content>
+          <Text style={styles.label}>Matricola:</Text>
+          <Text style={styles.output}>{formDatiScolatici.matricola}</Text>
 
-        <Text style={styles.label}>Matricola</Text>
-        <Text style={styles.output}>{formDatiScolatici.matricola}</Text>
+          <Text style={styles.label}>Corso:</Text>
+          <Text style={styles.output}>{formDatiScolatici.corso}</Text>
 
-        <Text style={styles.label}>Corso</Text>
-        <Text style={styles.output}>{formDatiScolatici.corso}</Text>
+          <Text style={styles.label}>Dipartimento:</Text>
+          <Text style={styles.output}>{formDatiScolatici.dipartimento}</Text>
+        </Card.Content>
+      </Card>
 
-        <Text style={styles.label}>Dipartimento</Text>
-        <Text style={styles.output}>{formDatiScolatici.dipartimento}</Text>
+      {esami.map((esame, index) => (
+        <Card key={index} style={styles.esameCard}>
+          <Card.Content>
+            <TextInput
+              label="Materia"
+              value={esame.materia}
+              onChangeText={(text) => handleInputChange(index, 'materia', text)}
+              mode="outlined"
+            />
+            <TextInput
+              label="CFU"
+              value={esame.cfu}
+              keyboardType="numeric"
+              onChangeText={(text) => handleInputChange(index, 'cfu', text)}
+              mode="outlined"
+              style={styles.input}
+            />
+            <TextInput
+              label="Data"
+              value={esame.data}
+              onChangeText={(text) => handleInputChange(index, 'data', text)}
+              mode="outlined"
+            />
+            <IconButton
+              icon="delete"
+              iconColor="red"
+              size={20}
+              onPress={() => handleRemoveEsame(index)}
+            />
+          </Card.Content>
+        </Card>
+      ))}
 
-        <Text style={styles.label}>Esami Universitari</Text>
+      <Button mode="contained" buttonColor="#005dff" onPress={handleAddEsame} style={styles.addButton}>
+        Aggiungi Esame
+      </Button>
 
-        <FlatList
-          data={esami}
-          renderItem={({ item, index }) => (
-            <View style={styles.row}>
-              <TextInput
-                style={styles.input}
-                placeholder="Materia"
-                value={item.materia}
-                onChangeText={(text) => handleInputChange(index, 'materia', text)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="CFU"
-                value={item.cfu}
-                keyboardType="numeric"
-                onChangeText={(text) => handleInputChange(index, 'cfu', text)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Data"
-                value={item.data}
-                onChangeText={(text) => handleInputChange(index, 'data', text)}
-              />
-              <Button title="Rimuovi" onPress={() => handleRemoveEsame(index)} />
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-
-        <Button title="Aggiungi Esame" onPress={handleAddEsame} />
-
-        <View style={styles.buttonContainer}>
-          <Button title="Indietro" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici")} />
-          <Button title="Successivo" onPress={handleSubmit} />
-        </View>
-      </ScrollView>
-    </View>
+      <View style={styles.buttonContainer}>
+        <Button mode="outlined" textColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici')}>Indietro</Button>
+        <Button mode="contained" buttonColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici')}>Successivo</Button>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-  scrollContainer: {
     padding: 20,
+    backgroundColor: '#f5f5f5',
   },
-  sectionTitle: {
-    fontSize: 20,
+  title: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#0660ff',
-    marginBottom: 20,
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    marginBottom: 20,
+    backgroundColor: 'white',
+  },
+  esameCard: {
+    marginBottom: 15,
+    backgroundColor: 'white',
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginBottom: 5,
   },
   output: {
     fontSize: 16,
     color: '#333',
     padding: 10,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#e0e0e0',
     borderRadius: 5,
     marginBottom: 15,
   },
   input: {
-    width: '30%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 15,
-    marginRight: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 10,
-    width: '100%',
+  },
+  addButton: {
+    marginVertical: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    justifyContent: 'space-evenly',
+    marginTop: 20,
+    
   },
 });

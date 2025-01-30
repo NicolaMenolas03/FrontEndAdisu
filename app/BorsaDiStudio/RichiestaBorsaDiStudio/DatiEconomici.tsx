@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Button, Switch } from 'react-native';
-import Navbar from '@/components/Navbar';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { TextInput, Button, Card, Switch } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import HomePage from '@/components/HomePage';
 
 export default function DatiEconomiciPage() {
   const router = useRouter();
-  
+
   const [formDatiEconomici, setformDatiEconomici] = useState({
     isee: '',
     dataRilascio: '',
@@ -24,7 +25,6 @@ export default function DatiEconomiciPage() {
         console.error('Failed to load form data', error);
       }
     };
-
     loadformDatiEconomici();
   }, []);
 
@@ -39,82 +39,77 @@ export default function DatiEconomiciPage() {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.sectionTitle}>Dati Economici</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <HomePage />
+      <Text style={styles.title}>Dati Economici</Text>
 
-        <Text style={styles.label}>ISEE</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Codice ISEE"
-          value={formDatiEconomici.isee}
-          onChangeText={(text) => handleInputChange('isee', text)}
-        />
-
-        <Text style={styles.label}>Data Rilascio ISEE</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Data Rilascio"
-          value={formDatiEconomici.dataRilascio}
-          onChangeText={(text) => handleInputChange('dataRilascio', text)}
-        />
-
-        <Text style={styles.label}>Autorizzo l'Università degli Studi di Bari all'acquisizione dei dati ISEE dalla banca dati dell'INPS</Text>
-        <View style={styles.switchContainer}>
-          <Text>Sì</Text>
-          <Switch
-            value={formDatiEconomici.autorizzoINPS}
-            onValueChange={(value) => handleInputChange('autorizzoINPS', value)}
+      <Card style={styles.card}>
+        <Card.Content>
+          <TextInput
+            label="ISEE"
+            value={formDatiEconomici.isee}
+            keyboardType="numeric"
+            onChangeText={(text) => handleInputChange('isee', text)}
+            mode="outlined"
+            style={styles.input}
           />
-          <Text>No</Text>
-        </View>
+          <TextInput
+            label="Data Rilascio ISEE"
+            value={formDatiEconomici.dataRilascio}
+            onChangeText={(text) => handleInputChange('dataRilascio', text)}
+            mode="outlined"
+            style={styles.input}
+          />
+          <View style={styles.switchContainer}>
+            <Text>Autorizzo l'Università a consultare i dati INPS</Text>
+            <Switch
+              value={formDatiEconomici.autorizzoINPS}
+              onValueChange={(value) => handleInputChange('autorizzoINPS', value)}
+            />
+          </View>
+        </Card.Content>
+      </Card>
 
-        <View style={styles.buttonContainer}>
-          <Button title="Indietro" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza")} />
-          <Button title="Successivo" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici")} />
-        </View>
-      </ScrollView>
-    </View>
+      <View style={styles.buttonContainer}>
+        <Button mode="outlined" textColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame')}>
+          Indietro
+        </Button>
+        <Button mode="contained" buttonColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici')}>
+          Invia Richiesta
+        </Button>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
   container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-  scrollContainer: {
     padding: 20,
+    backgroundColor: '#f5f5f5',
   },
-  sectionTitle: {
-    fontSize: 20,
+  title: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#0660ff',
-    marginBottom: 20,
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    marginBottom: 20,
+    backgroundColor: 'white',
   },
   input: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
     marginBottom: 15,
   },
   switchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    justifyContent: 'space-evenly',
+    marginTop: 20,
   },
 });

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Button, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert, Modal, Pressable } from 'react-native';
+import { TextInput, Button, Card } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
-import Navbar from '@/components/Navbar';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function DatiScolasticiPage() {
   const router = useRouter();
@@ -22,10 +23,7 @@ export default function DatiScolasticiPage() {
     statoStudente: 'Full Time',
   });
 
-  const updateFormDatiScolatici = (newData: Partial<typeof formDatiScolatici>) => {
-    setformDatiScolatici({ ...formDatiScolatici, ...newData });
-  };
-
+  const [isModalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const loadformDatiScolatici = async () => {
@@ -38,169 +36,203 @@ export default function DatiScolasticiPage() {
         console.error('Failed to load form data', error);
       }
     };
-
     loadformDatiScolatici();
   }, []);
 
-  const handleInputChange = async (field: string, value: string | boolean) => {
-    const updatedformDatiScolatici = { ...formDatiScolatici, [field]: value };
-    setformDatiScolatici(updatedformDatiScolatici);
+  const handleInputChange = async (field: keyof typeof formDatiScolatici, value: string) => {
+    const updatedData = { ...formDatiScolatici, [field]: value };
+    setformDatiScolatici(updatedData);
     try {
-      await AsyncStorage.setItem('formDatiScolatici', JSON.stringify(updatedformDatiScolatici));
+      await AsyncStorage.setItem('formDatiScolatici', JSON.stringify(updatedData));
     } catch (error) {
       console.error('Failed to save form data', error);
     }
   };
 
-  const handleExit = () => {
-    Alert.alert(
-      "Conferma Uscita",
-      "Sei sicuro di voler uscire senza salvare i dati?",
-      [
-        {
-          text: "Annulla",
-          style: "cancel",
-        },
-        {
-          text: "Conferma",
-          onPress: () => router.push('/BorsaDiStudio/BorsaDiStudioPage'), // Se conferma, esce e torna alla pagina
-        },
-      ],
-      { cancelable: false }
-    );
+  const handleHomePress = () => {
+    setModalVisible(true);
   };
 
+  const confirmExit = () => {
+    setModalVisible(false);
+    router.push('/BorsaDiStudio/BorsaDiStudioPage'); // Cambia con la route della tua pagina principale
+  };
 
   return (
-    <View style={styles.container}>
-      {/* Tasto Esci in alto a destra */}
-      <TouchableOpacity
-        style={styles.exitButton}
-        onPress={handleExit}
-      >
-        <Text style={styles.exitButtonText}>Esci</Text>
-      </TouchableOpacity>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.sectionTitle}>Dati Scolastici</Text>
-        
-        <Text style={styles.label}>Iscrizione a.a.</Text>
-        <Text style={styles.output}>{getAnnoAccademico()}</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Pulsante HOME */}
+      <View style={styles.header}>
+        <Ionicons
+          name="home-outline"
+          size={28}
+          color="#005dff"
+          onPress={handleHomePress}
+        />
+      </View>
 
-        <Text style={styles.label}>Matricola</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Matricola"
-          keyboardType="numeric"
-          value={formDatiScolatici.matricola}
-          onChangeText={(text) => handleInputChange( 'matricola', text )}
-        />
-        <Text style={styles.label}>Ateneo</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ateneo"
-          value={formDatiScolatici.ateneo}
-          onChangeText={(text) => handleInputChange( 'ateneo', text )}
-        />
-        <Text style={styles.label}>Corso</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Corso"
-          value={formDatiScolatici.corso}
-          onChangeText={(text) => handleInputChange( 'corso', text )}
-        />
-        <Text style={styles.label}>Dipartimento</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Dipartimento"
-          value={formDatiScolatici.dipartimento}
-          onChangeText={(text) => handleInputChange( 'dipartimento', text )}
-        />
-        <Text style={styles.label}>Durata legale del corso (1-6)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Durata legale del corso (1-6)"
-          keyboardType="numeric"
-          value={formDatiScolatici.durata}
-          onChangeText={(text) => handleInputChange( 'durata', text )}
-        />
-        
-        <Text style={styles.label}>Stato Studente</Text>
-        <Picker
-          selectedValue={formDatiScolatici.statoStudente}
-          style={styles.picker}
-          onValueChange={(itemValue: string) => handleInputChange( 'statoStudente', itemValue )}
+      <Text style={styles.title}>Dati Scolastici</Text>
+
+      <Card style={styles.card}>
+        <Card.Content>
+          <Text style={styles.label}>Iscrizione a.a.</Text>
+          <Text style={styles.output}>{getAnnoAccademico()}</Text>
+
+          <TextInput
+            style={styles.input}
+            label="Matricola"
+            value={formDatiScolatici.matricola}
+            onChangeText={(text) => handleInputChange('matricola', text)}
+            mode="outlined"
+            keyboardType="numeric"
+          />
+          <TextInput
+            style={styles.input}
+            label="Ateneo"
+            value={formDatiScolatici.ateneo}
+            onChangeText={(text) => handleInputChange('ateneo', text)}
+            mode="outlined"
+          />
+          <TextInput
+            style={styles.input}
+            label="Corso"
+            value={formDatiScolatici.corso}
+            onChangeText={(text) => handleInputChange('corso', text)}
+            mode="outlined"
+          />
+          <TextInput
+            style={styles.input}
+            label="Dipartimento"
+            value={formDatiScolatici.dipartimento}
+            onChangeText={(text) => handleInputChange('dipartimento', text)}
+            mode="outlined"
+          />
+          <TextInput
+            style={styles.input}
+            label="Durata legale del corso (1-6)"
+            value={formDatiScolatici.durata}
+            onChangeText={(text) => handleInputChange('durata', text)}
+            mode="outlined"
+            keyboardType="numeric"
+          />
+
+          <Text style={styles.label}>Stato Studente</Text>
+          <Picker
+            selectedValue={formDatiScolatici.statoStudente}
+            onValueChange={(value) => handleInputChange('statoStudente', value)}
+          >
+            <Picker.Item label="Full Time" value="Full Time" />
+            <Picker.Item label="Part Time" value="Part Time" />
+          </Picker>
+        </Card.Content>
+      </Card>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="outlined"
+          textColor="#005dff"
+          onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza')}
         >
-          <Picker.Item label="Full Time" value="Full Time" />
-          <Picker.Item label="Part Time" value="Part Time" />
-        </Picker>
-        
-        <View style={styles.buttonContainer}>
-          <Button title="Indietro" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} />
-          <Button title="Successivo" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame")} />
+          Indietro
+        </Button>
+        <Button
+          mode="contained"
+          buttonColor="#005dff"
+          onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame')}
+        >
+          Successivo
+        </Button>
+      </View>
+
+      {/* Modal per confermare uscita */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Sei sicuro di voler abbandonare la richiesta?</Text>
+            <View style={styles.modalButtons}>
+              <Button mode="outlined" onPress={() => setModalVisible(false)}>
+                Annulla
+              </Button>
+              <Button mode="contained" buttonColor="#ff4d4d" onPress={confirmExit}>
+                Conferma
+              </Button>
+            </View>
+          </View>
         </View>
-      </ScrollView>
-    </View>
+      </Modal>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-  scrollContainer: {
     padding: 20,
+    backgroundColor: '#f5f5f5',
   },
-  sectionTitle: {
-    fontSize: 20,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#0660ff',
-    marginBottom: 20,
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: 'white',
+    padding: 15,
+    marginBottom: 20,
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 10,
   },
+  input: {
+    marginBottom: 7,
+  },
   output: {
     fontSize: 16,
     color: '#333',
     padding: 10,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#e0e0e0',
     borderRadius: 5,
-    marginBottom: 15,
-  },
-  input: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 15,
-  },
-  picker: {
-    width: '100%',
-    height: 50,
     marginBottom: 15,
   },
   buttonContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtons: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-  },
-  exitButton: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    backgroundColor: '#0660ff',
-    padding: 10,
-    borderRadius: 5,
-    zIndex: 10,
-  },
-  exitButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
   },
 });

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Button } from 'react-native';
-import Navbar from '@/components/Navbar';
+import { StyleSheet, Text, View, ScrollView, Modal } from 'react-native';
+import { TextInput, Button, Card } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import HomePage from '../../../components/HomePage';
 
 export default function DatiResidenzaPage() {
   const router = useRouter();
@@ -11,7 +12,7 @@ export default function DatiResidenzaPage() {
     provincia: '',
     comune: '',
     indirizzo: '',
-    cap: ''
+    cap: '',
   });
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function DatiResidenzaPage() {
     loadformDatiResidenza();
   }, []);
 
-  const handleInputChange = async (field: string, value: string | boolean) => {
+  const handleInputChange = async (field: keyof typeof formDatiResidenza, value: string) => {
     const updatedformDatiResidenza = { ...formDatiResidenza, [field]: value };
     setformDatiResidenza(updatedformDatiResidenza);
     try {
@@ -39,82 +40,85 @@ export default function DatiResidenzaPage() {
     }
   };
 
-  
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.sectionTitle}>Dati di Residenza</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <HomePage />
+      
+      <Text style={styles.title}>Dati di Residenza</Text>
+      <Card style={styles.card}>
+        <Card.Content>
+          <TextInput 
+            label="Provincia" 
+            value={formDatiResidenza.provincia} 
+            onChangeText={(text) => handleInputChange('provincia', text)}
+            mode="outlined"
+            style={styles.input}
+          />
+          <TextInput 
+            label="Comune" 
+            value={formDatiResidenza.comune} 
+            onChangeText={(text) => handleInputChange('comune', text)}
+            mode="outlined"
+            style={styles.input}
+          />
+          <TextInput 
+            label="Indirizzo" 
+            value={formDatiResidenza.indirizzo} 
+            onChangeText={(text) => handleInputChange('indirizzo', text)}
+            mode="outlined"
+            style={styles.input}
+          />
+          <TextInput 
+            label="CAP" 
+            value={formDatiResidenza.cap} 
+            onChangeText={(text) => handleInputChange('cap', text)}
+            mode="outlined"
+            keyboardType="numeric"
+            style={styles.input}
+          />
+        </Card.Content>
+      </Card>
 
-        <Text style={styles.label}>Provincia</Text>
-        <TextInput
-        style={styles.input}
-        placeholder="Provincia"
-        value={formDatiResidenza.provincia}
-        onChangeText={(text) => handleInputChange('provincia', text)}
-      />
-      <Text style={styles.label}>Comune</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Comune"
-        value={formDatiResidenza.comune}
-        onChangeText={(text) => handleInputChange('comune', text)}
-      />
-      <Text style={styles.label}>Indirizzo</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Indirizzo"
-        value={formDatiResidenza.indirizzo}
-        onChangeText={(text) => handleInputChange('indirizzo', text)}
-      />
-      <Text style={styles.label}>CAP</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="CAP"
-        value={formDatiResidenza.cap}
-        onChangeText={(text) => handleInputChange('cap', text)}
-      />
-
-        <View style={styles.buttonContainer}>
-          <Button title="Indietro" onPress={()=>router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} />
-          <Button title="Successivo" onPress={()=>router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici")} />
-        </View>
-      </ScrollView>
-    </View>
+      <View style={styles.buttonContainer}>
+        <Button mode="outlined" textColor="#005dff" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")}>
+          Indietro
+        </Button>
+        <Button mode="contained" buttonColor="#005dff" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici")}>
+          Successivo
+        </Button>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
   container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-  scrollContainer: {
     padding: 20,
+    backgroundColor: '#f5f5f5',
   },
-  sectionTitle: {
-    fontSize: 20,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#0660ff',
-    marginBottom: 20,
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: 'white',
+    padding: 15,
+    marginBottom: 20,
   },
   input: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
     marginBottom: 15,
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    justifyContent: 'space-evenly',
+    marginTop: 20,
   },
 });
