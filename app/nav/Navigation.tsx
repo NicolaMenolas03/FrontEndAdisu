@@ -18,6 +18,7 @@ export default function App() {
         <Stack.Screen name="DatiAnagrafici"/>
         <Stack.Screen name="DatiResidenza"/>
         <Stack.Screen name="DatiScolastici"/>
+        <Stack.Screen name="DatiEconomici"/>
       </Stack>
   );
 }

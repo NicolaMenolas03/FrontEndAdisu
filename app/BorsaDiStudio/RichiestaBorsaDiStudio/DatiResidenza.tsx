@@ -1,81 +1,94 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, Button } from 'react-native';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'expo-router';
-
-type RootStackParamList = {
-  DatiEconomiciPage: {
-    provincia: string;
-    comune: string;
-    indirizzo: string;
-    cap: string;
-    [key: string]: any;
-  };
-  DatiAnagraficiPage: {
-    provincia: string;
-    comune: string;
-    indirizzo: string;
-    cap: string;
-    [key: string]: any;
-  };
-};
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function DatiResidenzaPage() {
   const router = useRouter();
   
-  const [formData, setFormData] = useState({
+  const [formDatiResidenza, setformDatiResidenza] = useState({
     provincia: '',
     comune: '',
     indirizzo: '',
     cap: ''
   });
 
-  const updateFormData = (newData: Partial<typeof formData>) => {
-    setFormData({ ...formData, ...newData });
+  useEffect(() => {
+    const loadformDatiResidenza = async () => {
+      try {
+        const savedformDatiResidenza = await AsyncStorage.getItem('formDatiResidenza');
+        if (savedformDatiResidenza) {
+          setformDatiResidenza(JSON.parse(savedformDatiResidenza));
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadformDatiResidenza();
+  }, []);
+
+  const handleInputChange = async (field: string, value: string | boolean) => {
+    const updatedformDatiResidenza = { ...formDatiResidenza, [field]: value };
+    setformDatiResidenza(updatedformDatiResidenza);
+    try {
+      await AsyncStorage.setItem('formDatiResidenza', JSON.stringify(updatedformDatiResidenza));
+    } catch (error) {
+      console.error('Failed to save form data', error);
+    }
   };
+
   
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.sectionTitle}>Dati di Residenza</Text>
 
+        <Text style={styles.label}>Provincia</Text>
         <TextInput
         style={styles.input}
         placeholder="Provincia"
-        value={formData.provincia}
-        onChangeText={(text) => updateFormData({ provincia: text })}
+        value={formDatiResidenza.provincia}
+        onChangeText={(text) => handleInputChange('provincia', text)}
       />
+      <Text style={styles.label}>Comune</Text>
       <TextInput
         style={styles.input}
         placeholder="Comune"
-        value={formData.comune}
-        onChangeText={(text) => updateFormData({ comune: text })}
+        value={formDatiResidenza.comune}
+        onChangeText={(text) => handleInputChange('comune', text)}
       />
+      <Text style={styles.label}>Indirizzo</Text>
       <TextInput
         style={styles.input}
         placeholder="Indirizzo"
-        value={formData.indirizzo}
-        onChangeText={(text) => updateFormData({ indirizzo: text })}
+        value={formDatiResidenza.indirizzo}
+        onChangeText={(text) => handleInputChange('indirizzo', text)}
       />
+      <Text style={styles.label}>CAP</Text>
       <TextInput
         style={styles.input}
         placeholder="CAP"
-        value={formData.cap}
-        onChangeText={(text) => updateFormData({ cap: text })}
+        value={formDatiResidenza.cap}
+        onChangeText={(text) => handleInputChange('cap', text)}
       />
 
         <View style={styles.buttonContainer}>
-          <Button title="Indietro" onPress={()=>router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza")} />
+          <Button title="Indietro" onPress={()=>router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} />
           <Button title="Successivo" onPress={()=>router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici")} />
         </View>
       </ScrollView>
-
-      <Navbar namePage="DatiResidenzaPage" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',

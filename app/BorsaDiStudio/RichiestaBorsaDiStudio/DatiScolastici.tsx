@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TextInput, ScrollView, Button, TouchableOpacity, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function DatiScolasticiPage() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function DatiScolasticiPage() {
     return `${currentYear}/${currentYear + 1}`;
   };
 
-  const [formData, setFormData] = useState({
+  const [formDatiScolatici, setformDatiScolatici] = useState({
     matricola: '',
     ateneo: '',
     corso: '',
@@ -21,55 +22,113 @@ export default function DatiScolasticiPage() {
     statoStudente: 'Full Time',
   });
 
-  const updateFormData = (newData: Partial<typeof formData>) => {
-    setFormData({ ...formData, ...newData });
+  const updateFormDatiScolatici = (newData: Partial<typeof formDatiScolatici>) => {
+    setformDatiScolatici({ ...formDatiScolatici, ...newData });
   };
+
+
+  useEffect(() => {
+    const loadformDatiScolatici = async () => {
+      try {
+        const savedformDatiScolatici = await AsyncStorage.getItem('formDatiScolatici');
+        if (savedformDatiScolatici) {
+          setformDatiScolatici(JSON.parse(savedformDatiScolatici));
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadformDatiScolatici();
+  }, []);
+
+  const handleInputChange = async (field: string, value: string | boolean) => {
+    const updatedformDatiScolatici = { ...formDatiScolatici, [field]: value };
+    setformDatiScolatici(updatedformDatiScolatici);
+    try {
+      await AsyncStorage.setItem('formDatiScolatici', JSON.stringify(updatedformDatiScolatici));
+    } catch (error) {
+      console.error('Failed to save form data', error);
+    }
+  };
+
+  const handleExit = () => {
+    Alert.alert(
+      "Conferma Uscita",
+      "Sei sicuro di voler uscire senza salvare i dati?",
+      [
+        {
+          text: "Annulla",
+          style: "cancel",
+        },
+        {
+          text: "Conferma",
+          onPress: () => router.push('/BorsaDiStudio/BorsaDiStudioPage'), // Se conferma, esce e torna alla pagina
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
 
   return (
     <View style={styles.container}>
+      {/* Tasto Esci in alto a destra */}
+      <TouchableOpacity
+        style={styles.exitButton}
+        onPress={handleExit}
+      >
+        <Text style={styles.exitButtonText}>Esci</Text>
+      </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.sectionTitle}>Dati Scolastici</Text>
         
         <Text style={styles.label}>Iscrizione a.a.</Text>
         <Text style={styles.output}>{getAnnoAccademico()}</Text>
-        
+
+        <Text style={styles.label}>Matricola</Text>
         <TextInput
           style={styles.input}
           placeholder="Matricola"
           keyboardType="numeric"
-          value={formData.matricola}
-          onChangeText={(text) => updateFormData({ matricola: text })}
+          value={formDatiScolatici.matricola}
+          onChangeText={(text) => handleInputChange( 'matricola', text )}
         />
+        <Text style={styles.label}>Ateneo</Text>
         <TextInput
           style={styles.input}
           placeholder="Ateneo"
-          value={formData.ateneo}
-          onChangeText={(text) => updateFormData({ ateneo: text })}
+          value={formDatiScolatici.ateneo}
+          onChangeText={(text) => handleInputChange( 'ateneo', text )}
         />
+        <Text style={styles.label}>Corso</Text>
         <TextInput
           style={styles.input}
           placeholder="Corso"
-          value={formData.corso}
-          onChangeText={(text) => updateFormData({ corso: text })}
+          value={formDatiScolatici.corso}
+          onChangeText={(text) => handleInputChange( 'corso', text )}
         />
+        <Text style={styles.label}>Dipartimento</Text>
         <TextInput
           style={styles.input}
           placeholder="Dipartimento"
-          value={formData.dipartimento}
-          onChangeText={(text) => updateFormData({ dipartimento: text })}
+          value={formDatiScolatici.dipartimento}
+          onChangeText={(text) => handleInputChange( 'dipartimento', text )}
         />
+        <Text style={styles.label}>Durata legale del corso (1-6)</Text>
         <TextInput
           style={styles.input}
           placeholder="Durata legale del corso (1-6)"
           keyboardType="numeric"
-          value={formData.durata}
-          onChangeText={(text) => updateFormData({ durata: text })}
+          value={formDatiScolatici.durata}
+          onChangeText={(text) => handleInputChange( 'durata', text )}
         />
+        
         <Text style={styles.label}>Stato Studente</Text>
         <Picker
-          selectedValue={formData.statoStudente}
+          selectedValue={formDatiScolatici.statoStudente}
           style={styles.picker}
-          onValueChange={(itemValue: string) => updateFormData({ statoStudente: itemValue })}
+          onValueChange={(itemValue: string) => handleInputChange( 'statoStudente', itemValue )}
         >
           <Picker.Item label="Full Time" value="Full Time" />
           <Picker.Item label="Part Time" value="Part Time" />
@@ -77,10 +136,9 @@ export default function DatiScolasticiPage() {
         
         <View style={styles.buttonContainer}>
           <Button title="Indietro" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} />
-          <Button title="Successivo" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici")} />
+          <Button title="Successivo" onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame")} />
         </View>
       </ScrollView>
-      <Navbar namePage="DatiScolasticiPage" />
     </View>
   );
 }
@@ -131,5 +189,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+  },
+  exitButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    backgroundColor: '#0660ff',
+    padding: 10,
+    borderRadius: 5,
+    zIndex: 10,
+  },
+  exitButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });

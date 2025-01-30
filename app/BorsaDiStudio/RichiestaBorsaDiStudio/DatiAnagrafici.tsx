@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { Picker } from '@react-native-picker/picker';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'expo-router'; // Ensure correct import for router
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function DatiAnagraficiPage() {
-const router = useRouter(); // Declare the router variable
-  const [formData, setFormData] = useState({
+  const router = useRouter(); // Declare the router variable
+
+  const [formDatiAnagrafici, setformDatiAnagrafici] = useState({
     nome: '',
     cognome: '',
     sesso: '',
@@ -16,8 +18,29 @@ const router = useRouter(); // Declare the router variable
     disabilita: false,
   });
 
-  const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData({ ...formData, [field]: value });
+  useEffect(() => {
+    const loadformDatiAnagrafici = async () => {
+      try {
+        const savedformDatiAnagrafici = await AsyncStorage.getItem('formDatiAnagrafici');
+        if (savedformDatiAnagrafici) {
+          setformDatiAnagrafici(JSON.parse(savedformDatiAnagrafici));
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
+    loadformDatiAnagrafici();
+  }, []);
+
+  const handleInputChange = async (field: string, value: string | boolean) => {
+    const updatedformDatiAnagrafici = { ...formDatiAnagrafici, [field]: value };
+    setformDatiAnagrafici(updatedformDatiAnagrafici);
+    try {
+      await AsyncStorage.setItem('formDatiAnagrafici', JSON.stringify(updatedformDatiAnagrafici));
+    } catch (error) {
+      console.error('Failed to save form data', error);
+    }
   };
 
   return (
@@ -26,23 +49,24 @@ const router = useRouter(); // Declare the router variable
         <View>
           <Text style={styles.sectionTitle}>Dati Anagrafici</Text>
 
+          <Text style={styles.label1}>Nome</Text>
           <TextInput
             style={styles.input}
             placeholder="Nome"
-            value={formData.nome}
+            value={formDatiAnagrafici.nome}
             onChangeText={(text) => handleInputChange('nome', text)}
           />
-
+          <Text style={styles.label1}>Cognome</Text>
           <TextInput
             style={styles.input}
             placeholder="Cognome"
-            value={formData.cognome}
+            value={formDatiAnagrafici.cognome}
             onChangeText={(text) => handleInputChange('cognome', text)}
           />
-
+          <Text style={styles.label1}>Sesso</Text>
           <Picker
             style={styles.picker}
-            selectedValue={formData.sesso}
+            selectedValue={formDatiAnagrafici.sesso}
             onValueChange={(itemValue) => handleInputChange('sesso', itemValue)}
           >
             <Picker.Item label="Seleziona Sesso" value="" />
@@ -50,24 +74,24 @@ const router = useRouter(); // Declare the router variable
             <Picker.Item label="Femmina" value="Femmina" />
             <Picker.Item label="Altro" value="Altro" />
           </Picker>
-
+          <Text style={styles.label1}>Età di Nascita</Text>
           <TextInput
             style={styles.input}
             placeholder="Età di Nascita"
             keyboardType="numeric"
-            value={formData.etaNascita}
+            value={formDatiAnagrafici.etaNascita}
             onChangeText={(text) => handleInputChange('etaNascita', text)}
           />
-
+          <Text style={styles.label1}>Cittadinanza</Text>
           <TextInput
             style={styles.input}
             placeholder="Cittadinanza"
-            value={formData.cittadinanza}
+            value={formDatiAnagrafici.cittadinanza}
             onChangeText={(text) => handleInputChange('cittadinanza', text)}
           />
 
           <View style={styles.checkboxContainer}>
-          
+            
             <Text style={styles.label}>Disabilità</Text>
           </View>
         </View>
@@ -77,12 +101,16 @@ const router = useRouter(); // Declare the router variable
         <Text style={styles.nextButtonText}>Successivo</Text>
       </TouchableOpacity>
       </ScrollView>
-      <Navbar namePage="DatiAnagraficiPage" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  label1: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
