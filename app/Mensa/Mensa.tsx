@@ -48,13 +48,35 @@ const Mensa = () => {
         router.push(`/Mensa/pasti?mensaId=${mensaId}&mensaName=${mensaName}`);
     };
 
+    const navigateToHome = () => {
+        router.push(`/(tabs)/landingPage`);
+    };
+
     return (
         <View style={styles.mainContainer}>
 
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.container}>
-                    <View style={styles.boxTitle}>
-                        <Title style={styles.title}>Mensa</Title>
+                    <View style={styles.containerMensa}>
+                        <Icon
+                            name="arrow-left"
+                            size={28}
+                            color="#007FFF"
+                            style={styles.icon}
+                            onPress={navigateToHome}
+                        />
+                    <Text>
+                    <TouchableOpacity 
+                        onPress={navigateToHome} 
+                        style={styles.breadcrumbItem}
+                        activeOpacity={0.6}
+                    >
+                        <Text style={styles.breadcrumbItem}>Home</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.breadcrumbSeparator}>/</Text>
+                    <Text style={[styles.breadcrumbItem, styles.breadcrumbActive]}>Mensa</Text>
+                </Text>
+                                        
                     </View>
 
                     {loading ? <Text>Loading...</Text> : <>
@@ -136,6 +158,31 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffffff",
         alignSelf: "center",  // Center the container
     },
+    containerMensa: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingBottom: 15,
+        backgroundColor: 'white',
+        width: '100%', // Ensure full width
+        justifyContent: 'flex-start', // Align content to left
+    },
+
+    breadcrumbItem:{
+        fontSize: 16,
+        color: '#007FFF',
+        marginHorizontal: 5,
+        textDecorationLine: 'underline',
+    },
+    breadcrumbActive: {
+        color: '#666',
+        textDecorationLine: 'none',
+    },
+    breadcrumbSeparator: {
+        color: '#666',
+        marginHorizontal: 5,
+    },
+    
     mainContainer: {
         flex: 1,
         backgroundColor: "#ffffff",

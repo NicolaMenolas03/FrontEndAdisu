@@ -8,6 +8,7 @@ import { apiService } from '@/services/api';
 import { Picker } from '@react-native-picker/picker';
 import { format } from 'date-fns';
 import { router } from 'expo-router';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 
 export default function Cart() {
@@ -31,7 +32,18 @@ export default function Cart() {
     };
 
 
-  
+  const navigateToMensa = () => {
+          router.push(`/Mensa/mensa`);
+      };
+
+    const navigateToHome = () => {
+        router.push(`/(tabs)/landingPage`);
+    };
+
+    const navigateToPasti = () => {
+        router.push(`/Mensa/pasti?mensaId=${canteen_id}`);
+    }
+
     const confirmOrder = async () => {
         let response = await createItem({
             "collection_date": formatCollectionDate(selectedTime),
@@ -61,6 +73,42 @@ export default function Cart() {
     return (
         <View style={styles.container}>
             <View>
+            </View>
+            <View style={styles.containerMensa}>
+                <Icon
+                    name="arrow-left"
+                    size={28}
+                    color="#007FFF"
+                    style={styles.icon}
+                    onPress={navigateToPasti}
+                />
+                <Text>
+                    <TouchableOpacity 
+                        onPress={navigateToHome} 
+                        style={styles.breadcrumbItem}
+                        activeOpacity={0.6}
+                    >
+                        <Text style={styles.breadcrumbItem}>Home</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.breadcrumbSeparator}>/</Text>
+                    <TouchableOpacity 
+                        onPress={navigateToMensa} 
+                        style={styles.breadcrumbItem}
+                        activeOpacity={0.6}
+                    >
+                        <Text style={styles.breadcrumbItem}>Mensa</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.breadcrumbSeparator}>/</Text>
+                    <TouchableOpacity 
+                        onPress={navigateToPasti} 
+                        style={styles.breadcrumbItem}
+                        activeOpacity={0.6}
+                    >
+                        <Text style={styles.breadcrumbItem}>Pasti</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.breadcrumbSeparator}>/</Text>
+                    <Text style={[styles.breadcrumbItem, styles.breadcrumbActive]}>Carrello</Text>
+                </Text>
             </View>
             <Text style={styles.title}>Il tuo carrello</Text>
             
@@ -126,7 +174,32 @@ const styles = StyleSheet.create({
     unavailable: {
         color: 'red',
     },
+    containerMensa: {
+        marginLeft: -5,
+        marginTop: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingBottom: 6,
+    },
 
+    breadcrumbItem:{
+        fontSize: 16,
+        color: '#007FFF',
+        marginHorizontal: 5,
+        textDecorationLine: 'underline',
+    },
+    breadcrumbActive: {
+        color: '#666',
+        textDecorationLine: 'none',
+    },
+    breadcrumbSeparator: {
+        color: '#666',
+        marginHorizontal: 5,
+    },
+    
+    icon: {
+        marginRight: 10,
+    },
     confirmButton: {
         backgroundColor: '#007AFF',
         padding: 15,

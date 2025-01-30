@@ -34,6 +34,11 @@ const Pasti = () => {
         router.push(`/Mensa/mensa`);
     };
 
+    
+    const navigateToHome = () => {
+        router.push(`/(tabs)/landingPage`);
+    };
+
     const searchMeals = () => {
         if (selectedCategory === 'all')
             return data;
@@ -67,7 +72,6 @@ const Pasti = () => {
 
     return (
         <View style={styles.container}>
-
             <View style={styles.containerMensa}>
                 <Icon
                     name="arrow-left"
@@ -77,15 +81,24 @@ const Pasti = () => {
                     onPress={navigateToMensa}
                 />
                 <Text>
-                    <TouchableOpacity onPress={navigateToMensa} style={styles.breadcrumbItem}>
-                        Home 
-                    </TouchableOpacity>/ 
-                    <TouchableOpacity onPress={navigateToMensa} style={styles.breadcrumbItem}>
-                        Mensa 
-                    </TouchableOpacity>/
-                        <Text style={styles.breadcrumbItem}>Pasti</Text>
-                    </Text>
-                
+                    <TouchableOpacity 
+                        onPress={navigateToHome} 
+                        style={styles.breadcrumbItem}
+                        activeOpacity={0.6}
+                    >
+                        <Text style={styles.breadcrumbItem}>Home</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.breadcrumbSeparator}>/</Text>
+                    <TouchableOpacity 
+                        onPress={navigateToMensa} 
+                        style={styles.breadcrumbItem}
+                        activeOpacity={0.6}
+                    >
+                        <Text style={styles.breadcrumbItem}>Mensa</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.breadcrumbSeparator}>/</Text>
+                    <Text style={[styles.breadcrumbItem, styles.breadcrumbActive]}>Pasti</Text>
+                </Text>
             </View>
 
             {/* Categories Tabs */}
@@ -175,8 +188,18 @@ const styles = StyleSheet.create({
 
     },
     breadcrumbItem:{
-        paddingLeft: 10,
-        paddingRight: 10,
+        fontSize: 16,
+        color: '#007FFF',
+        marginHorizontal: 5,
+        textDecorationLine: 'underline',
+    },
+    breadcrumbActive: {
+        color: '#666',
+        textDecorationLine: 'none',
+    },
+    breadcrumbSeparator: {
+        color: '#666',
+        marginHorizontal: 5,
     },
     navButton: {
         alignItems: 'center',
