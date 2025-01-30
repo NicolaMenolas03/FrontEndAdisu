@@ -19,7 +19,7 @@ import { TypeMensa } from "../lib/definitions";
 
 
 const Mensa = () => {
-    const { data, error, loading, createItem, deleteItem, updateItem } = useCRUD<TypeMensa>("/canteen/");
+    const { data, error, loading } = useCRUD<TypeMensa>("/canteen/");
     const [mensaName, setMensaName] = useState("");
     const [isFocused, setIsFocused] = useState(false);
     const [searchResults, setSearchResults] = useState<TypeMensa[]>([]);
@@ -252,22 +252,12 @@ const styles = StyleSheet.create({
         width: "100%",
         marginBottom: 20,
     },
-    PugliaLogo: {
-        width: wp("20%"),
-        height: hp("10%"),
-        resizeMode: "contain",
-    },
     icon: {
         paddingRight: 10,
     },
     iconMaps: {
         paddingRight: 10,
         top: 0,
-    },
-    headerImage: {
-        width: wp("20%"),
-        height: hp("10%"),
-        resizeMode: "contain",
     },
     inputSection: {
         width: "100%",

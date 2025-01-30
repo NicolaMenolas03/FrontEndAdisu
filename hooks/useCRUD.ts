@@ -46,8 +46,9 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
 
   const deleteItem = async (id: number) => {
     try {
-      await apiService.delete<T>(`${endpoint}${id}/`);
+      const response = await apiService.delete<T>(`${endpoint}${id}/`);
       setData((prev) => prev.filter((item) => item.id !== id));
+      return response;
     } catch (err) {
       const axiosError = err as AxiosError;
       setError(axiosError.message);

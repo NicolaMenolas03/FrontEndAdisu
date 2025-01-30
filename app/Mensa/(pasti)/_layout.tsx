@@ -63,7 +63,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 
                 <TouchableOpacity 
                     style={styles.navButton}
-                    onPress={() => router.push('../orders')}
+                    onPress={navigateToOrders}
                 >
                     <Ionicons name="list-outline" size={24} color="#FFFFFF" />
                 </TouchableOpacity>

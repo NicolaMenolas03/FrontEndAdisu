@@ -88,9 +88,11 @@ export type MealQuantities = {
 
 export type CartContextType = {
     selectedMeals: MealQuantities;
+    canteen_id?: number;
+    totalPrice: number;
     addToCart: (meal: TypePasti) => void;
     removeFromCart: (mealId: number) => void;
     getTotalItems: () => number;
-    canteen_id?: number;
     setCanteenId: (id: number) => void;
+    clearCart: () => void;
 };

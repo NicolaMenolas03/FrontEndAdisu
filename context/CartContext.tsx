@@ -1,19 +1,35 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import { CartContextType, MealQuantities, TypePasti } from '@/app/lib/definitions';
-
 
 const CartContext = createContext<CartContextType>({
     selectedMeals: {},
+    canteen_id: undefined,
+    totalPrice: 0,
     addToCart: () => {},
     removeFromCart: () => {},
     getTotalItems: () => 0,
-    canteen_id: undefined,
     setCanteenId: () => {},
+    clearCart: () => {},
 });
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
     const [selectedMeals, setSelectedMeals] = useState<MealQuantities>({});
     const [canteen_id, setCanteenId] = useState<number | undefined>(undefined);
+    const [totalPrice, setTotalPrice] = useState<number>(0);
+
+    const calculateTotalPrice = () => {
+        return Object.values(selectedMeals).reduce((total, item) => {
+            return total + (item.meal.price * item.quantity);
+        }, 0);
+    };
+
+    const clearCart = () => {
+        setSelectedMeals({});
+    }
+
+    useEffect(() => {
+        setTotalPrice(calculateTotalPrice());
+    }, [selectedMeals]);
 
     const addToCart = (meal: TypePasti) => {
         setSelectedMeals(prev => {
@@ -48,12 +64,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     return (
         <CartContext.Provider value={{ 
-            selectedMeals, 
+            selectedMeals,
+            totalPrice,
+            canteen_id, 
             addToCart, 
             removeFromCart,
             getTotalItems,
-            canteen_id,
             setCanteenId,
+            clearCart,
         }}>
             {children}
         </CartContext.Provider>

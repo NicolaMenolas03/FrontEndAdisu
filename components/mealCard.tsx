@@ -13,6 +13,10 @@ const MealCard = ({ meal, quantity, incrementQuantity, decrementQuantity }: {mea
             <ImagePasto meal={meal} style={styles.mealImage} />
             <Text style={styles.mealName}>{meal.name}</Text>
             <Allergen allergen={meal.allergens} />
+            <View style={styles.priceContainer}>
+                <Text style={styles.priceText}>{meal.price}</Text>
+                <Text style={styles.currencySymbol}>€</Text>
+            </View>
             <View style={styles.quantityContainer}>
                 <TouchableOpacity onPress={incrementQuantity}>
                     <Text style={styles.quantityButton}>+</Text>
@@ -22,7 +26,9 @@ const MealCard = ({ meal, quantity, incrementQuantity, decrementQuantity }: {mea
                     <Text style={styles.quantityButton}>-</Text>
                 </TouchableOpacity>
             </View>
+            
         </View>
+        
     );
 };
 
@@ -47,6 +53,25 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    priceContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f8f8f8',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 6,
+        marginHorizontal: 8,
+    },
+    priceText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#2c3e50',
+    },
+    currencySymbol: {
+        fontSize: 14,
+        color: '#2c3e50',
+        marginLeft: 2,
     },
     quantityContainer: {
         alignItems: 'center',

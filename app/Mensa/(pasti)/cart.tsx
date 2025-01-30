@@ -9,21 +9,19 @@ import { Picker } from '@react-native-picker/picker';
 import { format } from 'date-fns';
 import { router } from 'expo-router';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
+import ConfirmationModal from '@/components/ConfirmationModal';
+import ResultModal from '@/components/ResultModal';
 
 export default function Cart() {
+    const { selectedMeals, addToCart, removeFromCart, clearCart, canteen_id, totalPrice } = useCart();
+    const { createItem } = useCRUD<TypeBooking>("/booking/");
     const [unavailableMeals, setUnavailableMeals] = useState<number[]>([]);
     const [selectedTime, setSelectedTime] = useState('10:00');
-    const timeSlots = Array.from({ length: 12 }, (_, i) => {
-        const hour = i + 11;
-        return `${hour}:00`;
-    });
-
-    const { selectedMeals, addToCart, removeFromCart, canteen_id } = useCart();
-    const { createItem, deleteItem} = useCRUD<TypeBooking>("/booking/");
-
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [showResultModal, setShowResultModal] = useState(false);
+    const [orderSuccess, setOrderSuccess] = useState(false);
     const mealList = Object.values(selectedMeals);
-    
+
     const formatCollectionDate = (time: string) => {
         const today = new Date();
         const [hours] = time.split(':');
@@ -31,6 +29,10 @@ export default function Cart() {
         return format(today, "yyyy-MM-dd'T'HH:mm:ss");
     };
 
+    const timeSlots = Array.from({ length: 12 }, (_, i) => {
+        const hour = i + 11;
+        return `${hour}:00`;
+    });
 
   const navigateToMensa = () => {
           router.push(`/Mensa/mensa`);
@@ -44,21 +46,30 @@ export default function Cart() {
         router.push(`/Mensa/pasti?mensaId=${canteen_id}`);
     }
 
-    const confirmOrder = async () => {
-        let response = await createItem({
-            "collection_date": formatCollectionDate(selectedTime),
-            "items": mealList.map((item) => ({ "meal": item.meal.id, "quantity": item.quantity })), 
-            "canteen_id": canteen_id,
-        })
-        if (response) {
-            router.push(`/Mensa/(pasti)/orders?id=${response.id}`);
+    
+    const handleConfirmOrder = async () => {
+        try {
+            await createItem({
+                "collection_date": formatCollectionDate(selectedTime),
+                "items": mealList.map((item) => ({ "meal": item.meal.id, "quantity": item.quantity })),
+                "canteen_id": canteen_id,
+            });
+            setOrderSuccess(true);
+            setShowResultModal(true);
+            clearCart();
+        } catch (error) {
+            setOrderSuccess(false);
+            setShowResultModal(true);
         }
     };
 
-    useEffect(() => {
-        checkMealAvailability();
-    }, []);
-    
+    const handleResultClose = () => {
+        setShowResultModal(false);
+        if (orderSuccess) {
+            router.push('/Mensa/(pasti)/orders');
+        }
+    };
+
     const checkMealAvailability = async () => {
         try {
             const response = await apiService.post<TypePastiGioralieri[]>('daily_meals/check_meal_available/', {
@@ -69,6 +80,10 @@ export default function Cart() {
             console.error('Error checking meal availability:', error);
         }
     };
+
+    useEffect(() => {
+        checkMealAvailability();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -111,18 +126,17 @@ export default function Cart() {
                 </Text>
             </View>
             <Text style={styles.title}>Il tuo carrello</Text>
-            
-            <FlatList 
+
+            <FlatList
                 data={mealList}
                 renderItem={({ item }) => (
-                    <View style={styles.mealItem}>
-                        
-                        <MealCard
-                        meal = {item.meal}
-                        quantity = {item.quantity}
-                        incrementQuantity={() => addToCart(item.meal)}
-                        decrementQuantity={() => removeFromCart(item.meal.id)}
+                    <View>
 
+                        <MealCard
+                            meal={item.meal}
+                            quantity={item.quantity}
+                            incrementQuantity={() => addToCart(item.meal)}
+                            decrementQuantity={() => removeFromCart(item.meal.id)}
                         />
                         {unavailableMeals.includes(item.meal.id) && (
                             <Text style={styles.unavailable}>Non disponibile</Text>
@@ -131,6 +145,10 @@ export default function Cart() {
 
                 )}
             />
+            <View style={styles.totalContainer}>
+                <Text style={styles.totalLabel}>Totale:</Text>
+                <Text style={styles.totalPrice}>€ {totalPrice.toFixed(2)}</Text>
+            </View>
 
             <View style={styles.bottomContainer}>
                 <Picker
@@ -143,18 +161,36 @@ export default function Cart() {
                     ))}
                 </Picker>
 
-                <TouchableOpacity 
-                    style={styles.confirmButton} 
-                    onPress={() => {confirmOrder()}}>
+                <TouchableOpacity
+                    style={styles.confirmButton}
+                    onPress={mealList.length > 0 ? () => setShowConfirmModal(true) :  ()=> {}}>
                     <Text style={styles.confirmButtonText}>Conferma ordine</Text>
                 </TouchableOpacity>
+
+                <ConfirmationModal
+                    visible={showConfirmModal}
+                    body="Confermi l'ordine?"
+                    onConfirm={() => {
+                        setShowConfirmModal(false);
+                        handleConfirmOrder();
+                    }}
+                    onCancel={() => setShowConfirmModal(false)}
+                />
+
+                <ResultModal
+                    successMessage='Ordine effettuato con successo'
+                    errorMessage="Errore durante l'invio dell'ordine"
+                    visible={showResultModal}
+                    success={orderSuccess}
+                    onClose={handleResultClose}
+                />
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    
+
     container: {
         flex: 1,
         padding: 16,
@@ -164,12 +200,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 16,
-    },
-    mealItem: {
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-        backgroundColor: '#fff', // Add white background to meal items only
     },
     unavailable: {
         color: 'red',
@@ -224,4 +254,25 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 8,
     },
+    totalContainer: {
+        padding: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderTopWidth: 1,
+        borderTopColor: '#e0e0e0',
+        borderBottomColor: '#e0e0e0',
+        borderBottomWidth: 1,
+        marginBottom: 10,
+    },
+    totalLabel: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#333',
+    },
+    totalPrice: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#007AFF',
+    }
 });
