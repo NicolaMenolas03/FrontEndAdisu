@@ -1,49 +1,67 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import Navbar from '@/components/Navbar';
-
-// Definisci il tipo per le pagine di navigazione
-type RootStackParamList = {
-  SimulazioneBorsaDiStudio: undefined;
-};
+import { Card } from 'react-native-paper';
 
 export default function DatiBorsaDiStudio() {
-  // Usa il hook useNavigation con il tipo di navigazione
-
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scholarshipContainer}>
-        <Text style={styles.sectionTitle}>Dati Borsa di Studio</Text>
+        <Text style={styles.title}>Dati Borsa di Studio</Text>
 
         {/* Prima sezione */}
-        <View style={styles.sectionContainer}>
-          <Text style={styles.inputLabel}>Dati personali</Text>
-          <Text>Matricola</Text>
-          <TextInput style={styles.input} value="Matricola" editable={false} />
-          <Text>Tipo borsa di studio</Text>
-          <TextInput style={styles.input} value="Tipo borsa di studio" editable={false} />
-          <Text>Tipo studente</Text>
-          <TextInput style={styles.input} value="Tipo studente" editable={false} />
-          <Text>Fascia reddito</Text>
-          <TextInput style={styles.input} value="Fascia reddito" editable={false} />
-        </View>
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.sectionTitle}>Dati Personali</Text>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Matricola</Text>
+              <TextInput style={styles.input} value="Matricola" editable={false} />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Tipo Borsa di Studio</Text>
+              <TextInput style={styles.input} value="Tipo borsa di studio" editable={false} />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Tipo Studente</Text>
+              <TextInput style={styles.input} value="Tipo studente" editable={false} />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Fascia Reddito</Text>
+              <TextInput style={styles.input} value="Fascia reddito" editable={false} />
+            </View>
+          </Card.Content>
+        </Card>
 
         {/* Seconda sezione */}
-        <View style={styles.sectionContainer}>
-          <Text style={styles.inputLabel}>Importi</Text>
-          <Text>Importo mensa</Text>
-          <TextInput style={styles.input} value="Importo mensa" editable={false} />
-          <Text>Importo alloggio</Text>
-          <TextInput style={styles.input} value="Importo alloggio" editable={false} />
-          <Text>Importo totale</Text>
-          <TextInput style={styles.input} value="Importo totale" editable={false} />
-        </View>
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.sectionTitle}>Importi</Text>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Importo Mensa</Text>
+              <TextInput style={styles.input} value="Importo mensa" editable={false} />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Importo Alloggio</Text>
+              <TextInput style={styles.input} value="Importo alloggio" editable={false} />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Importo Totale</Text>
+              <TextInput style={styles.input} value="Importo totale" editable={false} />
+            </View>
+          </Card.Content>
+        </Card>
 
       </ScrollView>
-      
+
       {/* Barra di navigazione */}
-        <Navbar namePage={''}/>
+      <Navbar namePage="" />
     </View>
   );
 }
@@ -51,41 +69,50 @@ export default function DatiBorsaDiStudio() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'space-between', // Ensure space is between content and navbar
+    backgroundColor: '#f9f9f9',
   },
   scholarshipContainer: {
-    flex: 1,
     padding: 20,
-    paddingBottom: 60, // Add bottom padding to prevent content overlap with navbar
+    paddingBottom: 60,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    marginBottom: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#6200ee',
-    marginBottom: 20,
-    textAlign: 'center',
+    color: '#333',
+    marginBottom: 10,
   },
-  sectionContainer: {
-    marginBottom: 30,
-    padding: 15,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
+  inputGroup: {
+    marginBottom: 15,
   },
   inputLabel: {
-    textAlign: 'center',
     fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#333',
+    fontWeight: '500',
+    marginBottom: 5,
+    color: '#555',
   },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 5,
-    marginBottom: 15,
+    backgroundColor: '#f9f9f9',
     paddingHorizontal: 10,
   },
 });

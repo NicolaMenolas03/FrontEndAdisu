@@ -137,7 +137,7 @@ export default function SimulazioneBorsaDiStudio() {
     <View style={styles.container}>
       <View style={styles.contentContainer}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          <Text style={styles.sectionTitle}>Dati Borsa di Studio</Text>
+          <Text style={styles.sectionTitle}>Simulazione Borsa di Studio</Text>
 
           <View style={styles.sectionContainer}>
             <Text style={styles.inputLabel}>Dati personali</Text>
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#0660ff',
+    color: 'Black',
     marginBottom: 20,
     textAlign: 'center',
   },

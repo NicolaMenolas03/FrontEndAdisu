@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { TextInput, Button, Card } from 'react-native-paper';
+import { TextInput, Button, Card, HelperText } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,6 +18,28 @@ export default function DatiAnagraficiPage() {
     disabilita: false,
   });
 
+  const [errors, setErrors] = useState({
+    nome: '',
+    cognome: '',
+    sesso: '',
+    etaNascita: '',
+    cittadinanza: '',
+  });
+
+  const validateFields = () => {
+    const newErrors = {
+      nome: formDatiAnagrafici.nome ? '' : 'Il campo Nome è obbligatorio.',
+      cognome: formDatiAnagrafici.cognome ? '' : 'Il campo Cognome è obbligatorio.',
+      sesso: formDatiAnagrafici.sesso ? '' : 'Il campo Sesso è obbligatorio.',
+      etaNascita: formDatiAnagrafici.etaNascita.match(/^\d+$/) ? '' : 'Inserire una età valida (numerica).',
+      cittadinanza: formDatiAnagrafici.cittadinanza ? '' : 'Il campo Cittadinanza è obbligatorio.',
+    };
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((error) => error === '');
+  };
+
   useEffect(() => {
     const loadformDatiAnagrafici = async () => {
       try {
@@ -33,13 +55,19 @@ export default function DatiAnagraficiPage() {
     loadformDatiAnagrafici();
   }, []);
 
-  const handleInputChange = async (field: string, value: any) => {
+  const handleInputChange = async (field: string, value: string) => {
     const updatedData = { ...formDatiAnagrafici, [field]: value };
     setformDatiAnagrafici(updatedData);
     try {
       await AsyncStorage.setItem('formDatiAnagrafici', JSON.stringify(updatedData));
     } catch (error) {
       console.error('Errore nel salvataggio dei dati', error);
+    }
+  };
+
+  const handleNext = () => {
+    if (validateFields()) {
+      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza');
     }
   };
 
@@ -56,6 +84,8 @@ export default function DatiAnagraficiPage() {
             mode="outlined"
             style={styles.input}
           />
+          {errors.nome ? <HelperText type="error">{errors.nome}</HelperText> : null}
+
           <TextInput
             label="Cognome"
             value={formDatiAnagrafici.cognome}
@@ -63,6 +93,8 @@ export default function DatiAnagraficiPage() {
             mode="outlined"
             style={styles.input}
           />
+          {errors.cognome ? <HelperText type="error">{errors.cognome}</HelperText> : null}
+
           <Text style={styles.label}>Sesso</Text>
           <Picker
             selectedValue={formDatiAnagrafici.sesso}
@@ -74,6 +106,8 @@ export default function DatiAnagraficiPage() {
             <Picker.Item label="Femmina" value="Femmina" />
             <Picker.Item label="Altro" value="Altro" />
           </Picker>
+          {errors.sesso ? <HelperText type="error">{errors.sesso}</HelperText> : null}
+
           <TextInput
             label="Età di Nascita"
             value={formDatiAnagrafici.etaNascita}
@@ -82,6 +116,8 @@ export default function DatiAnagraficiPage() {
             keyboardType="numeric"
             style={styles.input}
           />
+          {errors.etaNascita ? <HelperText type="error">{errors.etaNascita}</HelperText> : null}
+
           <TextInput
             label="Cittadinanza"
             value={formDatiAnagrafici.cittadinanza}
@@ -89,13 +125,14 @@ export default function DatiAnagraficiPage() {
             mode="outlined"
             style={styles.input}
           />
+          {errors.cittadinanza ? <HelperText type="error">{errors.cittadinanza}</HelperText> : null}
         </Card.Content>
       </Card>
       <View style={styles.buttonContainer}>
         <Button
           mode="contained"
           buttonColor="#005dff"
-          onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza')}
+          onPress={handleNext}
         >
           Successivo
         </Button>
@@ -109,7 +146,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f5f5f5',
   },
-  label:{
+  label: {
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 10,
