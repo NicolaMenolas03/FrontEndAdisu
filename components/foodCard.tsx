@@ -3,6 +3,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useCart } from '../context/CartContext';
 import Allergen from "./allergen";
 import ImagePasto from "./imagePasto";
+import React, { useState } from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const allergens: { [key: string]: any } = {
     "Pesce": require('../assets/icons/icons8-gambero-94.png'),
@@ -12,6 +14,7 @@ const allergens: { [key: string]: any } = {
 
 const FoodCard = ({ meal }: { meal: TypePasti}) => {
     const { addToCart } = useCart();
+    const [rating, setRating] = useState(0);
     
     const handleAddToCart = () => {
         addToCart(meal);
@@ -33,6 +36,40 @@ const FoodCard = ({ meal }: { meal: TypePasti}) => {
                         <Text style={styles.addButtonText}>+</Text>
                     </TouchableOpacity>
                 </View>
+
+                {/* Add Rating Section */}
+                <View style={styles.ratingContainer}>
+                    <View style={styles.ratingSection}>
+                        <View style={styles.starsContainer}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <TouchableOpacity
+                                    key={star}
+                                    onPress={() => setRating(star)}
+                                >
+                                    <Icon
+                                        name={star <= rating ? 'star' : 'star-border'}
+                                        size={24}
+                                        color={star <= rating ? '#FFD700' : '#888'}
+                                    />
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                        <TouchableOpacity 
+                            style={[
+                                styles.submitButton,
+                                rating > 0 && styles.submitButtonActive
+                            ]}
+                            disabled={rating === 0}
+                            onPress={() => {
+                                // Add your review submission logic here
+                                console.log('Rating submitted:', rating);
+                            }}
+                        >
+                            <Text style={styles.submitButtonText}>Valuta</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                
             </View>
         </View>
     );
@@ -109,6 +146,35 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         includeFontPadding: false,
         marginTop: -2, // Fine-tune vertical alignment
+    },
+    ratingContainer: {
+        marginTop: 12,
+        marginBottom: 8,
+    },
+    ratingSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+    },
+    starsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    submitButton: {
+        backgroundColor: '#E8E8E8',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 8,
+        opacity: 0.5,
+    },
+    submitButtonActive: {
+        backgroundColor: '#4CAF50',
+        opacity: 1,
+    },
+    submitButtonText: {
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontWeight: '600',
     },
 })
 
