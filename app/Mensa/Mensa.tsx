@@ -16,6 +16,7 @@ import { Title } from "react-native-paper";
 import { useCRUD } from "@/hooks/useCRUD";
 import { router } from "expo-router";
 import { TypeMensa } from "../lib/definitions";
+import { navigateToHome, navigateToPasti } from "../nav/utils";
 
 
 const Mensa = () => {
@@ -42,14 +43,6 @@ const Mensa = () => {
             setSearchResults(mensaList);
         }
         setMensaName(query);
-    };
-
-    const navigateToPasti = (mensaId: string, mensaName: string) => {
-        router.push(`/Mensa/pasti?mensaId=${mensaId}&mensaName=${mensaName}`);
-    };
-
-    const navigateToHome = () => {
-        router.push(`/(tabs)/landingPage`);
     };
 
     return (
@@ -128,7 +121,7 @@ const Mensa = () => {
                                 </View>
                                 <TouchableOpacity
                                     style={styles.goButton}
-                                    onPress={() => navigateToPasti(mensa.id.toString(), mensa.name)}
+                                    onPress={() => navigateToPasti(mensa.id.toString())}
                                 >
                                     <Text style={styles.buttonText}><Icon
                                         name="arrow-right"

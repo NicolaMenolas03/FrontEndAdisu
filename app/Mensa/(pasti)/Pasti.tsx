@@ -7,13 +7,11 @@ import { router } from 'expo-router';
 import { TypePasti } from '../../lib/definitions';
 import FoodCard from '@/components/foodCard';
 import { useCart } from '@/context/CartContext';
-
-
+import { navigateToHome, navigateToMensa } from '@/app/nav/utils';
 
 type RootStackParamList = {
     Pasti: {
         mensaId: string;
-        mensaName: string;
     };
 };
 
@@ -23,21 +21,10 @@ const { width } = Dimensions.get('window');
 const Pasti = () => {
     const { setCanteenId } = useCart();
     const route = useRoute<PastiScreenRouteProp>();
-    const { mensaId, mensaName } = route.params;
-
+    const { mensaId } = route.params;
     setCanteenId(parseInt(mensaId));
-
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
-    const { data, error, loading } = useCRUD<TypePasti>(`/daily_meals/${mensaId}/get_meals_by_id/`); // Note the Pasti[] type
-
-    const navigateToMensa = () => {
-        router.push(`/Mensa/mensa`);
-    };
-
-    
-    const navigateToHome = () => {
-        router.push(`/(tabs)/landingPage`);
-    };
+    const { data, error, loading } = useCRUD<TypePasti>(`/daily_meals/${mensaId}/get_meals_by_id/`);
 
     const searchMeals = () => {
         if (selectedCategory === 'all')

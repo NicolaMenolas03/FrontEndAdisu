@@ -1,8 +1,8 @@
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
-import { router, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import { CartProvider, useCart } from '../../../context/CartContext';
+import { navigateToCart, navigateToHome, navigateToOrders } from '@/app/nav/utils';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
@@ -15,17 +15,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 function LayoutContent({ children }: { children: React.ReactNode }) {
     const { getTotalItems } = useCart();
     const cartItems = getTotalItems();
-    const navigateToLeandingPage = () => {
-            router.push(`/(tabs)/landingPage`);
-        };
-
-    const navigateToCart = () => {
-            router.push(`/Mensa/(pasti)/cart`);
-    };
-
-    const navigateToOrders = () => {
-            router.push(`/Mensa/(pasti)/orders`);
-    };
 
 
     return (
@@ -42,7 +31,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
             <View style={styles.navbar}>
                 <TouchableOpacity 
                     style={styles.navButton}
-                    onPress={() => navigateToLeandingPage()}
+                    onPress={navigateToHome}
                 >
                     <Ionicons name="home-outline" size={24} color="#FFFFFF" />
                 </TouchableOpacity>

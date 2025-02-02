@@ -11,16 +11,21 @@ import { router } from 'expo-router';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import ConfirmationModal from '@/components/ConfirmationModal';
 import ResultModal from '@/components/ResultModal';
+import TimePicker from '@/components/TimePicker';
+import { navigateToHome, navigateToMensa, navigateToPasti } from '@/app/nav/utils';
 
 export default function Cart() {
     const { selectedMeals, addToCart, removeFromCart, clearCart, canteen_id, totalPrice } = useCart();
-    const { createItem } = useCRUD<TypeBooking>("/booking/");
+    const { createItem, error } = useCRUD<TypeBooking>("/booking/");
     const [unavailableMeals, setUnavailableMeals] = useState<number[]>([]);
-    const [selectedTime, setSelectedTime] = useState('10:00');
+    const [selectedTime, setSelectedTime] = useState('');
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showResultModal, setShowResultModal] = useState(false);
+    const [showResultModalTimer, setShowResultModalTimer] = useState(false);
     const [orderSuccess, setOrderSuccess] = useState(false);
     const mealList = Object.values(selectedMeals);
+
+    const str_canteen_id = String(canteen_id || '');
 
     const formatCollectionDate = (time: string) => {
         const today = new Date();
@@ -29,24 +34,14 @@ export default function Cart() {
         return format(today, "yyyy-MM-dd'T'HH:mm:ss");
     };
 
-    const timeSlots = Array.from({ length: 12 }, (_, i) => {
-        const hour = i + 11;
-        return `${hour}:00`;
-    });
-
-  const navigateToMensa = () => {
-          router.push(`/Mensa/mensa`);
-      };
-
-    const navigateToHome = () => {
-        router.push(`/(tabs)/landingPage`);
-    };
-
-    const navigateToPasti = () => {
-        router.push(`/Mensa/pasti?mensaId=${canteen_id}`);
+    const checkTime = () => {
+        if (selectedTime === '') {
+            setShowResultModalTimer(true);
+        } else {
+            setShowConfirmModal(true);
+        }
     }
 
-    
     const handleConfirmOrder = async () => {
         try {
             await createItem({
@@ -95,27 +90,27 @@ export default function Cart() {
                     size={28}
                     color="#007FFF"
                     style={styles.icon}
-                    onPress={navigateToPasti}
+                    onPress={() => {navigateToPasti(str_canteen_id)}}
                 />
                 <Text>
-                    <TouchableOpacity 
-                        onPress={navigateToHome} 
+                    <TouchableOpacity
+                        onPress={navigateToHome}
                         style={styles.breadcrumbItem}
                         activeOpacity={0.6}
                     >
                         <Text style={styles.breadcrumbItem}>Home</Text>
                     </TouchableOpacity>
                     <Text style={styles.breadcrumbSeparator}>/</Text>
-                    <TouchableOpacity 
-                        onPress={navigateToMensa} 
+                    <TouchableOpacity
+                        onPress={navigateToMensa}
                         style={styles.breadcrumbItem}
                         activeOpacity={0.6}
                     >
                         <Text style={styles.breadcrumbItem}>Mensa</Text>
                     </TouchableOpacity>
                     <Text style={styles.breadcrumbSeparator}>/</Text>
-                    <TouchableOpacity 
-                        onPress={navigateToPasti} 
+                    <TouchableOpacity
+                        onPress={() => {navigateToPasti(str_canteen_id)}}
                         style={styles.breadcrumbItem}
                         activeOpacity={0.6}
                     >
@@ -151,19 +146,11 @@ export default function Cart() {
             </View>
 
             <View style={styles.bottomContainer}>
-                <Picker
-                    selectedValue={selectedTime}
-                    style={styles.timePicker}
-                    onValueChange={(itemValue) => setSelectedTime(itemValue)}
-                >
-                    {timeSlots.map((time) => (
-                        <Picker.Item key={time} label={time} value={time} />
-                    ))}
-                </Picker>
+                <TimePicker onTimeSelect={setSelectedTime} />
 
                 <TouchableOpacity
                     style={styles.confirmButton}
-                    onPress={mealList.length > 0 ? () => setShowConfirmModal(true) :  ()=> {}}>
+                    onPress={mealList.length > 0 ? () => checkTime() : () => { }}>
                     <Text style={styles.confirmButtonText}>Conferma ordine</Text>
                 </TouchableOpacity>
 
@@ -183,6 +170,14 @@ export default function Cart() {
                     visible={showResultModal}
                     success={orderSuccess}
                     onClose={handleResultClose}
+                />
+
+                <ResultModal
+                    successMessage=''
+                    errorMessage="Seleziona un orario di ritiro"
+                    visible={showResultModalTimer}
+                    success={false}
+                    onClose={() => setShowResultModalTimer(false)}
                 />
             </View>
         </View>
@@ -212,7 +207,7 @@ const styles = StyleSheet.create({
         paddingBottom: 6,
     },
 
-    breadcrumbItem:{
+    breadcrumbItem: {
         fontSize: 16,
         color: '#007FFF',
         marginHorizontal: 5,
@@ -226,7 +221,7 @@ const styles = StyleSheet.create({
         color: '#666',
         marginHorizontal: 5,
     },
-    
+
     icon: {
         marginRight: 10,
     },
@@ -248,11 +243,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         marginBottom: 20,
-    },
-    timePicker: {
-        width: '40%',
-        height: 50,
-        borderRadius: 8,
     },
     totalContainer: {
         padding: 16,

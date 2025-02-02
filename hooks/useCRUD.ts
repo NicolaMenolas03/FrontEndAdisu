@@ -25,10 +25,10 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
     try {
       const response = await apiService.post<T, Partial<T>>(endpoint, item);
       setData((prev) => [...prev, response.data]);
-      return response.data;
     } catch (err) {
       const axiosError = err as AxiosError;
       setError(axiosError.message);
+      throw axiosError;
     }
   };
 

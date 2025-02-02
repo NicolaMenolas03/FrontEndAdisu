@@ -4,7 +4,7 @@ import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 interface OrderResultModalProps {
     visible: boolean;
     success: boolean;
-    onClose: () => void;
+    onClose?: () => void;
     successMessage: string;
     errorMessage: string;
 }

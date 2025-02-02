@@ -6,14 +6,15 @@ import { red } from "react-native-reanimated/lib/typescript/Colors";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import ResultModal from "@/components/ResultModal";
+import { format, parseISO } from "date-fns";
 
 const { width } = Dimensions.get('window');
 
 const statusColors: { [key: string]: string } = {
-    'finished': '#4CAF50',  // Green
-    'in_progress': '#FFC107',    // Yellow
-    'confirmed': '#007FFF',  // Blue
-    'created': '#000000'     // Black
+    'finished': '#4CAF50',  
+    'in_progress': '#FFC107',    
+    'confirmed': '#007FFF',  
+    'created': '#4287f5'     
 };
 
 
@@ -24,6 +25,11 @@ const Orders = () => {
     const [confirmationDelete, setConfirmationDelete] = React.useState(false);
     const [resultDelete, setResultDelete] = React.useState(false);
     const [deleteSuccess, setDeleteSuccess] = React.useState(false);
+
+    const formatDate = (dateString: string) => {
+        const date = parseISO(dateString);
+        return format(date, 'dd/MM/yyyy HH:mm');
+    };
 
     const deleteOrder = async ({ id }: { id: number }) => {
         try{
@@ -43,7 +49,7 @@ const Orders = () => {
                     <Text style={styles.orderNumber}>#{item.id}</Text>
                     <Text style={[
                         styles.statusText,
-                        { color: statusColors[item.status.toLowerCase()] || '#000000' }
+                        { backgroundColor: statusColors[item.status.toLowerCase()] || '#000000', borderRadius: 5, padding: 3, color: 'white' }
                     ]}>
 
                         {item.status}
@@ -51,8 +57,8 @@ const Orders = () => {
                     </Text>
                 </View>
                 <View style={styles.middleContainer}>
-                    <Text style={styles.bookingText}>Data creazione: {item.booking_date}</Text>
-                    <Text style={styles.bookingText}>Ritiro: {item.collection_date}</Text>
+                    <Text style={styles.bookingText}>Data creazione: {formatDate(item.booking_date)}</Text>
+                    <Text style={styles.bookingText}>Ritiro: {formatDate(item.collection_date)}</Text>
                 </View>
 
                 <View style={styles.bottomContainer}>
