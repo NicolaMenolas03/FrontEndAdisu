@@ -12,10 +12,10 @@ import ImagePasto from "@/components/imagePasto";
 const { width } = Dimensions.get('window');
 
 const statusColors: { [key: string]: string } = {
-    'finished': '#4CAF50',  
-    'in_progress': '#FFC107',    
-    'confirmed': '#007FFF',  
-    'created': '#4287f5'     
+    'completo': '#4CAF50',
+    'in corso': '#FFC107',
+    'confermanto': '#007FFF',
+    'creato': '#4287f5'
 };
 
 
@@ -33,7 +33,7 @@ const Orders = () => {
     };
 
     const deleteOrder = async ({ id }: { id: number }) => {
-        try{
+        try {
             await deleteItem(id);
             setDeleteSuccess(true);
         } catch (error) {
@@ -61,10 +61,10 @@ const Orders = () => {
                     <Text style={styles.bookingText}>Data creazione: {formatDate(item.booking_date)}</Text>
                     <Text style={styles.bookingText}>Ritiro: {formatDate(item.collection_date)}</Text>
                     <Text style={styles.bookingText}>Mensa: {item.canteen.name}</Text>
-                    
+
                     <View style={styles.mealsContainer}>
                         {item.items?.map((value, index) => (
-                            <View 
+                            <View
                                 key={value.meal}
                                 style={[
                                     styles.mealImageWrapper,
@@ -79,7 +79,7 @@ const Orders = () => {
 
                 <View style={styles.bottomContainer}>
                     <View style={{ flex: 1 }}>
-                        {item.status === 'created' &&
+                        {item.status === 'Creato' &&
                             <TouchableOpacity onPress={() => setConfirmationDelete(true)}>
 
                                 <Icon name="trash-can-outline" size={24} color="grey" selectionColor={"red"} />
