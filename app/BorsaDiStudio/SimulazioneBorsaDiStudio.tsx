@@ -142,7 +142,7 @@ export default function SimulazioneBorsaDiStudio() {
           <View style={styles.sectionContainer}>
             <Text style={styles.inputLabel}>Dati personali</Text>
             
-            <Text>Anno accademico</Text>
+            <Text style={styles.boxText}>Anno accademico</Text>
             {anniAccademici.length > 0 ? (
             <Picker
               selectedValue={selectedAnno}
@@ -157,10 +157,10 @@ export default function SimulazioneBorsaDiStudio() {
               ))}
             </Picker>
           ) : (
-            <Text>Seleziona un anno accademico per caricare i range ISEE.</Text>
+            <Text style={styles.boxText}>Seleziona un anno accademico per caricare i range ISEE.</Text>
           )}
 
-            <Text>Valore ISEE</Text>
+            <Text style={styles.boxText}>Valore ISEE</Text>
             {isees.length > 0 ? (
             <Picker
               selectedValue={selectedRange}
@@ -176,11 +176,11 @@ export default function SimulazioneBorsaDiStudio() {
               ))}
             </Picker>
           ) : (
-            <Text>Seleziona un anno accademico per caricare i range ISEE.</Text>
+            <Text style={styles.boxText}>Seleziona un anno accademico per caricare i range ISEE.</Text>
           )}
 
-            <Text>Tipologia Studente</Text>
-            <Picker
+            <Text style={styles.boxText}>Tipologia Studente</Text>
+            <Picker 
               selectedValue={tipologiaStudente}
               style={styles.picker}
               onValueChange={(itemValue: string) => setTipologiaStudente(itemValue)}
@@ -191,7 +191,7 @@ export default function SimulazioneBorsaDiStudio() {
             </Picker>
 
             <View style={styles.toggleGroup}>
-              <Text>Studente diversamente abile con disabilità pari o superiore al 66% o in possesso di attestazione di invalidità ex art. 3 c. 1 della l. 104/92.</Text>
+              <Text style={styles.boxText}>Studente diversamente abile con disabilità pari o superiore al 66% o in possesso di attestazione di invalidità ex art. 3 c. 1 della l. 104/92.</Text>
               <TouchableOpacity
                 style={[styles.toggleButton, disabilita && styles.toggleButtonSelected]}
                 onPress={() => setDisabilita(!disabilita)}
@@ -202,7 +202,7 @@ export default function SimulazioneBorsaDiStudio() {
 
 
             <View style={styles.toggleGroup}>
-              <Text>Studentessa frequentante corso di laurea S.T.E.M.</Text>
+              <Text style={styles.boxText}>Studentessa frequentante corso di laurea S.T.E.M.</Text>
               <TouchableOpacity
                 style={[styles.toggleButton, corsoSTEM && styles.toggleButtonSelected]}
                 onPress={() => setCorsoSTEM(!corsoSTEM)}
@@ -214,18 +214,18 @@ export default function SimulazioneBorsaDiStudio() {
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.box} onPress={handleSimulaPress}>
-              <Text style={styles.boxText}>Simula</Text>
+              <Text style={styles.buttonText}>Simula</Text>
             </TouchableOpacity>
           </View>
 
           {showResults && results && (
-            <View style={styles.sectionContainerImport}>
+            <View style={styles.sectionContainer}>
               <Text style={styles.inputLabel}>Importi</Text>
-              <Text>Importo mensa</Text>
+              <Text style={styles.boxText}>Importo mensa</Text>
               <TextInput style={styles.input} value={results.importoMensa} editable={false} />
-              <Text>Importo alloggio</Text>
+              <Text style={styles.boxText}>Importo alloggio</Text>
               <TextInput style={styles.input} value={results.importoAlloggio} editable={false} />
-              <Text>Importo totale</Text>
+              <Text style={styles.boxText}>Importo totale</Text>
               <TextInput style={styles.input} value={results.importoTotale} editable={false} />
             </View>
           )}
@@ -239,7 +239,7 @@ export default function SimulazioneBorsaDiStudio() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f9f9f9',
   },
   contentContainer: {
     flex: 1,
@@ -254,18 +254,38 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   box: {
-    width: '100%',
-    height: 40,
-    backgroundColor: '#0660ff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    marginVertical: 10,
+    backgroundColor: '#007FFF',
+        padding: 10,
+        borderRadius: 10,
+        width: 300,
+        alignItems: 'center',
+        marginTop: 10,
+  },
+  card: {
+    marginBottom: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   boxText: {
-    color: 'white',
+    marginLeft:15,
+    marginRight:15,
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '500',
+    marginBottom: 5,
+    color: '#555',
+  },
+  buttonText: {
+    marginLeft:15,
+    marginRight:15,
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 5,
+    color:'white',
   },
   sectionTitle: {
     fontSize: 20,
@@ -282,19 +302,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   sectionContainer: {
-    marginTop: 20,
     marginBottom: 20,
-    padding: 15,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    marginTop: 20,
+    backgroundColor: 'white',
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   inputLabel: {
     textAlign: 'center',
-    fontSize: 16,
+    padding: 13,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
     color: '#333',
+    marginBottom: 10,
   },
   input: {
     height: 40,
@@ -303,7 +327,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
     paddingHorizontal: 10,
-  },
+    marginLeft:15,
+    marginRight:15,
+    },
   toggleGroup: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -317,7 +343,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    marginLeft: 10,
+    marginLeft: 13,
+    marginRight: 13,
   },
   toggleButtonSelected: {
     backgroundColor: '#0660ff',
@@ -333,5 +360,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 15,
+    marginLeft:15,
+    marginRight:15,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#555',
   },
 });
