@@ -11,10 +11,10 @@ const img: { [key: string]: any } = {
     "sweet": require('../assets/images/3d-rendering-coffee-shop-icon_23-2149878997.jpeg'),
 }
 
-const ImagePasto = ({  meal, style } : {meal:TypePasti, style?: StyleProp<ImageStyle> }) => {
+const ImagePasto = ({ meal_type, style } : {meal_type: string, style?: StyleProp<ImageStyle> }) => {
     return (
         <Image
-            source={img[meal.type]}
+            source={img[meal_type]}
             style={style}
         />
     );

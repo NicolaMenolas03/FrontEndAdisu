@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import ResultModal from "@/components/ResultModal";
 import { format, parseISO } from "date-fns";
+import ImagePasto from "@/components/imagePasto";
 
 const { width } = Dimensions.get('window');
 
@@ -59,6 +60,21 @@ const Orders = () => {
                 <View style={styles.middleContainer}>
                     <Text style={styles.bookingText}>Data creazione: {formatDate(item.booking_date)}</Text>
                     <Text style={styles.bookingText}>Ritiro: {formatDate(item.collection_date)}</Text>
+                    <Text style={styles.bookingText}>Mensa: {item.canteen.name}</Text>
+                    
+                    <View style={styles.mealsContainer}>
+                        {item.items?.map((value, index) => (
+                            <View 
+                                key={value.meal}
+                                style={[
+                                    styles.mealImageWrapper,
+                                    { left: index * 50 }
+                                ]}
+                            >
+                                <ImagePasto meal_type={value.meal_type} style={styles.mealImage} />
+                            </View>
+                        ))}
+                    </View>
                 </View>
 
                 <View style={styles.bottomContainer}>
@@ -108,6 +124,25 @@ const Orders = () => {
 };
 
 const styles = StyleSheet.create({
+    mealsContainer: {
+        flexDirection: 'row',
+        marginTop: 10,
+        height: 80,
+        position: 'relative',
+    },
+    mealImageWrapper: {
+        position: 'absolute',
+        width: 70,
+        height: 70,
+        borderRadius: 10,
+        overflow: 'hidden',
+        borderWidth: 2,
+        borderColor: 'white',
+    },
+    mealImage: {
+        width: '100%',
+        height: '100%',
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',

@@ -29,6 +29,18 @@ export type TypeMensa = {
     address: string;
     city: string;
     province: string;
+    average_rating: number;
+};
+
+
+// Rating
+export type TypeRating = {
+    id: number;
+    scale: number;
+    meal: TypePasti;
+    meal_id?: number;
+    canteen: TypeMensa;
+    canteen_id?: number;
 };
 
 // Auth
@@ -64,6 +76,7 @@ export type TypeBooking = {
     items?: Array<{
         meal: number;
         quantity: number;
+        meal_type: string;
     }>;
     canteen_id?: number;
 

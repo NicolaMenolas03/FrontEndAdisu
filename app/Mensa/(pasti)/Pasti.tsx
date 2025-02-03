@@ -120,7 +120,7 @@ const Pasti = () => {
                 ) : (
                     <View style={styles.cardsContainer}>
                         {filteredMeals.map((meal) => (
-                            <FoodCard key={meal.id} meal={meal} />
+                            <FoodCard key={meal.id} meal={meal} mensaId={mensaId} />
                         ))}
                     </View>
                 )}

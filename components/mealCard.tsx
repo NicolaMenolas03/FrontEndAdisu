@@ -10,7 +10,7 @@ const MealCard = ({ meal, quantity, incrementQuantity, decrementQuantity }: {mea
     
     return (
         <View style={styles.mealItem}>
-            <ImagePasto meal={meal} style={styles.mealImage} />
+            <ImagePasto meal_type={meal.type} style={styles.mealImage} />
             <Text style={styles.mealName}>{meal.name}</Text>
             <Allergen allergen={meal.allergens} />
             <View style={styles.priceContainer}>

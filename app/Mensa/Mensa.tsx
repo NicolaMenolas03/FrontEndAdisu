@@ -118,6 +118,18 @@ const Mensa = () => {
                                     <Text>
                                         {mensa.city}, {mensa.province}
                                     </Text>
+                                    <View style={styles.ratingContainer}>
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <Icon
+                                                key={star}
+                                                name={star <= Math.round(mensa.average_rating) ? "star" : "star-outline"}
+                                                size={16}
+                                                color="#FFD700"
+                                                style={styles.starIcon}
+                                            />
+                                        ))}
+                                        <Text style={styles.ratingText}>({mensa.average_rating.toFixed(1)})</Text>
+                                    </View>
                                 </View>
                                 <TouchableOpacity
                                     style={styles.goButton}
@@ -305,6 +317,19 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: "bold",
+    },
+    ratingContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 4,
+    },
+    starIcon: {
+        marginRight: 2,
+    },
+    ratingText: {
+        marginLeft: 4,
+        color: '#666',
+        fontSize: 12,
     },
 });
 
