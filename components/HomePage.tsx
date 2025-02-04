@@ -26,7 +26,7 @@ export default function HomeButton() {
   return (
     <View>
       <Ionicons
-        name="home-outline"
+        name="home"
         size={28}
         color="#005dff"
         onPress={handleHomePress}
@@ -59,8 +59,8 @@ export default function HomeButton() {
 
 const styles = StyleSheet.create({
   icon: {
+    position: 'absolute',
     marginLeft: 10,
-    marginTop: 10,
   },
   modalContainer: {
     flex: 1,
