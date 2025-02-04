@@ -14,14 +14,14 @@ export default function BackButton() {
 
 const styles = StyleSheet.create({
   backButton: {
-    padding: 15,
+    padding: 0,
     position: 'absolute',
-    top: 20,
+    top: 10,
     left: 15,
     zIndex: 10,
   },
   backButtonText: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#005dff',
     fontWeight: 'bold',
   },
