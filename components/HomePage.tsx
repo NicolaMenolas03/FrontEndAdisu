@@ -60,7 +60,6 @@ export default function HomeButton() {
 const styles = StyleSheet.create({
   icon: {
     marginLeft: 10,
-    marginTop: 10,
   },
   modalContainer: {
     flex: 1,

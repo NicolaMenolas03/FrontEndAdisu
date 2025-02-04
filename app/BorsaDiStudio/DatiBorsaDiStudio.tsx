@@ -2,10 +2,12 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import Navbar from '@/components/Navbar';
 import { Card } from 'react-native-paper';
+import TornaIndietro from '@/components/TornaIndietro';
 
 export default function DatiBorsaDiStudio() {
   return (
     <View style={styles.container}>
+      <TornaIndietro />
       <ScrollView contentContainerStyle={styles.scholarshipContainer}>
         <Text style={styles.title}>Dati Borsa di Studio</Text>
 
@@ -59,9 +61,6 @@ export default function DatiBorsaDiStudio() {
         </Card>
 
       </ScrollView>
-
-      {/* Barra di navigazione */}
-      <Navbar namePage="" />
     </View>
   );
 }
