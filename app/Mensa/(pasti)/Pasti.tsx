@@ -4,7 +4,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCRUD } from "@/hooks/useCRUD";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { router } from 'expo-router';
-import { TypePasti } from '../../lib/definitions';
+import { TypeMeal } from '../../lib/definitions';
 import FoodCard from '@/components/foodCard';
 import { useCart } from '@/context/CartContext';
 import { navigateToHome, navigateToMensa } from '@/app/nav/utils';
@@ -24,7 +24,7 @@ const Pasti = () => {
     const { mensaId } = route.params;
     setCanteenId(parseInt(mensaId));
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
-    const { data, error, loading } = useCRUD<TypePasti>(`/daily_meals/${mensaId}/get_meals_by_id/`);
+    const { data, error, loading } = useCRUD<TypeMeal>(`/daily_meals/${mensaId}/get_meals_by_id/`);
 
     const searchMeals = () => {
         if (selectedCategory === 'all')
@@ -130,15 +130,6 @@ const Pasti = () => {
 };
 
 const styles = StyleSheet.create({
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    cartBadgeText: {
-        color: 'white',
-        fontSize: 12,
-        fontWeight: 'bold',
-    },
     cartBadge: {
         position: 'absolute',
         top: -5,
@@ -149,18 +140,6 @@ const styles = StyleSheet.create({
         height: 20,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    cartContainer: {
-        position: 'relative',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#007FFF',
-        borderRadius: 30,
-        width: 60,
-        height: 60,
-        marginTop: -30, // Solleva il cerchio sopra la navbar
-        borderWidth: 5,
-        borderColor: '#f5f5f5',
     },
     navbar: {
         margin: 20,
@@ -187,11 +166,6 @@ const styles = StyleSheet.create({
     breadcrumbSeparator: {
         color: '#666',
         marginHorizontal: 5,
-    },
-    navButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
     },
     container: {
         flex: 1,
@@ -242,12 +216,6 @@ const styles = StyleSheet.create({
         height: 28,
         marginBottom: 5,
     },
-    cartButton: {
-        position: 'absolute',
-        top: 20,
-        right: 20,
-        zIndex: 1,
-    },
     badge: {
         position: 'absolute',
         right: -6,
@@ -262,66 +230,6 @@ const styles = StyleSheet.create({
     badgeText: {
         color: 'white',
         fontSize: 12,
-    },
-    modalContainer: {
-        flex: 1,
-        backgroundColor: 'white',
-    },
-    modalHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-    },
-    cartItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-    },
-    quantityContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    quantityButton: {
-        fontSize: 20,
-        paddingHorizontal: 10,
-    },
-    quantity: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-    },
-    totalContainer: {
-        padding: 20,
-        borderTopWidth: 1,
-        borderTopColor: '#eee',
-    },
-    totalText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    checkoutButton: {
-        backgroundColor: '#003366',
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    checkoutButtonText: {
-        color: 'white',
-        fontSize: 16,
-    },
-    itemName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    itemPrice: {
-        fontSize: 16,
-        color: '#333',
     },
 });
 

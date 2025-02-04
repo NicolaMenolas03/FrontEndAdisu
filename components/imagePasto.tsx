@@ -1,7 +1,7 @@
  
  
  
-import { TypePasti } from '@/app/lib/definitions';
+import { TypeMeal } from '@/app/lib/definitions';
 import React from 'react';
 import { StyleSheet, Image, StyleProp, ImageStyle } from 'react-native';
 

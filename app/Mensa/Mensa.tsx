@@ -15,17 +15,17 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Title } from "react-native-paper";
 import { useCRUD } from "@/hooks/useCRUD";
 import { router } from "expo-router";
-import { TypeMensa } from "../lib/definitions";
+import { TypeCanteen } from "../lib/definitions";
 import { navigateToHome, navigateToPasti } from "../nav/utils";
 
 
 const Mensa = () => {
-    const { data, error, loading } = useCRUD<TypeMensa>("/canteen/");
+    const { data, error, loading } = useCRUD<TypeCanteen>("/canteen/");
     const [mensaName, setMensaName] = useState("");
     const [isFocused, setIsFocused] = useState(false);
-    const [searchResults, setSearchResults] = useState<TypeMensa[]>([]);
+    const [searchResults, setSearchResults] = useState<TypeCanteen[]>([]);
 
-    const mensaList: TypeMensa[] = data;
+    const mensaList: TypeCanteen[] = data;
 
     useEffect(() => {
         if (data) {
@@ -310,9 +310,6 @@ const styles = StyleSheet.create({
     suggestionItem: {
         padding: 4,
         borderBottomWidth: 0,
-    },
-    boxTitle: {
-        marginBottom: 30,
     },
     title: {
         fontSize: 24,

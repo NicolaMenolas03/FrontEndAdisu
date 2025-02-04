@@ -1,4 +1,4 @@
-import { TypePasti } from "@/app/lib/definitions";
+import { TypeMeal } from "@/app/lib/definitions";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useCart } from '../context/CartContext';
 import Allergen from "./allergen";
@@ -6,7 +6,7 @@ import ImagePasto from "./imagePasto";
 import RatingSection from "./ratingSection";
 
 
-const FoodCard = ({ meal, mensaId }: { meal: TypePasti, mensaId: string}) => {
+const FoodCard = ({ meal, mensaId }: { meal: TypeMeal, mensaId: string}) => {
     const { addToCart } = useCart();
     
     const handleAddToCart = () => {
@@ -36,9 +36,6 @@ const FoodCard = ({ meal, mensaId }: { meal: TypePasti, mensaId: string}) => {
 };
 
 const styles = StyleSheet.create({
-    cardsContainer: {
-        padding: 10,
-    },
     card: {
         backgroundColor: '#fff',
         borderRadius: 10,
@@ -62,15 +59,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
-    },
-    allergenRow: {
-        flexDirection: 'row',
-        gap: 10,
-        marginBottom: 10,
-    },
-    allergenIcon: {
-        width: 20,
-        height: 20,
     },
     cardDescription: {
         fontSize: 14,

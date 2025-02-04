@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { CartContextType, MealQuantities, TypePasti } from '@/app/lib/definitions';
+import { CartContextType, MealQuantities, TypeMeal } from '@/app/lib/definitions';
 
 const CartContext = createContext<CartContextType>({
     selectedMeals: {},
@@ -31,7 +31,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setTotalPrice(calculateTotalPrice());
     }, [selectedMeals]);
 
-    const addToCart = (meal: TypePasti) => {
+    const addToCart = (meal: TypeMeal) => {
         setSelectedMeals(prev => {
             const updatedMeals = { ...prev };
             if (updatedMeals[meal.id]) {

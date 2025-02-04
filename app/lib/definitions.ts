@@ -4,7 +4,7 @@ export type TypeAllergeni = {
     name: string;
 };
 
-export type TypePasti = {
+export type TypeMeal = {
     id: number;
     name: string;
     description: string;
@@ -14,16 +14,16 @@ export type TypePasti = {
     canteens: number;
 };
 
-export type TypePastiGioralieri = {
+export type TypeDailyMeal = {
     id: number;
     available: boolean;
-    meal: TypePasti;
+    meal: TypeMeal;
     date: string;
-    canteen: TypeMensa;
+    canteen: TypeCanteen;
 }
 
 // Mensa
-export type TypeMensa = {
+export type TypeCanteen = {
     id: number;
     name: string;
     address: string;
@@ -37,9 +37,9 @@ export type TypeMensa = {
 export type TypeRating = {
     id: number;
     scale: number;
-    meal: TypePasti;
+    meal: TypeMeal;
     meal_id?: number;
-    canteen: TypeMensa;
+    canteen: TypeCanteen;
     canteen_id?: number;
 };
 
@@ -72,11 +72,11 @@ export type TypeBooking = {
     status: string;
     price: number;
     total_price: number;
-    canteen: TypeMensa;
+    canteen: TypeCanteen;
     items?: Array<{
         meal: number;
         quantity: number;
-        meal_type: string;
+        meal_type?: string;
     }>;
     canteen_id?: number;
 
@@ -85,7 +85,7 @@ export type TypeBooking = {
 export type TypeBookingItem = {
     id: number;
     booking: TypeBooking;
-    meal: TypePasti;
+    meal: TypeMeal;
     quantity: number;
     price: number;
 }
@@ -94,7 +94,7 @@ export type TypeBookingItem = {
 // Cart Context
 export type MealQuantities = {
     [key: number]: {
-        meal: TypePasti;
+        meal: TypeMeal;
         quantity: number;
     };
 }
@@ -103,7 +103,7 @@ export type CartContextType = {
     selectedMeals: MealQuantities;
     canteen_id?: number;
     totalPrice: number;
-    addToCart: (meal: TypePasti) => void;
+    addToCart: (meal: TypeMeal) => void;
     removeFromCart: (mealId: number) => void;
     getTotalItems: () => number;
     setCanteenId: (id: number) => void;

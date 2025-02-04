@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthResponse, LoginData, RegisterData } from '@/app/lib/definitions';
 import { Platform } from 'react-native';
+import { router } from 'expo-router';
 
 const getBaseUrl = () => {
   if (__DEV__) {
@@ -40,29 +41,70 @@ apiClient.interceptors.request.use(
   }
 );
 
-export const setAccessToken = async (value: string) => {
+// Add refresh token function
+const refreshToken = async () => {
   try {
-    apiClient.interceptors.request.use(
-      async (config) => {
-        if (value) {
-          config.headers.Authorization = `Bearer ${value}`;
-        }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
+    const refreshToken = await AsyncStorage.getItem('refreshToken');
+    const response = await axios.post(`${API_BASE_URL}/auth/refresh/`, {
+      refresh: refreshToken
+    });
+    
+    if (response.data.access) {
+      await AsyncStorage.setItem('accessToken', response.data.access);
+      return response.data.access;
+    }
+    return null;
   } catch (error) {
-    console.error('Error saving token:', error);
+    await AsyncStorage.removeItem('accessToken');
+    await AsyncStorage.removeItem('refreshToken');
+    router.replace('/login');
+    return null;
   }
+};
+
+// Add response interceptor
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      
+      const newToken = await refreshToken();
+      if (newToken) {
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return apiClient(originalRequest);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export const setAccessToken = async (accessToken: string, refreshTokenValue: string) => {
+  try {
+    await AsyncStorage.setItem('accessToken', accessToken);
+    await AsyncStorage.setItem('refreshToken', refreshTokenValue);
+    apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  } catch (error) {
+    console.error('Error setting tokens:', error);
+  }
+};
+
+export const checkAuthStatus = async () => {
+  const token = await AsyncStorage.getItem('accessToken');
+  if (!token) {
+    router.replace('/login');
+  }
+  return token;
 };
 
 export const loadStoredToken = async () => {
   try {
     const token = await AsyncStorage.getItem('accessToken');
     if (token) {
-      setAccessToken(token);
+      setAccessToken(token, '');
     }
   } catch (error) {
     console.error('Error loading token:', error);

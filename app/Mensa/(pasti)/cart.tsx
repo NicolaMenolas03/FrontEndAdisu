@@ -3,7 +3,7 @@ import { useCart } from '../../../context/CartContext';
 import { useEffect, useState } from 'react';;
 import MealCard from '@/components/mealCard';
 import { useCRUD } from '@/hooks/useCRUD';
-import { TypeBooking, TypePastiGioralieri } from '@/app/lib/definitions';
+import { TypeBooking, TypeDailyMeal } from '@/app/lib/definitions';
 import { apiService } from '@/services/api';
 import { Picker } from '@react-native-picker/picker';
 import { format } from 'date-fns';
@@ -67,7 +67,7 @@ export default function Cart() {
 
     const checkMealAvailability = async () => {
         try {
-            const response = await apiService.post<TypePastiGioralieri[]>('daily_meals/check_meal_available/', {
+            const response = await apiService.post<TypeDailyMeal[]>('daily_meals/check_meal_available/', {
                 ids: mealList.map((item) => item.meal.id),
             });
             setUnavailableMeals(response.data.map((item) => item.id));
