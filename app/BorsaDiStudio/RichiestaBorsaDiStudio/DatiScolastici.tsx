@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import GufoChat from '@/components/Gufochat';
 
 export default function DatiScolasticiPage() {
   const router = useRouter();
@@ -59,7 +60,8 @@ export default function DatiScolasticiPage() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       {/* Pulsante HOME */}
       <View style={styles.header}>
         <Ionicons
@@ -165,13 +167,20 @@ export default function DatiScolasticiPage() {
         </View>
       </Modal>
     </ScrollView>
+    <GufoChat></GufoChat>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex:1,
+    justifyContent: 'space-between',
     backgroundColor: '#f5f5f5',
+  },
+  scrollContainer: {
+    padding: 20,
+    marginBottom: '35%',
   },
   header: {
     flexDirection: 'row',
@@ -181,7 +190,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0660ff',
+    color: 'black',
     textAlign: 'center',
     marginBottom: 20,
   },

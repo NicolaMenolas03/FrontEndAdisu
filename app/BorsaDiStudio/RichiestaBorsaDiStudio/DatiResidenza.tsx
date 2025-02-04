@@ -4,6 +4,7 @@ import { TextInput, Button, Card } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomePage from '../../../components/HomePage';
+import GufoChat from '@/components/Gufochat';
 
 export default function DatiResidenzaPage() {
   const router = useRouter();
@@ -41,7 +42,8 @@ export default function DatiResidenzaPage() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <HomePage />
       
       <Text style={styles.title}>Dati di Residenza</Text>
@@ -88,13 +90,20 @@ export default function DatiResidenzaPage() {
         </Button>
       </View>
     </ScrollView>
+    <GufoChat></GufoChat>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex:1,
+    justifyContent: 'space-between',
     backgroundColor: '#f5f5f5',
+  },
+  scrollContainer: {
+    padding: 20,
+    marginBottom: '35%',
   },
   header: {
     flexDirection: 'row',
@@ -104,7 +113,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0660ff',
+    color: 'black',
     textAlign: 'center',
     marginBottom: 20,
   },

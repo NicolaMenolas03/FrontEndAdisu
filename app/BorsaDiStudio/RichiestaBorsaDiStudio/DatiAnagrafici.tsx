@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomePage from '@/components/HomePage';
+import GufoChat from '@/components/Gufochat';
 
 export default function DatiAnagraficiPage() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function DatiAnagraficiPage() {
       nome: formDatiAnagrafici.nome ? '' : 'Il campo Nome è obbligatorio.',
       cognome: formDatiAnagrafici.cognome ? '' : 'Il campo Cognome è obbligatorio.',
       sesso: formDatiAnagrafici.sesso ? '' : 'Il campo Sesso è obbligatorio.',
-      etaNascita: formDatiAnagrafici.etaNascita.match(/^\d+$/) ? '' : 'Inserire una età valida (numerica).',
+      etaNascita: formDatiAnagrafici.etaNascita ? '' : 'Inserire una età valida (numerica).',
       cittadinanza: formDatiAnagrafici.cittadinanza ? '' : 'Il campo Cittadinanza è obbligatorio.',
     };
 
@@ -72,6 +73,7 @@ export default function DatiAnagraficiPage() {
   };
 
   return (
+    <View style={{flex: 1}}>
     <ScrollView contentContainerStyle={styles.container}>
       <HomePage />
       <Text style={styles.title}>Dati Anagrafici</Text>
@@ -137,7 +139,10 @@ export default function DatiAnagraficiPage() {
           Successivo
         </Button>
       </View>
+      
     </ScrollView>
+    <GufoChat></GufoChat>
+    </View>
   );
 }
 
@@ -154,7 +159,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0660ff',
+    color: 'black',
     textAlign: 'center',
     marginBottom: 20,
   },

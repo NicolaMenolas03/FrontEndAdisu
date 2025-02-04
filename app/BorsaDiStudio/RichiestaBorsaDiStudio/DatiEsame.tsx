@@ -4,6 +4,7 @@ import { TextInput, Button, Card, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomePage from '../../../components/HomePage';
+import GufoChat from '@/components/Gufochat';
 
 interface Esame {
   materia: string;
@@ -62,7 +63,8 @@ export default function DatiEsamePage() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+    <ScrollView>
       <HomePage />
       <Text style={styles.title}>Dati Esame</Text>
       <Card style={styles.card}>
@@ -120,18 +122,21 @@ export default function DatiEsamePage() {
         <Button mode="contained" buttonColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici')}>Successivo</Button>
       </View>
     </ScrollView>
+    <GufoChat></GufoChat>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     backgroundColor: '#f5f5f5',
+    padding: 20,
+    flex: 1,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0660ff',
+    color: 'black',
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -166,6 +171,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginTop: 20,
+    marginBottom: 200,
     
   },
 });

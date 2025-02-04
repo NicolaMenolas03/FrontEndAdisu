@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { TextInput, Button, Card, Switch } from 'react-native-paper';
+import { TextInput, Button, Card, Switch, HelperText  } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomePage from '@/components/HomePage';
+import GufoChat from '@/components/Gufochat';
 
 export default function DatiEconomiciPage() {
   const router = useRouter();
@@ -13,6 +14,27 @@ export default function DatiEconomiciPage() {
     dataRilascio: '',
     autorizzoINPS: false,
   });
+
+const [errors, setErrors] = useState({
+    isee: '',
+    dataRilascio: '',
+  });
+  const validateFields = () => {
+    const newErrors = {
+      isee: formDatiEconomici.isee ? '' : 'Il campo isee è obbligatorio.',
+      dataRilascio: formDatiEconomici.dataRilascio ? '' : 'Il campo dataRilascio è obbligatorio.',
+    };
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((error) => error === '');
+  };
+
+  const handleNext = () => {
+    if (validateFields()) {
+      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici');
+    }
+  };
 
   useEffect(() => {
     const loadformDatiEconomici = async () => {
@@ -39,6 +61,7 @@ export default function DatiEconomiciPage() {
   };
 
   return (
+    <View style={{flex: 1}}>
     <ScrollView contentContainerStyle={styles.container}>
       <HomePage />
       <Text style={styles.title}>Dati Economici</Text>
@@ -53,6 +76,7 @@ export default function DatiEconomiciPage() {
             mode="outlined"
             style={styles.input}
           />
+          {errors.isee ? <HelperText type="error">{errors.isee}</HelperText> : null}
           <TextInput
             label="Data Rilascio ISEE"
             value={formDatiEconomici.dataRilascio}
@@ -60,6 +84,7 @@ export default function DatiEconomiciPage() {
             mode="outlined"
             style={styles.input}
           />
+          {errors.dataRilascio ? <HelperText type="error">{errors.dataRilascio}</HelperText> : null}
           <View style={styles.switchContainer}>
             <Text>Autorizzo l'Università a consultare i dati INPS</Text>
             <Switch
@@ -74,11 +99,13 @@ export default function DatiEconomiciPage() {
         <Button mode="outlined" textColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame')}>
           Indietro
         </Button>
-        <Button mode="contained" buttonColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici')}>
+        <Button mode="contained" buttonColor="#005dff" onPress={handleNext}>
           Invia Richiesta
         </Button>
       </View>
     </ScrollView>
+    <GufoChat></GufoChat>
+    </View>
   );
 }
 
@@ -90,7 +117,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0660ff',
+    color: 'black',
     textAlign: 'center',
     marginBottom: 20,
   },

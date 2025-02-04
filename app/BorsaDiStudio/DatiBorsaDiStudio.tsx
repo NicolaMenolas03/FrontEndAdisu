@@ -16,22 +16,22 @@ export default function DatiBorsaDiStudio() {
 
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Matricola</Text>
-              <TextInput style={styles.input} value="Matricola" editable={false} />
+              <TextInput style={styles.input} value="--------" editable={false} />
             </View>
 
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Tipo Borsa di Studio</Text>
-              <TextInput style={styles.input} value="Tipo borsa di studio" editable={false} />
+              <TextInput style={styles.input} value="--------" editable={false} />
             </View>
 
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Tipo Studente</Text>
-              <TextInput style={styles.input} value="Tipo studente" editable={false} />
+              <TextInput style={styles.input} value="--------" editable={false} />
             </View>
 
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Fascia Reddito</Text>
-              <TextInput style={styles.input} value="Fascia reddito" editable={false} />
+              <TextInput style={styles.input} value="--------" editable={false} />
             </View>
           </Card.Content>
         </Card>
@@ -43,17 +43,17 @@ export default function DatiBorsaDiStudio() {
 
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Importo Mensa</Text>
-              <TextInput style={styles.input} value="Importo mensa" editable={false} />
+              <TextInput style={styles.input} value="--------" editable={false} />
             </View>
 
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Importo Alloggio</Text>
-              <TextInput style={styles.input} value="Importo alloggio" editable={false} />
+              <TextInput style={styles.input} value="--------" editable={false} />
             </View>
 
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Importo Totale</Text>
-              <TextInput style={styles.input} value="Importo totale" editable={false} />
+              <TextInput style={styles.input} value="--------" editable={false} />
             </View>
           </Card.Content>
         </Card>
