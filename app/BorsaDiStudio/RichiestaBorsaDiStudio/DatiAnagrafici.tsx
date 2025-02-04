@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Switch} from 'react-native';
-import { TextInput, Button, Card, HelperText } from 'react-native-paper';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import { TextInput, Button, Card, HelperText,Switch } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -75,8 +75,11 @@ export default function DatiAnagraficiPage() {
   return (
     <View style={styles.container}>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.topbar}>
       <HomePage />
       <Text style={styles.title}>Dati Anagrafici</Text>
+      </View>
+      
       <Card style={styles.card}>
         <Card.Content>
         <Text style={styles.label}>Intestazione</Text>
@@ -145,13 +148,14 @@ export default function DatiAnagraficiPage() {
           </Picker>
           {errors.cittadinanza ? <HelperText type="error">{errors.cittadinanza}</HelperText> : null}
 
-          <View style={styles.switchContainer}>
-              <Text style={styles.label}>Disabilità</Text>
-              <Switch
+            <View style={styles.switchContainer}>
+                <Text style={styles.label}>Disabilità</Text>
+                <Switch
                 value={formDatiAnagrafici.disabilita}
                 onValueChange={(value) => handleInputChange('disabilita', value)}
+                color='#007BFF'
               />
-          </View>
+            </View>
           
         </Card.Content>
       </Card>
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
-    marginBottom: 20,
+    marginStart: 90,
   },
   card: {
     marginBottom: 20,
@@ -248,6 +252,12 @@ const styles = StyleSheet.create({
         width: 300,
         alignItems: 'center',
         marginTop: 10,
+  },
+  topbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 20,
   },
   buttonText: {
     marginLeft:15,
