@@ -2,12 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'expo-router';
+import TornaIndietro from '@/components/TornaIndietro';
 
 export default function BorseDiStudioChoicePage() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
+      <TornaIndietro />
       <Text style={styles.sectionTitle}>Scegli il Tipo di Borsa di Studio</Text>
 
       {/* Scelte */}
@@ -23,9 +25,6 @@ export default function BorseDiStudioChoicePage() {
           <Text style={styles.boxText}>Borsa di Studio per Merito</Text>
         </View>
       </View>
-
-      {/* Barra di navigazione */}
-      <Navbar namePage="BorseDiStudioChoicePage" />
     </View>
   );
 }

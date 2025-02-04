@@ -6,6 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import Navbar from '@/components/Navbar';
 import { apiService } from '@/services/api';
 import { useCRUD } from '@/hooks/useCRUD';
+import TornaIndietro from '@/components/TornaIndietro';
 
 
 type RootStackParamList = {
@@ -135,6 +136,7 @@ export default function SimulazioneBorsaDiStudio() {
 
   return (
     <View style={styles.container}>
+      <TornaIndietro />
       <View style={styles.contentContainer}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <Text style={styles.sectionTitle}>Simulazione Borsa di Studio</Text>
@@ -231,7 +233,6 @@ export default function SimulazioneBorsaDiStudio() {
           )}
         </ScrollView>
       </View>
-      <Navbar namePage={''} />
     </View>
   );
 }

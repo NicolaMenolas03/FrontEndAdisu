@@ -1,13 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Navbar from '@/components/Navbar';
+import Tornaindietro from '@/components/TornaIndietro';
 import { useRouter } from 'expo-router';
+
 
 export default function BorsaDiStudioPage() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
+      <Tornaindietro />
       <Text style={styles.title}>Borsa di Studio</Text>
 
       {/* Pulsanti centrali */}
