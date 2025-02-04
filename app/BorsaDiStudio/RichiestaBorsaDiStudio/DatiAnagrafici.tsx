@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView,Switch} from 'react-native';
 import { TextInput, Button, Card, HelperText } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
@@ -56,7 +56,7 @@ export default function DatiAnagraficiPage() {
     loadformDatiAnagrafici();
   }, []);
 
-  const handleInputChange = async (field: string, value: string) => {
+  const handleInputChange = async (field: string, value: string | boolean) => {
     const updatedData = { ...formDatiAnagrafici, [field]: value };
     setformDatiAnagrafici(updatedData);
     try {
@@ -111,7 +111,7 @@ export default function DatiAnagraficiPage() {
           {errors.sesso ? <HelperText type="error">{errors.sesso}</HelperText> : null}
 
           <TextInput
-            label="Età di Nascita"
+            label="Data di nascita"
             value={formDatiAnagrafici.etaNascita}
             onChangeText={(text) => handleInputChange('etaNascita', text)}
             mode="outlined"
@@ -128,6 +128,15 @@ export default function DatiAnagraficiPage() {
             style={styles.input}
           />
           {errors.cittadinanza ? <HelperText type="error">{errors.cittadinanza}</HelperText> : null}
+
+          <View style={styles.switchContainer}>
+              <Text style={styles.label}>Disabilità</Text>
+              <Switch
+                value={formDatiAnagrafici.disabilita}
+                onValueChange={(value) => handleInputChange('disabilita', value)}
+              />
+          </View>
+          
         </Card.Content>
       </Card>
       <View style={styles.buttonContainer}>
@@ -161,6 +170,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
   },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -184,4 +199,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
   },
-});
+}); 
