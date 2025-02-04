@@ -54,11 +54,6 @@ export default function DatiScolasticiPage() {
     setModalVisible(true);
   };
 
-  const confirmExit = () => {
-    setModalVisible(false);
-    router.push('/BorsaDiStudio/BorsaDiStudioPage'); // Cambia con la route della tua pagina principale
-  };
-
   return (
     <View style={styles.container}>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -144,28 +139,6 @@ export default function DatiScolasticiPage() {
           Successivo
         </Button>
       </View>
-
-      {/* Modal per confermare uscita */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Sei sicuro di voler abbandonare la richiesta?</Text>
-            <View style={styles.modalButtons}>
-              <Button mode="outlined" onPress={() => setModalVisible(false)}>
-                Annulla
-              </Button>
-              <Button mode="contained" buttonColor="#ff4d4d" onPress={confirmExit}>
-                Conferma
-              </Button>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </ScrollView>
     <GufoChat></GufoChat>
     </View>

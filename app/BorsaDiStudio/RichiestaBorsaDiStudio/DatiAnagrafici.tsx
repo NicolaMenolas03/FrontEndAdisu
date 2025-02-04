@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Switch} from 'react-native';
 import { TextInput, Button, Card, HelperText } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
@@ -56,7 +56,7 @@ export default function DatiAnagraficiPage() {
     loadformDatiAnagrafici();
   }, []);
 
-  const handleInputChange = async (field: string, value: string) => {
+  const handleInputChange = async (field: string, value: string | boolean) => {
     const updatedData = { ...formDatiAnagrafici, [field]: value };
     setformDatiAnagrafici(updatedData);
     try {
@@ -144,6 +144,15 @@ export default function DatiAnagraficiPage() {
             <Picker.Item label="Altro" value="Altro" />
           </Picker>
           {errors.cittadinanza ? <HelperText type="error">{errors.cittadinanza}</HelperText> : null}
+
+          <View style={styles.switchContainer}>
+              <Text style={styles.label}>Disabilità</Text>
+              <Switch
+                value={formDatiAnagrafici.disabilita}
+                onValueChange={(value) => handleInputChange('disabilita', value)}
+              />
+          </View>
+          
         </Card.Content>
       </Card>
       <View style={styles.buttonContainer}>
@@ -173,6 +182,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 10,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 15,
   },
   title: {
     fontSize: 24,
