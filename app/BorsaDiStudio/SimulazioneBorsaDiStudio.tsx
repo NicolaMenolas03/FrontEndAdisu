@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Switch } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -51,6 +51,7 @@ export default function SimulazioneBorsaDiStudio() {
   const [disabilita, setDisabilita] = useState(false);
   const [pastiAggiuntivi, setPastiAggiuntivi] = useState(false);
   const [corsoSTEM, setCorsoSTEM] = useState(false);
+  const [Disabilita, SetDisabilita] = useState(false);
   
   
   useEffect(() => {
@@ -194,24 +195,19 @@ export default function SimulazioneBorsaDiStudio() {
 
             <View style={styles.toggleGroup}>
               <Text style={styles.boxText}>Studente diversamente abile con disabilità pari o superiore al 66% o in possesso di attestazione di invalidità ex art. 3 c. 1 della l. 104/92.</Text>
-              <TouchableOpacity
-                style={[styles.toggleButton, disabilita && styles.toggleButtonSelected]}
-                onPress={() => setDisabilita(!disabilita)}
-              >
-                <Text style={styles.toggleButtonText}>{disabilita ? '✔' : '✘'}</Text>
-              </TouchableOpacity>
+              <Switch
+                onValueChange={() => SetDisabilita(!Disabilita)}
+                value={Disabilita}
+              />
             </View>
-
 
             <View style={styles.toggleGroup}>
-              <Text style={styles.boxText}>Studentessa frequentante corso di laurea S.T.E.M.</Text>
-              <TouchableOpacity
-                style={[styles.toggleButton, corsoSTEM && styles.toggleButtonSelected]}
-                onPress={() => setCorsoSTEM(!corsoSTEM)}
-              >
-                <Text style={styles.toggleButtonText}>{corsoSTEM ? '✔' : '✘'}</Text>
-              </TouchableOpacity>
-            </View>
+            <Text style={styles.boxText}>Studentessa frequentante corso di laurea S.T.E.M.</Text>
+              <Switch
+                onValueChange={() => setCorsoSTEM(!corsoSTEM)}
+                value={corsoSTEM}
+              />
+              </View>
           </View>
 
           <View style={styles.buttonContainer}>
