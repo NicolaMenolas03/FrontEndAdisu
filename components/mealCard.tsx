@@ -1,6 +1,6 @@
 import {TypeMeal } from '@/app/lib/definitions';
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Allergen from './allergen';
 import ImagePasto from './imagePasto';
 

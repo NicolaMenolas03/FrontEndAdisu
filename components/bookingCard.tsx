@@ -29,11 +29,11 @@ const bookingCard = ({ item, deleteItem }: { item: TypeBooking, deleteItem: (id:
     const deleteOrder = ({ id }: { id: number }) => {
         try {
             deleteItem(id);
-            setDeleteSuccess(true);
+            setResultDelete(true);
         } catch (error) {
-            setDeleteSuccess(false);
+            setResultDelete(false);
         }
-        setResultDelete(true);
+        setDeleteSuccess(true);
     }
 
 
@@ -64,7 +64,7 @@ const bookingCard = ({ item, deleteItem }: { item: TypeBooking, deleteItem: (id:
                                 { left: index * 50 }
                             ]}
                         >
-                            <ImagePasto meal_type={value.meal_type} style={styles.mealImage} />
+                            <ImagePasto meal_type={value.meal_type || ""} style={styles.mealImage} />
                         </View>
                     ))}
                 </View>

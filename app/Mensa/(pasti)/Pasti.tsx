@@ -1,31 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions} from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCRUD } from "@/hooks/useCRUD";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { router } from 'expo-router';
 import { TypeMeal } from '../../lib/definitions';
 import FoodCard from '@/components/foodCard';
 import { useCart } from '@/context/CartContext';
 import { navigateToHome, navigateToMensa } from '@/app/nav/utils';
 
 type RootStackParamList = {
-    Pasti: {
-        mensaId: string;
-    };
+    Pasti: TypeMeal;
 };
 
+const categories = [
+    {
+        id: 'all',
+        label: 'Tutto',
+        img: require('../../../assets/icons/icons8-cibo-fast-food-cibo-di-strada-10-94.png')
+    },
+    {
+        id: 'first',
+        label: 'Primi',
+        img: require('../../../assets/icons/icons8-spaghetti-94.png')
+    },
+    {
+        id: 'second',
+        label: 'Secondi',
+        img: require('../../../assets/icons/icons8-paleodieta-94.png')
+    },
+    {
+        id: 'sweet',
+        label: 'Dolci',
+        img: require('../../../assets/icons/icons8-dolce-94.png')
+    }
+];
+
 type PastiScreenRouteProp = RouteProp<RootStackParamList, 'Pasti'>;
-const { width } = Dimensions.get('window');
 
 const Pasti = () => {
     const { setCanteenId } = useCart();
     const route = useRoute<PastiScreenRouteProp>();
-    const { mensaId } = route.params;
-    setCanteenId(parseInt(mensaId));
+    const { id } = route.params;
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
-    const { data, error, loading } = useCRUD<TypeMeal>(`/daily_meals/${mensaId}/get_meals_by_id/`);
-
+    const { data, loading } = useCRUD<TypeMeal>(`/daily_meals/${id}/get_meals_by_id/`);
     const searchMeals = () => {
         if (selectedCategory === 'all')
             return data;
@@ -34,28 +51,9 @@ const Pasti = () => {
     }
     const filteredMeals = searchMeals();
 
-    const categories = [
-        {
-            id: 'all',
-            label: 'Tutto',
-            img: require('../../../assets/icons/icons8-cibo-fast-food-cibo-di-strada-10-94.png')
-        },
-        {
-            id: 'first',
-            label: 'Primi',
-            img: require('../../../assets/icons/icons8-spaghetti-94.png')
-        },
-        {
-            id: 'second',
-            label: 'Secondi',
-            img: require('../../../assets/icons/icons8-paleodieta-94.png')
-        },
-        {
-            id: 'sweet',
-            label: 'Dolci',
-            img: require('../../../assets/icons/icons8-dolce-94.png')
-        }
-    ];
+    useEffect(() => {
+        setCanteenId(id);
+    }, [id]);
 
     return (
         <View style={styles.container}>
@@ -120,7 +118,7 @@ const Pasti = () => {
                 ) : (
                     <View style={styles.cardsContainer}>
                         {filteredMeals.map((meal) => (
-                            <FoodCard key={meal.id} meal={meal} mensaId={mensaId} />
+                            <FoodCard key={meal.id} meal={meal} canteen_id={id.toString()} />
                         ))}
                     </View>
                 )}

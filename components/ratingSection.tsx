@@ -5,9 +5,9 @@ import { TouchableOpacity, View, StyleSheet, Text } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
-const RatingSection = ({ meal_id, mensa_id }: { meal_id: string, mensa_id: string }) => {
+const RatingSection = ({ meal_id, canteen_id }: { meal_id: string, canteen_id: string }) => {
     const { data, createItem } = useCRUD<TypeRating>('/rating/');
-    const current_rating = data.find((rating) => rating.meal_id === parseInt(meal_id) && rating.canteen_id === parseInt(mensa_id));
+    const current_rating = data.find((rating) => rating.meal_id === parseInt(meal_id) && rating.canteen_id === parseInt(canteen_id));
     const [rating, setRating] = useState(0);
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const RatingSection = ({ meal_id, mensa_id }: { meal_id: string, mensa_id: strin
                     ]}
                     disabled={rating === 0}
                     onPress={() => {
-                        createItem({ scale: rating, meal_id: parseInt(meal_id), canteen_id: parseInt(mensa_id)});
+                        createItem({ scale: rating, meal_id: parseInt(meal_id), canteen_id: parseInt(canteen_id) });
                     }}
                 >
                     <Text style={styles.submitButtonText}>Valuta</Text>

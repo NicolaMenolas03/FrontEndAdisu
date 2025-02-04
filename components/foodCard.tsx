@@ -6,7 +6,7 @@ import ImagePasto from "./imagePasto";
 import RatingSection from "./ratingSection";
 
 
-const FoodCard = ({ meal, mensaId }: { meal: TypeMeal, mensaId: string}) => {
+const FoodCard = ({ meal, canteen_id }: { meal: TypeMeal, canteen_id: string}) => {
     const { addToCart } = useCart();
     
     const handleAddToCart = () => {
@@ -29,7 +29,7 @@ const FoodCard = ({ meal, mensaId }: { meal: TypeMeal, mensaId: string}) => {
                         <Text style={styles.addButtonText}>+</Text>
                     </TouchableOpacity>
                 </View>
-                <RatingSection meal_id={meal.id.toString()} mensa_id={mensaId}/>
+                <RatingSection meal_id={meal.id.toString()} canteen_id={canteen_id}/>
             </View>
         </View>
     );
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textAlignVertical: 'center',
         includeFontPadding: false,
-        marginTop: -2, // Fine-tune vertical alignment
+        marginTop: -5,
     },
 })
 

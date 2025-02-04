@@ -16,7 +16,7 @@ import { navigateToHome, navigateToMensa, navigateToPasti } from '@/app/nav/util
 
 export default function Cart() {
     const { selectedMeals, addToCart, removeFromCart, clearCart, canteen_id, totalPrice } = useCart();
-    const { createItem, error } = useCRUD<TypeBooking>("/booking/");
+    const { createItem } = useCRUD<TypeBooking>("/booking/");
     const [unavailableMeals, setUnavailableMeals] = useState<number[]>([]);
     const [selectedTime, setSelectedTime] = useState('');
     const [showConfirmModal, setShowConfirmModal] = useState(false);

@@ -27,10 +27,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setSelectedMeals({});
     }
 
-    useEffect(() => {
-        setTotalPrice(calculateTotalPrice());
-    }, [selectedMeals]);
-
     const addToCart = (meal: TypeMeal) => {
         setSelectedMeals(prev => {
             const updatedMeals = { ...prev };
@@ -61,6 +57,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const getTotalItems = () => {
         return Object.values(selectedMeals).reduce((total, item) => total + item.quantity, 0);
     };
+
+    useEffect(() => {
+        setTotalPrice(calculateTotalPrice());
+    }, [selectedMeals]);
+
 
     return (
         <CartContext.Provider value={{ 

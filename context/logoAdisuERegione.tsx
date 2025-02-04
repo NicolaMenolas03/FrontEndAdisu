@@ -24,6 +24,7 @@ const LogoAdisuERegione = ({ children }: { children: React.ReactNode }) => {
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: height * 0.04,
         width: '100%',
         height: height * 0.10,
         flexDirection: 'row',

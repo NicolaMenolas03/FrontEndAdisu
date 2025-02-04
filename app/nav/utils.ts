@@ -9,7 +9,7 @@ export const navigateToHome = () => {
 };
 
 export const navigateToPasti = (canteen_id: string) => {
-    router.push(`/Mensa/pasti?mensaId=${canteen_id}`);
+    router.push(`/Mensa/pasti?id=${canteen_id}`);
 }
 
 export const navigateToCart = () => {

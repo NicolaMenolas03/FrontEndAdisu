@@ -1,9 +1,5 @@
- 
- 
- 
-import { TypeMeal } from '@/app/lib/definitions';
 import React from 'react';
-import { StyleSheet, Image, StyleProp, ImageStyle } from 'react-native';
+import { Image, StyleProp, ImageStyle } from 'react-native';
 
 const img: { [key: string]: any } = {
     "first": require('../assets/images/16e29b6bc926727c49956cb32f27188d.jpg'),
