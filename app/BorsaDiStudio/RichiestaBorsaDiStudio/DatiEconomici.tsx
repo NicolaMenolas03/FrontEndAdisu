@@ -61,8 +61,8 @@ const [errors, setErrors] = useState({
   };
 
   return (
-    <View style={{flex: 1}}>
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <HomePage />
       <Text style={styles.title}>Dati Economici</Text>
 
@@ -111,8 +111,13 @@ const [errors, setErrors] = useState({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex:1,
+    justifyContent: 'space-between',
     backgroundColor: '#f5f5f5',
+  },
+  scrollContainer: {
+    padding: 20,
+    marginBottom: '35%',
   },
   title: {
     fontSize: 24,

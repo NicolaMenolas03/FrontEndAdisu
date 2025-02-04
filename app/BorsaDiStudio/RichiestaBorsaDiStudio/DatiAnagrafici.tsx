@@ -73,8 +73,8 @@ export default function DatiAnagraficiPage() {
   };
 
   return (
-    <View style={{flex: 1}}>
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <HomePage />
       <Text style={styles.title}>Dati Anagrafici</Text>
       <Card style={styles.card}>
@@ -148,8 +148,13 @@ export default function DatiAnagraficiPage() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex:1,
+    justifyContent: 'space-between',
     backgroundColor: '#f5f5f5',
+  },
+  scrollContainer: {
+    padding: 20,
+    marginBottom: '35%',
   },
   label: {
     fontSize: 16,

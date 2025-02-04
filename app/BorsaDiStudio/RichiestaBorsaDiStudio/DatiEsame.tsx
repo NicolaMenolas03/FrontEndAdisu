@@ -64,7 +64,7 @@ export default function DatiEsamePage() {
 
   return (
     <View style={styles.container}>
-    <ScrollView>
+    <ScrollView style={styles.scrollContainer}>
       <HomePage />
       <Text style={styles.title}>Dati Esame</Text>
       <Card style={styles.card}>
@@ -122,16 +122,20 @@ export default function DatiEsamePage() {
         <Button mode="contained" buttonColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici')}>Successivo</Button>
       </View>
     </ScrollView>
-    <GufoChat></GufoChat>
+    <GufoChat />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex:1,
+    justifyContent: 'space-between',
     backgroundColor: '#f5f5f5',
+  },
+  scrollContainer: {
     padding: 20,
-    flex: 1,
+    marginBottom: '35%',
   },
   title: {
     fontSize: 24,
@@ -171,7 +175,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginTop: 20,
-    marginBottom: 200,
-    
+  },
+  gufoChat: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
 });
