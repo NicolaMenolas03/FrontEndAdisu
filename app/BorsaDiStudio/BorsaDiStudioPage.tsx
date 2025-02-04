@@ -15,7 +15,7 @@ export default function BorsaDiStudioPage() {
         <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/DatiBorsaDiStudio")}>
           <Text style={styles.buttonText}>Dati Borsa di Studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio")}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")}>
           <Text style={styles.buttonText}>Richiesta Borsa di Studio</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/SimulazioneBorsaDiStudio")}>
