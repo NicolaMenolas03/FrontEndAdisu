@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, TextInput, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Buffer } from 'buffer';
 import { HfInference } from "@huggingface/inference";
 
 const KEY = "aGZfTld0elBrYXJlZE5nWmpGaXJZWXRvVEdSb3hiR2Z1VXJkRA==";
