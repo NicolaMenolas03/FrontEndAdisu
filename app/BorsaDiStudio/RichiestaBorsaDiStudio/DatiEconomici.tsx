@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { TextInput, Button, Card, Switch, HelperText  } from 'react-native-paper';
+import { StyleSheet, Text, View, ScrollView, Modal } from 'react-native';
+import { TextInput, Button, Card, Switch, HelperText } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomePage from '@/components/HomePage';
@@ -8,32 +8,35 @@ import GufoChat from '@/components/Gufochat';
 
 export default function DatiEconomiciPage() {
   const router = useRouter();
-
   const [formDatiEconomici, setformDatiEconomici] = useState({
     isee: '',
     dataRilascio: '',
     autorizzoINPS: false,
   });
-
-const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState({
     isee: '',
     dataRilascio: '',
   });
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const validateFields = () => {
     const newErrors = {
       isee: formDatiEconomici.isee ? '' : 'Il campo isee è obbligatorio.',
       dataRilascio: formDatiEconomici.dataRilascio ? '' : 'Il campo dataRilascio è obbligatorio.',
     };
-
     setErrors(newErrors);
-
     return Object.values(newErrors).every((error) => error === '');
   };
 
   const handleNext = () => {
     if (validateFields()) {
-      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici');
+      setModalVisible(true);
     }
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    router.push('/BorsaDiStudio/BorsaDiStudioPage');
   };
 
   useEffect(() => {
@@ -62,56 +65,64 @@ const [errors, setErrors] = useState({
 
   return (
     <View style={styles.container}>
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <HomePage />
-      <Text style={styles.title}>Dati Economici</Text>
-
-      <Card style={styles.card}>
-        <Card.Content>
-          <TextInput
-            label="ISEE"
-            value={formDatiEconomici.isee}
-            keyboardType="numeric"
-            onChangeText={(text) => handleInputChange('isee', text)}
-            mode="outlined"
-            style={styles.input}
-          />
-          {errors.isee ? <HelperText type="error">{errors.isee}</HelperText> : null}
-          <TextInput
-            label="Data Rilascio ISEE"
-            value={formDatiEconomici.dataRilascio}
-            onChangeText={(text) => handleInputChange('dataRilascio', text)}
-            mode="outlined"
-            style={styles.input}
-          />
-          {errors.dataRilascio ? <HelperText type="error">{errors.dataRilascio}</HelperText> : null}
-          <View style={styles.switchContainer}>
-            <Text>Autorizzo l'Università a consultare i dati INPS</Text>
-            <Switch
-              value={formDatiEconomici.autorizzoINPS}
-              onValueChange={(value) => handleInputChange('autorizzoINPS', value)}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <HomePage />
+        <Text style={styles.title}>Dati Economici</Text>
+        <Card style={styles.card}>
+          <Card.Content>
+            <TextInput
+              label="ISEE"
+              value={formDatiEconomici.isee}
+              keyboardType="numeric"
+              onChangeText={(text) => handleInputChange('isee', text)}
+              mode="outlined"
+              style={styles.input}
             />
+            {errors.isee ? <HelperText type="error">{errors.isee}</HelperText> : null}
+            <TextInput
+              label="Data Rilascio ISEE"
+              value={formDatiEconomici.dataRilascio}
+              onChangeText={(text) => handleInputChange('dataRilascio', text)}
+              mode="outlined"
+              style={styles.input}
+            />
+            {errors.dataRilascio ? <HelperText type="error">{errors.dataRilascio}</HelperText> : null}
+            <View style={styles.switchContainer}>
+              <Text>Autorizzo l'Università a consultare i dati INPS</Text>
+              <Switch
+                value={formDatiEconomici.autorizzoINPS}
+                onValueChange={(value) => handleInputChange('autorizzoINPS', value)}
+              />
+            </View>
+          </Card.Content>
+        </Card>
+        <View style={styles.buttonContainer}>
+          <Button mode="outlined" textColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame')}>
+            Indietro
+          </Button>
+          <Button mode="contained" buttonColor="#005dff" onPress={handleNext}>
+            Invia Richiesta
+          </Button>
+        </View>
+      </ScrollView>
+      <GufoChat />
+      <Modal animationType="fade" transparent={true} visible={isModalVisible}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Richiesta completata con successo</Text>
+            <Button mode="contained" buttonColor="#005dff" onPress={handleCloseModal}>
+              OK
+            </Button>
           </View>
-        </Card.Content>
-      </Card>
-
-      <View style={styles.buttonContainer}>
-        <Button mode="outlined" textColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame')}>
-          Indietro
-        </Button>
-        <Button mode="contained" buttonColor="#005dff" onPress={handleNext}>
-          Invia Richiesta
-        </Button>
-      </View>
-    </ScrollView>
-    <GufoChat></GufoChat>
+        </View>
+      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     justifyContent: 'space-between',
     backgroundColor: '#f5f5f5',
   },
@@ -143,5 +154,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginTop: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
   },
 });
