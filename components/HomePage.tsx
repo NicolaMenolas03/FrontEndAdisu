@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Modal } from 'react-native';
+import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -39,17 +39,21 @@ export default function HomeButton() {
         visible={isModalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
+        
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>Sei sicuro di voler abbandonare la richiesta?</Text>
-            <View style={styles.modalButtons}>
-              <Button mode="outlined" onPress={() => setModalVisible(false)}>
-                Annulla
-              </Button>
-              <Button mode="contained" buttonColor="#ff4d4d" onPress={confirmExit}>
-                Conferma
-              </Button>
-            </View>
+            <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    style={styles.boxindietro}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <Text style={styles.buttonTextindietro}>Annulla</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.box} onPress={confirmExit}>
+                    <Text style={styles.buttonText}>Conferma</Text>
+                  </TouchableOpacity>
+                </View>
           </View>
         </View>
       </Modal>
@@ -74,6 +78,11 @@ const styles = StyleSheet.create({
     width: '80%',
     alignItems: 'center',
   },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 20,
+  },
   modalText: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -84,5 +93,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
+  },
+  box: {
+    backgroundColor: "#cc0000",
+    padding: 10,
+    borderRadius: 10,
+    width: 100,
+    alignItems: "center",
+    marginTop: 10,
+    marginLeft: 10,
+  },
+  boxindietro: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 10,
+    width: 100,
+    alignItems: "center",
+    marginTop: 10,
+    marginRight: 10,
+    color: "#007FFF",
+    borderColor: "#007FFF",
+    borderWidth: 1,
+  },
+  buttonText: {
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 5,
+    color: "white",
+  },
+  buttonTextindietro: {
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 5,
+    color: "#007FFF",
   },
 });

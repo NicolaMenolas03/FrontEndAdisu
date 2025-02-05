@@ -20,7 +20,7 @@ const Navbar = ({namePage}:NavbarProps) => {
     return (
         <View style={styles.navbar}>
             <TouchableOpacity style={styles.navButton} onPress={() => router.push('/(tabs)/landingPage')}>
-                <Icon name="home" size={30} color={namePage==='landingPage'?'white':'#6fa3ff'} />
+                <Icon name="home" size={30} color='white'/>
             </TouchableOpacity>
             <TouchableOpacity style={styles.navButton} onPress={() => router.push('/(tabs)/landingPage')}>
                 <Icon name="newspaper" size={30} color="#6fa3ff" />
