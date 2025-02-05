@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, TextInput, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import axios from 'axios';
-import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { HfInference } from "@huggingface/inference";
+
+const KEY = "aGZfTld0elBrYXJlZE5nWmpGaXJZWXRvVEdSb3hiR2Z1VXJkRA==";
+const MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3";
 
 const GufoChat = () => {
   const [isChatVisible, setChatVisible] = useState(false);
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>([]);
   const [inputText, setInputText] = useState('');
+  const decodeBase64 = (base64String: WithImplicitCoercion<string> | { [Symbol.toPrimitive](hint: "string"): string; }) => {
+    return Buffer.from(base64String, 'base64').toString('utf-8');
+  };
 
+  const hf = new HfInference(decodeBase64(KEY));
   const toggleChat = () => setChatVisible(!isChatVisible);
 
   const sendMessage = async () => {
@@ -19,11 +25,22 @@ const GufoChat = () => {
     setInputText('');
 
     try {
-      const response = await axios.post('https://your-backend.com/api/chat', { message: inputText });
-      const botMessage = { text: response.data.reply, sender: 'bot' };
+      const response = await hf.textGeneration({
+        model: MODEL_NAME,
+        inputs: inputText,
+        parameters: { max_new_tokens: 100, temperature: 0.7 },
+      });
+
+      let botText = { text: response.generated_text || "Non ho capito. Puoi ripetere?", sender: 'bot' };
+      if (botText.text.startsWith(inputText)) {
+        botText.text = botText.text.replace(inputText, '').trim();
+      }
+      const botMessage = { text: botText.text, sender: 'bot' };
+
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
-      console.error('Errore nel recupero della risposta', error);
+      console.error("Errore nella richiesta:", error);
+      setMessages((prev) => [...prev, { text: "Errore di connessione. Riprova più tardi.", sender: 'bot' }]);
     }
   };
 
@@ -34,35 +51,35 @@ const GufoChat = () => {
       </TouchableOpacity>
 
       <Modal visible={isChatVisible} animationType="slide" transparent>
-      <View style={styles.modalContainer}>
+        <View style={styles.modalContainer}>
           <View style={styles.transparentSection} />
           <View style={styles.chatSection}>
             <View style={styles.chatHeader}>
-            <Text style={styles.chatTitle}>GufoChat</Text>
-            <Ionicons name="close" size={24} color="white" onPress={toggleChat} />
-          </View>
+              <Text style={styles.chatTitle}>GufoChat</Text>
+              <Ionicons name="close" size={24} color="white" onPress={toggleChat} />
+            </View>
 
-          <FlatList
-            data={messages}
-            keyExtractor={(_, index) => index.toString()}
-            renderItem={({ item }) => (
-              <View style={[styles.messageBubble, item.sender === 'user' ? styles.userBubble : styles.botBubble]}>
-                <Text style={styles.messageText}>{item.text}</Text>
-              </View>
-            )}
-          />
-
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textInput}
-              value={inputText}
-              onChangeText={setInputText}
-              placeholder="Scrivi un messaggio..."
+            <FlatList
+              data={messages}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View style={[styles.messageBubble, item.sender === 'user' ? styles.userBubble : styles.botBubble]}>
+                  <Text style={styles.messageText}>{item.text}</Text>
+                </View>
+              )}
             />
-            <TouchableOpacity onPress={sendMessage}>
-              <Ionicons name="send" size={24} color="#007fff" />
-            </TouchableOpacity>
-          </View>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textInput}
+                value={inputText}
+                onChangeText={setInputText}
+                placeholder="Scrivi un messaggio..."
+              />
+              <TouchableOpacity onPress={sendMessage}>
+                <Ionicons name="send" size={24} color="#007fff" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -94,16 +111,25 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 50,
   },
-  bigcontainer:{
+  modalContainer: {
+    flex: 1,
+  },
+  transparentSection: {
+    flex: 1,
     backgroundColor: 'transparent',
   },
-  chatContainer: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingTop: 500,
-    paddingBottom: 10,
+  chatSection: {
+    flex: 2,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginStart: 20,
+    marginEnd: 20,
+    marginBottom: 20,
+    shadowColor: 'rgba(0,127,255,1)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 31,
   },
   chatHeader: {
     flexDirection: 'row',
@@ -130,7 +156,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   botBubble: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#6F7378',
     alignSelf: 'flex-start',
   },
   messageText: {
@@ -151,27 +177,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     height: 40,
     color: '#737373',
-  },
-  modalContainer: {
-    flex: 1,
-  },
-  transparentSection: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-  chatSection: {
-    flex: 2,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    overflow: 'hidden',
-    marginStart: 20,
-    marginEnd: 20,
-    marginBottom: 20,
-    shadowColor: 'rgba(0,127,255,1)',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 31,
-
   },
 });
 
