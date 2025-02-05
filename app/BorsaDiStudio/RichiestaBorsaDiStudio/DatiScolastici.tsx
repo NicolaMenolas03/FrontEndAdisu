@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Alert, Modal, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert, Modal, Pressable, TouchableOpacity } from 'react-native';
 import { TextInput, Button, Card } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import GufoChat from '@/components/Gufochat';
+import HomePage from '@/components/HomePage';
 
 export default function DatiScolasticiPage() {
   const router = useRouter();
@@ -87,19 +88,11 @@ export default function DatiScolasticiPage() {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Pulsante HOME */}
-        <View style={styles.header}>
-          <Ionicons
-            name="home-outline"
-            size={28}
-            color="#005dff"
-            onPress={handleHomePress}
-          />
-        </View>
-
-        <Text style={styles.title}>Dati Scolastici</Text>
-
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.topbar}>
+              <HomePage />
+              <Text style={styles.title}>Dati di Residenza</Text>
+            </View>
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.label}>Iscrizione a.a.</Text>
@@ -112,6 +105,7 @@ export default function DatiScolasticiPage() {
               onChangeText={(text) => handleInputChange('matricola', text)}
               mode="outlined"
               keyboardType="numeric"
+              theme={{ colors: { primary: '#007BFF' } }}
             />
             <TextInput
               style={styles.input}
@@ -119,6 +113,7 @@ export default function DatiScolasticiPage() {
               value={formDatiScolatici.ateneo}
               onChangeText={(text) => handleInputChange('ateneo', text)}
               mode="outlined"
+              theme={{ colors: { primary: '#007BFF' } }}
             />
             <TextInput
               style={styles.input}
@@ -126,6 +121,7 @@ export default function DatiScolasticiPage() {
               value={formDatiScolatici.corso}
               onChangeText={(text) => handleInputChange('corso', text)}
               mode="outlined"
+              theme={{ colors: { primary: '#007BFF' } }}
             />
             <TextInput
               style={styles.input}
@@ -133,6 +129,7 @@ export default function DatiScolasticiPage() {
               value={formDatiScolatici.dipartimento}
               onChangeText={(text) => handleInputChange('dipartimento', text)}
               mode="outlined"
+              theme={{ colors: { primary: '#007BFF' } }}
             />
             <TextInput
               style={styles.input}
@@ -141,35 +138,31 @@ export default function DatiScolasticiPage() {
               onChangeText={(text) => handleInputChange('durata', text)}
               mode="outlined"
               keyboardType="numeric"
+              theme={{ colors: { primary: '#007BFF' } }}
             />
 
             <Text style={styles.label}>Stato Studente</Text>
             <Picker
               selectedValue={formDatiScolatici.statoStudente}
               onValueChange={(value) => handleInputChange('statoStudente', value)}
+              style={styles.picker}
             >
               <Picker.Item label="Full Time" value="Full Time" />
               <Picker.Item label="Part Time" value="Part Time" />
             </Picker>
           </Card.Content>
         </Card>
-
         <View style={styles.buttonContainer}>
-          <Button
-            mode="outlined"
-            textColor="#005dff"
-            onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza')}
-          >
-            Indietro
-          </Button>
-          <Button
-            mode="contained"
-            buttonColor="#005dff"
-            onPress={handleNext}
-          >
-            Successivo
-          </Button>
-        </View>
+                  <TouchableOpacity
+                    style={styles.boxindietro}
+                    onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza')}
+                  >
+                    <Text style={styles.buttonTextindietro}>Indietro</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.box} onPress={handleNext}>
+                    <Text style={styles.buttonText}>Successivo</Text>
+                  </TouchableOpacity>
+                </View>
       </ScrollView>
       <GufoChat></GufoChat>
     </View>
@@ -196,7 +189,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
-    marginBottom: 20,
+    marginStart: 90,
   },
   card: {
     backgroundColor: 'white',
@@ -247,5 +240,58 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+  },
+  topbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 20,
+  },
+  box: {
+    backgroundColor: '#007FFF',
+    padding: 10,
+    borderRadius: 10,
+    width: 150,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  boxindietro: { 
+    backgroundColor: 'white', 
+    padding: 10, 
+    borderRadius: 10, 
+    width: 150, 
+    alignItems: 'center', 
+    marginTop: 10, 
+    color: '#007FFF',
+    borderColor: '#007FFF',
+    borderWidth: 1,
+  },
+  buttonText: {
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 5,
+    color: 'white',
+  },
+  buttonTextindietro: {
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 5,
+    color: '#007FFF',
+  },
+  picker: {
+    height: 50,
+    borderColor: '#87828b',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 15,
+    marginBottom: 15,
+    padding: 10,
+    fontSize: 16,
+    fontWeight: '500',
+    color: 'black',
   },
 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Switch } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { Switch } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -137,11 +138,11 @@ export default function SimulazioneBorsaDiStudio() {
 
   return (
     <View style={styles.container}>
-      <TornaIndietro />
-      <View style={styles.contentContainer}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <Text style={styles.sectionTitle}>Simulazione Borsa di Studio</Text>
-
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.topbar}>
+              <TornaIndietro />
+              <Text style={styles.title}>Simulazione Borsa di Studio</Text>
+            </View>
           <View style={styles.sectionContainer}>
             <Text style={styles.inputLabel}>Dati personali</Text>
             
@@ -192,23 +193,24 @@ export default function SimulazioneBorsaDiStudio() {
               <Picker.Item label="Pendolare" value="Pendolare" />
               <Picker.Item label="In sede" value="In sede" />
             </Picker>
-
-            <View style={styles.toggleGroup}>
+              <View style={styles.switchContainer}>
               <Text style={styles.boxText}>Studente diversamente abile con disabilità pari o superiore al 66% o in possesso di attestazione di invalidità ex art. 3 c. 1 della l. 104/92.</Text>
-              <Switch
+                <Switch
                 onValueChange={() => SetDisabilita(!Disabilita)}
                 value={Disabilita}
+                color='#007BFF'
               />
-            </View>
+              </View>
 
-            <View style={styles.toggleGroup}>
+              <View style={styles.switchContainer}>
             <Text style={styles.boxText}>Studentessa frequentante corso di laurea S.T.E.M.</Text>
               <Switch
                 onValueChange={() => setCorsoSTEM(!corsoSTEM)}
                 value={corsoSTEM}
+                color='#007BFF'
               />
               </View>
-          </View>
+              </View>
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.box} onPress={handleSimulaPress}>
@@ -229,11 +231,28 @@ export default function SimulazioneBorsaDiStudio() {
           )}
         </ScrollView>
       </View>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    padding: 20,
+    marginBottom: '35%',
+  },
+  topbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginStart: 90,
+    marginTop: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
@@ -362,5 +381,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: '#555',
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+    marginRight:15,
   },
 });

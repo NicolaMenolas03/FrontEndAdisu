@@ -10,7 +10,6 @@ export default function BorsaDiStudioPage() {
 
   return (
     <View style={styles.container}>
-      <Tornaindietro />
       <Text style={styles.title}>Borsa di Studio</Text>
 
       {/* Pulsanti centrali */}

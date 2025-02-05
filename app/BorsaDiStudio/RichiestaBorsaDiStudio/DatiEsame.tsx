@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { TextInput, Button, Card, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -113,9 +113,11 @@ export default function DatiEsamePage() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollContainer}>
-        <HomePage />
-        <Text style={styles.title}>Dati Esame</Text>
+              <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <View style={styles.topbar}>
+                  <HomePage />
+                  <Text style={styles.title}>Dati Esami</Text>
+                </View>
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.label}>Matricola:</Text>
@@ -137,6 +139,8 @@ export default function DatiEsamePage() {
                 value={esame.materia}
                 onChangeText={(text) => handleInputChange(index, 'materia', text)}
                 mode="outlined"
+                style={styles.input}
+                theme={{ colors: { primary: '#007BFF' } }}
                 error={!!errori[index]?.materia}
               />
               {errori[index]?.materia && <Text>{errori[index]?.materia}</Text>}
@@ -149,6 +153,7 @@ export default function DatiEsamePage() {
                 mode="outlined"
                 error={!!errori[index]?.cfu}
                 style={styles.input}
+                theme={{ colors: { primary: '#007BFF' } }}
               />
               {errori[index]?.cfu && <Text>{errori[index]?.cfu}</Text>}
 
@@ -157,28 +162,38 @@ export default function DatiEsamePage() {
                 value={esame.data}
                 onChangeText={(text) => handleInputChange(index, 'data', text)}
                 mode="outlined"
+                style={styles.input}
+                theme={{ colors: { primary: '#007BFF' } }}
                 error={!!errori[index]?.data}
               />
               {errori[index]?.data && <Text>{errori[index]?.data}</Text>}
 
               <IconButton
                 icon="delete"
-                iconColor="red"
-                size={20}
+                iconColor="#990000"
+                size={30}
                 onPress={() => handleRemoveEsame(index)}
+                style={{ alignSelf: 'flex-end' }}
               />
             </Card.Content>
           </Card>
         ))}
-
-        <Button mode="contained" buttonColor="#005dff" onPress={handleAddEsame} style={styles.addButton}>
-          Aggiungi Esame
-        </Button>
-
         <View style={styles.buttonContainer}>
-          <Button mode="outlined" textColor="#005dff" onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici')}>Indietro</Button>
-          <Button mode="contained" buttonColor="#005dff" onPress={handleSubmit}>Successivo</Button>
+        <TouchableOpacity style={styles.boxadd} onPress={handleAddEsame}>
+                            <Text style={styles.buttonText}>Aggiungi Esame</Text>
+                          </TouchableOpacity>
         </View>
+        <View style={styles.buttonContainer}>
+                          <TouchableOpacity
+                            style={styles.boxindietro}
+                            onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici')}
+                          >
+                            <Text style={styles.buttonTextindietro}>Indietro</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.box} onPress={handleSubmit}>
+                            <Text style={styles.buttonText}>Successivo</Text>
+                          </TouchableOpacity>
+                        </View>
       </ScrollView>
       <GufoChat />
     </View>
@@ -200,7 +215,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
-    marginBottom: 20,
+    marginStart: 90,
   },
   card: {
     marginBottom: 20,
@@ -238,5 +253,66 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
+  },
+  topbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 20,
+  },
+  boxadd: {
+    backgroundColor: '#007FFF',
+    padding: 10,
+    borderRadius: 10,
+    width: 330,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  box: {
+    backgroundColor: '#007FFF',
+    padding: 10,
+    borderRadius: 10,
+    width: 150,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  boxindietro: { 
+    backgroundColor: 'white', 
+    padding: 10, 
+    borderRadius: 10, 
+    width: 150, 
+    alignItems: 'center', 
+    marginTop: 10, 
+    color: '#007FFF',
+    borderColor: '#007FFF',
+    borderWidth: 1,
+  },
+  buttonText: {
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 5,
+    color: 'white',
+  },
+  buttonTextindietro: {
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 5,
+    color: '#007FFF',
+  },
+  picker: {
+    height: 50,
+    borderColor: '#87828b',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 15,
+    marginBottom: 15,
+    padding: 10,
+    fontSize: 16,
+    fontWeight: '500',
+    color: 'black',
   },
 });

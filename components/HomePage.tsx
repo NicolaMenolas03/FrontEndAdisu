@@ -28,7 +28,7 @@ export default function HomeButton() {
       <Ionicons
         name="home-outline"
         size={28}
-        color="#005dff"
+        color="#007fff"
         onPress={handleHomePress}
         style={styles.icon}
       />

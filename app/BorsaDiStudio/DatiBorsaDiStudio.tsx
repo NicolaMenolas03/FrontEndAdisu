@@ -7,11 +7,11 @@ import TornaIndietro from '@/components/TornaIndietro';
 export default function DatiBorsaDiStudio() {
   return (
     <View style={styles.container}>
-      <TornaIndietro />
-      <ScrollView contentContainerStyle={styles.scholarshipContainer}>
-        <Text style={styles.title}>Dati Borsa di Studio</Text>
-
-        {/* Prima sezione */}
+              <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <View style={styles.topbar}>
+                  <TornaIndietro />
+                  <Text style={styles.title}>Dati Borsa di Studio</Text>
+                </View>
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.sectionTitle}>Dati Personali</Text>
@@ -66,6 +66,24 @@ export default function DatiBorsaDiStudio() {
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    padding: 20,
+    marginBottom: '35%',
+  },
+  topbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginStart: 90,
+    marginTop: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
@@ -73,13 +91,6 @@ const styles = StyleSheet.create({
   scholarshipContainer: {
     padding: 20,
     paddingBottom: 60,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
-    textAlign: 'center',
-    marginBottom: 20,
   },
   card: {
     marginBottom: 20,

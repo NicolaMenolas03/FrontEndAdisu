@@ -253,12 +253,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  topbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginBottom: 20,
-  },
   buttonText: {
     marginLeft: 15,
     marginRight: 15,
@@ -266,5 +260,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginBottom: 5,
     color: 'white',
+  },
+  topbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 20,
   },
 });

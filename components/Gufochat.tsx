@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Modal, TextInput, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 const GufoChat = () => {
   const [isChatVisible, setChatVisible] = useState(false);
@@ -33,9 +34,11 @@ const GufoChat = () => {
       </TouchableOpacity>
 
       <Modal visible={isChatVisible} animationType="slide" transparent>
-        <View style={styles.chatContainer}>
-          <View style={styles.chatHeader}>
-            <Text style={styles.chatTitle}>Chat con il Gufo</Text>
+      <View style={styles.modalContainer}>
+          <View style={styles.transparentSection} />
+          <View style={styles.chatSection}>
+            <View style={styles.chatHeader}>
+            <Text style={styles.chatTitle}>GufoChat</Text>
             <Ionicons name="close" size={24} color="white" onPress={toggleChat} />
           </View>
 
@@ -57,8 +60,9 @@ const GufoChat = () => {
               placeholder="Scrivi un messaggio..."
             />
             <TouchableOpacity onPress={sendMessage}>
-              <Ionicons name="send" size={24} color="#005dff" />
+              <Ionicons name="send" size={24} color="#007fff" />
             </TouchableOpacity>
+          </View>
           </View>
         </View>
       </Modal>
@@ -70,34 +74,42 @@ const styles = StyleSheet.create({
   gufoButton: {
     position: 'absolute',
     bottom: 20,
+    right: 20,
     alignSelf: 'center',
-    backgroundColor: '#005dff',
+    backgroundColor: '#ffffff',
     borderRadius: 50,
     padding: 10,
     elevation: 5,
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: 'rgba(0,127,255,1)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 31,
   },
   gufoImage: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     borderRadius: 50,
+  },
+  bigcontainer:{
+    backgroundColor: 'transparent',
   },
   chatContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingTop: 20,
+    paddingTop: 500,
     paddingBottom: 10,
   },
   chatHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#005dff',
+    backgroundColor: '#007fff',
     padding: 15,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -114,7 +126,7 @@ const styles = StyleSheet.create({
     maxWidth: '80%',
   },
   userBubble: {
-    backgroundColor: '#005dff',
+    backgroundColor: '#007fff',
     alignSelf: 'flex-end',
   },
   botBubble: {
@@ -134,10 +146,32 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#e0e0e0',
     borderRadius: 5,
     paddingHorizontal: 10,
     height: 40,
+    color: '#737373',
+  },
+  modalContainer: {
+    flex: 1,
+  },
+  transparentSection: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  chatSection: {
+    flex: 2,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginStart: 20,
+    marginEnd: 20,
+    marginBottom: 20,
+    shadowColor: 'rgba(0,127,255,1)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 31,
+
   },
 });
 

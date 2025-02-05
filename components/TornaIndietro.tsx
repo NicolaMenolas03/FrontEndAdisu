@@ -1,13 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function BackButton() {
   const router = useRouter();
 
   return (
-    <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-      <Text style={styles.backButtonText}>{'< Torna indietro'}</Text>
+    <TouchableOpacity style={styles.backButton} onPress={() => router.push('/BorsaDiStudio/BorsaDiStudioPage')}>
+      <Ionicons
+      name="arrow-back"
+      style={styles.backButtonText}>
+
+      </Ionicons>
     </TouchableOpacity>
   );
 }
@@ -21,8 +26,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   backButtonText: {
-    fontSize: 14,
-    color: '#005dff',
+    fontSize: 28,
+    color: '#007fff',
     fontWeight: 'bold',
   },
 });
