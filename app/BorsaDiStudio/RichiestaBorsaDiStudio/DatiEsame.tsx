@@ -25,6 +25,15 @@ export default function DatiEsamePage() {
 
   const [errori, setErrori] = useState<{ materia?: string; cfu?: string; data?: string }[]>([]);
 
+//Prossima pagina
+const handleNext = () => {
+  if (validaEsami()) {
+    router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici'); // Cambia con la route della tua pagina principale
+  }
+};
+
+
+
   useEffect(() => {
     const loadformDatiScolatici = async () => {
       try {
@@ -36,18 +45,21 @@ export default function DatiEsamePage() {
         console.error('Failed to load form data', error);
       }
     };
+    
+    const loadesami = async () => {
+      try {
+        const savedesami = await AsyncStorage.getItem('esami');
+        if (savedesami) {
+          setEsami(JSON.parse(savedesami));
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+
     loadformDatiScolatici();
+    loadesami();
   }, []);
-
-  const handleInputChange = (index: number, field: keyof Esame, value: string) => {
-    const updatedEsami = [...esami];
-    updatedEsami[index][field] = value;
-    setEsami(updatedEsami);
-
-    const newErrori = [...errori];
-    newErrori.splice(index, 1);
-    setErrori(newErrori);
-  };
 
   const handleAddEsame = () => {
     setEsami([...esami, { materia: '', cfu: '', data: '' }]);
@@ -62,15 +74,18 @@ export default function DatiEsamePage() {
     setErrori(updatedErrori);
   };
 
-  const handleSubmit = async () => {
+  const handleInputChange = async (index: number, field: keyof Esame, value: string) => {
+    // Cloniamo l'array di esami per modificarlo in modo immutabile
+    const updatedEsami = [...esami];
+    updatedEsami[index] = { ...updatedEsami[index], [field]: value };
+  
+    // Aggiorniamo lo stato
+    setEsami(updatedEsami);
+  
     try {
-      if (validaEsami()) {
-        const formData = { ...formDatiScolatici, esami };
-        await AsyncStorage.setItem('formDatiEsame', JSON.stringify(formData));
-        router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici');
-      }
+      await AsyncStorage.setItem('esami', JSON.stringify(updatedEsami));
     } catch (error) {
-      console.error('Errore nel salvataggio dei dati', error);
+      console.error('Failed to save form data', error);
     }
   };
 
@@ -94,7 +109,7 @@ export default function DatiEsamePage() {
         erroriEsame.cfu = 'Inserisci un numero valido di CFU';
         valido = false;
       } else if (cfuNumero > 12 || cfuNumero < 2) {
-        erroriEsame.cfu = 'I CFU non possono superare 12';
+        erroriEsame.cfu = 'I CFU devono essere compresi tra 2 e 12';
         valido = false;
       }
 
@@ -109,6 +124,43 @@ export default function DatiEsamePage() {
     setErrori(nuoviErrori); // Aggiorna gli errori nello stato
 
     return valido; // Restituisce true se tutto è valido, false altrimenti
+  };
+
+  //controllo data
+  const handleData = (index: number, field: any, text: string) => {
+    // Rimuove qualsiasi carattere che non sia un numero o "/"
+    let formattedText = text.replace(/[^0-9]/g, "");
+
+    // Aggiunge "/" alla terza e sesta posizione
+    if (formattedText.length > 2) {
+      formattedText = formattedText.slice(0, 2) + "/" + formattedText.slice(2);
+    }
+    if (formattedText.length > 5) {
+      formattedText = formattedText.slice(0, 5) + "/" + formattedText.slice(5);
+    }
+
+    // Evita che la lunghezza superi 10 caratteri (GG/MM/AAAA)
+    if (formattedText.length > 10) {
+      formattedText = formattedText.slice(0, 10);
+    }
+
+    // Estrai giorno, mese e anno
+  const parts = formattedText.split("/");
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const year = parseInt(parts[2], 10);
+
+  // Controllo base su giorno e mese
+  if (day > 31 || month > 12) return;
+
+  // Verifica i giorni massimi per ogni mese
+  const daysInMonth = [31, (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  if (month > 0 && day > daysInMonth[month - 1]) return;
+
+  if (year>2026) return;
+    // Aggiorna lo stato
+    handleInputChange(index,field,formattedText);
   };
 
   return (
@@ -151,6 +203,7 @@ export default function DatiEsamePage() {
                 keyboardType="numeric"
                 onChangeText={(text) => handleInputChange(index, 'cfu', text)}
                 mode="outlined"
+                maxLength={2}
                 error={!!errori[index]?.cfu}
                 style={styles.input}
                 theme={{ colors: { primary: '#007BFF' } }}
@@ -160,7 +213,7 @@ export default function DatiEsamePage() {
               <TextInput
                 label="Data"
                 value={esame.data}
-                onChangeText={(text) => handleInputChange(index, 'data', text)}
+                onChangeText={(text) => handleData(index, 'data', text)}
                 mode="outlined"
                 style={styles.input}
                 theme={{ colors: { primary: '#007BFF' } }}
@@ -190,7 +243,7 @@ export default function DatiEsamePage() {
                           >
                             <Text style={styles.buttonTextindietro}>Indietro</Text>
                           </TouchableOpacity>
-                          <TouchableOpacity style={styles.box} onPress={handleSubmit}>
+                          <TouchableOpacity style={styles.box} onPress={handleNext}>
                             <Text style={styles.buttonText}>Successivo</Text>
                           </TouchableOpacity>
                         </View>

@@ -1,81 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { TextInput, Card, HelperText, Switch } from 'react-native-paper';
-import { Picker } from '@react-native-picker/picker';
-import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import HomePage from '@/components/HomePage';
-import GufoChat from '@/components/Gufochat';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { TextInput, Card, HelperText, Switch } from "react-native-paper";
+import { Picker } from "@react-native-picker/picker";
+import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import HomePage from "@/components/HomePage";
+import GufoChat from "@/components/Gufochat";
 
 export default function DatiAnagraficiPage() {
   const router = useRouter();
 
   const [formDatiAnagrafici, setformDatiAnagrafici] = useState({
-    nome: '',
-    cognome: '',
-    sesso: '',
-    etaNascita: '',
-    cittadinanza: '',
+    nome: "",
+    cognome: "",
+    sesso: "",
+    etaNascita: "",
+    cittadinanza: "",
     disabilita: false,
   });
 
   const [errors, setErrors] = useState({
-    nome: '',
-    cognome: '',
-    sesso: '',
-    etaNascita: '',
-    cittadinanza: '',
+    nome: "",
+    cognome: "",
+    sesso: "",
+    etaNascita: "",
+    cittadinanza: "",
   });
 
-  
   const handleNext = () => {
     if (validateFields()) {
-      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza');
+      router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza");
     }
   };
 
   const validateFields = () => {
     const newErrors = {
-      nome: formDatiAnagrafici.nome ? '' : 'Il campo Nome è obbligatorio.',
-      cognome: formDatiAnagrafici.cognome ? '' : 'Il campo Cognome è obbligatorio.',
-      sesso: formDatiAnagrafici.sesso ? '' : 'Il campo Sesso è obbligatorio.',
-      etaNascita: formDatiAnagrafici.etaNascita ? '' : 'Inserire una età valida (numerica).',
-      cittadinanza: formDatiAnagrafici.cittadinanza ? '' : 'Il campo Cittadinanza è obbligatorio.',
+      nome: formDatiAnagrafici.nome ? "" : "Il campo Nome è obbligatorio.",
+      cognome: formDatiAnagrafici.cognome
+        ? ""
+        : "Il campo Cognome è obbligatorio.",
+      sesso: formDatiAnagrafici.sesso ? "" : "Il campo Sesso è obbligatorio.",
+      etaNascita: formDatiAnagrafici.etaNascita
+        ? ""
+        : "Inserire una età valida (numerica).",
+      cittadinanza: formDatiAnagrafici.cittadinanza
+        ? ""
+        : "Il campo Cittadinanza è obbligatorio.",
     };
 
     setErrors(newErrors);
 
-    return Object.values(newErrors).every((error) => error === '');
+    return Object.values(newErrors).every((error) => error === "");
   };
 
   useEffect(() => {
     const loadformDatiAnagrafici = async () => {
       try {
-        const savedData = await AsyncStorage.getItem('formDatiAnagrafici');
+        const savedData = await AsyncStorage.getItem("formDatiAnagrafici");
         if (savedData) {
           setformDatiAnagrafici(JSON.parse(savedData));
         }
       } catch (error) {
-        console.error('Errore nel caricamento dei dati', error);
+        console.error("Errore nel caricamento dei dati", error);
       }
     };
-    loadformDatiAnagrafici();}, 
-    []);
+    loadformDatiAnagrafici();
+  }, []);
 
   const handleInputChange = async (field: string, value: string | boolean) => {
     const updatedData = { ...formDatiAnagrafici, [field]: value };
     setformDatiAnagrafici(updatedData);
     try {
-      await AsyncStorage.setItem('formDatiAnagrafici', JSON.stringify(updatedData));
+      await AsyncStorage.setItem(
+        "formDatiAnagrafici",
+        JSON.stringify(updatedData)
+      );
     } catch (error) {
-      console.error('Errore nel salvataggio dei dati', error);
+      console.error("Errore nel salvataggio dei dati", error);
     }
   };
 
+  //controllo data
   const handleData = (field: any, text: string) => {
     // Rimuove qualsiasi carattere che non sia un numero o "/"
     let formattedText = text.replace(/[^0-9]/g, "");
-  
+
     // Aggiunge "/" alla terza e sesta posizione
     if (formattedText.length > 2) {
       formattedText = formattedText.slice(0, 2) + "/" + formattedText.slice(2);
@@ -83,15 +98,44 @@ export default function DatiAnagraficiPage() {
     if (formattedText.length > 5) {
       formattedText = formattedText.slice(0, 5) + "/" + formattedText.slice(5);
     }
-  
+
     // Evita che la lunghezza superi 10 caratteri (GG/MM/AAAA)
     if (formattedText.length > 10) {
       formattedText = formattedText.slice(0, 10);
     }
+
+    // Estrai giorno, mese e anno
+    const parts = formattedText.split("/");
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
+
+    // Controllo base su giorno e mese
+    if (day > 31 || month > 12) return;
+
+    // Verifica i giorni massimi per ogni mese
+    const daysInMonth = [
+      31,
+      year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28,
+      31,
+      30,
+      31,
+      30,
+      31,
+      31,
+      30,
+      31,
+      30,
+      31,
+    ];
+
+    if (month > 0 && day > daysInMonth[month - 1]) return;
+
+    if (year > 2026) return;
     // Aggiorna lo stato
-    handleInputChange(field,formattedText);
+    handleInputChange(field, formattedText);
   };
-  
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -106,38 +150,46 @@ export default function DatiAnagraficiPage() {
             <TextInput
               label="Nome"
               value={formDatiAnagrafici.nome}
-              onChangeText={(text) => handleInputChange('nome', text)}
+              onChangeText={(text) => handleInputChange("nome", text)}
               mode="outlined"
               style={styles.input}
-              theme={{ colors: { primary: '#007BFF' } }}
+              theme={{ colors: { primary: "#007BFF" } }}
             />
-            {errors.nome ? <HelperText type="error">{errors.nome}</HelperText> : null}
+            {errors.nome ? (
+              <HelperText type="error">{errors.nome}</HelperText>
+            ) : null}
 
             <TextInput
               label="Cognome"
               value={formDatiAnagrafici.cognome}
-              onChangeText={(text) => handleInputChange('cognome', text)}
+              onChangeText={(text) => handleInputChange("cognome", text)}
               mode="outlined"
               style={styles.input}
-              theme={{ colors: { primary: '#007BFF' } }}
+              theme={{ colors: { primary: "#007BFF" } }}
             />
-            {errors.cognome ? <HelperText type="error">{errors.cognome}</HelperText> : null}
+            {errors.cognome ? (
+              <HelperText type="error">{errors.cognome}</HelperText>
+            ) : null}
 
             <TextInput
               label="Data di Nascita (GG/MM/AAAA)"
               value={formDatiAnagrafici.etaNascita}
-              onChangeText={(text) => handleData('etaNascita', text)}
+              onChangeText={(text) => handleData("etaNascita", text)}
               mode="outlined"
               keyboardType="numeric"
               style={styles.input}
-              theme={{ colors: { primary: '#007BFF' } }}
+              theme={{ colors: { primary: "#007BFF" } }}
             />
-            {errors.etaNascita ? <HelperText type="error">{errors.etaNascita}</HelperText> : null}
+            {errors.etaNascita ? (
+              <HelperText type="error">{errors.etaNascita}</HelperText>
+            ) : null}
 
             <Text style={styles.label}>Sesso</Text>
             <Picker
               selectedValue={formDatiAnagrafici.sesso}
-              onValueChange={(itemValue) => handleInputChange('sesso', itemValue)}
+              onValueChange={(itemValue) =>
+                handleInputChange("sesso", itemValue)
+              }
               style={styles.picker}
             >
               <Picker.Item label="Seleziona Sesso" value="" />
@@ -145,12 +197,16 @@ export default function DatiAnagraficiPage() {
               <Picker.Item label="Femmina" value="Femmina" />
               <Picker.Item label="Altro" value="Altro" />
             </Picker>
-            {errors.sesso ? <HelperText type="error">{errors.sesso}</HelperText> : null}
+            {errors.sesso ? (
+              <HelperText type="error">{errors.sesso}</HelperText>
+            ) : null}
 
             <Text style={styles.label}>Cittadinanza</Text>
             <Picker
               selectedValue={formDatiAnagrafici.cittadinanza}
-              onValueChange={(itemValue) => handleInputChange('cittadinanza', itemValue)}
+              onValueChange={(itemValue) =>
+                handleInputChange("cittadinanza", itemValue)
+              }
               style={styles.picker}
             >
               <Picker.Item label="Seleziona Cittadinanza" value="" />
@@ -166,17 +222,20 @@ export default function DatiAnagraficiPage() {
               <Picker.Item label="Indiana" value="Indiana" />
               <Picker.Item label="Altro" value="Altro" />
             </Picker>
-            {errors.cittadinanza ? <HelperText type="error">{errors.cittadinanza}</HelperText> : null}
+            {errors.cittadinanza ? (
+              <HelperText type="error">{errors.cittadinanza}</HelperText>
+            ) : null}
 
             <View style={styles.switchContainer}>
               <Text style={styles.label}>Disabilità</Text>
               <Switch
                 value={formDatiAnagrafici.disabilita}
-                onValueChange={(value) => handleInputChange('disabilita', value)}
-                color='#007BFF'
+                onValueChange={(value) =>
+                  handleInputChange("disabilita", value)
+                }
+                color="#007BFF"
               />
             </View>
-
           </Card.Content>
         </Card>
         <View style={styles.buttonContainer}>
@@ -184,7 +243,6 @@ export default function DatiAnagraficiPage() {
             <Text style={styles.buttonText}>Successivo</Text>
           </TouchableOpacity>
         </View>
-
       </ScrollView>
       <GufoChat></GufoChat>
     </View>
@@ -194,37 +252,37 @@ export default function DatiAnagraficiPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
-    backgroundColor: '#f5f5f5',
+    justifyContent: "space-between",
+    backgroundColor: "#f5f5f5",
   },
   scrollContainer: {
     padding: 20,
-    marginBottom: '35%',
+    marginBottom: "35%",
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 10,
     marginBottom: 10,
   },
   switchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 15,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "black",
+    textAlign: "center",
     marginStart: 90,
   },
   card: {
     marginBottom: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -232,59 +290,59 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 50,
-    borderColor: '#87828b',
+    borderColor: "#87828b",
     borderWidth: 1,
     borderRadius: 5,
     marginTop: 15,
     marginBottom: 15,
     padding: 10,
     fontSize: 16,
-    fontWeight: '500',
-    color: 'black',
+    fontWeight: "500",
+    color: "black",
   },
   input: {
     marginBottom: 15,
-    color: '#007BFF',
+    color: "#007BFF",
   },
   button: {
-    backgroundColor: '#007FFF',
+    backgroundColor: "#007FFF",
     padding: 10,
     borderRadius: 10,
     width: 300,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
   },
   buttonTextStyle: {
     fontSize: 16,
     marginBottom: 5,
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: 20,
   },
   box: {
-    backgroundColor: '#007FFF',
+    backgroundColor: "#007FFF",
     padding: 10,
     borderRadius: 10,
     width: 300,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
   },
   buttonText: {
     marginLeft: 15,
     marginRight: 15,
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
     marginBottom: 5,
-    color: 'white',
+    color: "white",
   },
   topbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
     marginBottom: 20,
   },
 });
