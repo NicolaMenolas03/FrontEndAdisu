@@ -1,69 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { Switch } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { apiService } from '@/services/api';
-import { useCRUD } from '@/hooks/useCRUD';
 import TornaIndietro from '@/components/TornaIndietro';
-
-
-type RootStackParamList = {
-  Home: undefined;
-  Page1: undefined;
-  Page2: undefined;
-  DatiBorsaDiStudio: undefined;
-};
-
-type SimulationResults = {
-  importoMensa: string;
-  importoAlloggio: string;
-  importoTotale: string;
-};
-
-interface IseeData {
-  id: number;
-  nrRange: number;
-  iseeMin: string;
-  iseeMax: string;
-  academicYear: string;
-}
-
-interface AcademicYear {
-  id: number;
-  academicYear: string;
-}
+import { useSimulazioneState } from '../../context/SimulationContext';
 
 
 export default function SimulazioneBorsaDiStudio() {
-  const { data: IseeData, loading: IseeLoading, error: IseeError, createItem: createIseeItem, updateItem: updateIseeItem, deleteItem: deleteIseeItem }  = useCRUD<IseeData>('/isee-range/');
-  const { data: academicYearData, loading: academicYearLoading, error: academicYearError, createItem: createAcademicYearItem, updateItem: updateAcademicYearItem, deleteItem: deleteAcademicYearItem } = useCRUD<AcademicYear>('/academicyear/');
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [showResults, setShowResults] = useState(false); 
-  const [results, setResults] = useState<SimulationResults | null>(null);
-  const [tipologiaStudente, setTipologiaStudente] = useState('');
-  const [anniAccademici, setAnniAccademici] = useState<any[]>([]);
-  const [selectedAnno, setSelectedAnno] = useState<string>('');
-  const [isee, setIsee] = useState<string>('');  // Valore ISEE
-  const [isees, setIsees] = useState<any[]>([]); // Array dei range ISEE
-  const [selectedRange, setSelectedRange] = useState<string>(''); // Valore del range selezionato
-  const [disabilita, setDisabilita] = useState(false);
-  const [pastiAggiuntivi, setPastiAggiuntivi] = useState(false);
-  const [corsoSTEM, setCorsoSTEM] = useState(false);
-  const [Disabilita, SetDisabilita] = useState(false);
-  
-  
+  const { showResults, setShowResults, selectedAnno, setSelectedAnno, results, setResults, tipologiaStudente, setTipologiaStudente, anniAccademici, setAnniAccademici,
+    isee, isees, setIsees, selectedRange, setSelectedRange, disabilita, setDisabilita, pastiAggiuntivi, corsoSTEM, setCorsoSTEM } = useSimulazioneState();
+
   useEffect(() => {
     const fetchFirstYear = async () => {
       try {
         const response = await apiService.get(`/academicyear/`);
         const { data } = response;
-        console.log(data);
-  
-        // Supponendo che data sia un array di anni accademici
+
         if (data && data.length > 0) {
-          handleAnnoAccademico(data[0].academicYear); // Usa il primo anno accademico
+          handleAnnoAccademico(data[0].academicYear);
         }
       } catch (error) {
         console.error("Errore nel recuperare gli anni accademici:", error);
@@ -74,20 +29,19 @@ export default function SimulazioneBorsaDiStudio() {
       try {
         const response = await apiService.get('/academicyear/');
         const { data } = response;
-  
-        // Assumi che `data` sia un array di anni accademici
+
         if (data && data.length > 0) {
           setAnniAccademici(data);
-          setSelectedAnno(data[0].academicYear); // Imposta il primo anno come selezionato
+          setSelectedAnno(data[0].academicYear);
         }
       } catch (error) {
         console.error("Errore nel recuperare gli anni accademici:", error);
       }
     };
-  
+
     fetchAnniAccademici();
-    fetchFirstYear(); // Chiama la funzione
-  }, []); // L'array vuoto garantisce l'esecuzione al montaggio
+    fetchFirstYear();
+  }, []);
 
   const handleSimulaPress = () => {
     const calcoloSimulazione = () => {
@@ -105,13 +59,13 @@ export default function SimulazioneBorsaDiStudio() {
 
       // Aggiustamenti
       if (disabilita) {
-        importoBase *= 1.2; // Aumento del 20% per disabilità
+        importoBase *= 1.2;
       }
       if (pastiAggiuntivi) {
-        importoBase += 500; // Aggiunta per pasti extra
+        importoBase += 500;
       }
       if (corsoSTEM) {
-        importoBase *= 1.1; // Aumento del 10% per corsi STEM
+        importoBase *= 1.1;
       }
 
       const importoMensa = pastiAggiuntivi ? '500 €' : '310 €';
@@ -125,10 +79,10 @@ export default function SimulazioneBorsaDiStudio() {
     setShowResults(true);
   };
 
-  const handleAnnoAccademico = async (itemValue: string) => {    
+  const handleAnnoAccademico = async (itemValue: string) => {
     console.log("Anno selezionato:", itemValue);
     setSelectedAnno(itemValue);
-    let response = await apiService.get(`/iseerange/get-isee-range/?academicYear=${itemValue}`);	
+    let response = await apiService.get(`/iseerange/get-isee-range/?academicYear=${itemValue}`);
     const { data } = response;
     if (response.status == 200) {
       setIsees(data);  // Imposta i range ISEE ricevuti
@@ -141,12 +95,12 @@ export default function SimulazioneBorsaDiStudio() {
         <View style={styles.topbar}>
           <TornaIndietro />
           <Text style={styles.title}>Simulazione Borsa di Studio</Text>
-            </View>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.inputLabel}>Dati personali</Text>
-            
-            <Text style={styles.boxText}>Anno accademico</Text>
-            {anniAccademici.length > 0 ? (
+        </View>
+        <View style={styles.sectionContainer}>
+          <Text style={styles.inputLabel}>Dati personali</Text>
+
+          <Text style={styles.boxText}>Anno accademico</Text>
+          {anniAccademici.length > 0 ? (
             <Picker
               selectedValue={selectedAnno}
               style={styles.picker}
@@ -154,7 +108,7 @@ export default function SimulazioneBorsaDiStudio() {
             >
               {anniAccademici.map((annoAccademico) => (
                 <Picker.Item
-                  label={`${annoAccademico.academicYear}` }
+                  label={`${annoAccademico.academicYear}`}
                   value={annoAccademico.academicYear}
                 />
               ))}
@@ -163,8 +117,8 @@ export default function SimulazioneBorsaDiStudio() {
             <Text style={styles.boxText}>Seleziona un anno accademico per caricare i range ISEE.</Text>
           )}
 
-            <Text style={styles.boxText}>Valore ISEE</Text>
-            {isees.length > 0 ? (
+          <Text style={styles.boxText}>Valore ISEE</Text>
+          {isees.length > 0 ? (
             <Picker
               selectedValue={selectedRange}
               style={styles.picker}
@@ -182,54 +136,54 @@ export default function SimulazioneBorsaDiStudio() {
             <Text style={styles.boxText}>Seleziona un anno accademico per caricare i range ISEE.</Text>
           )}
 
-            <Text style={styles.boxText}>Tipologia Studente</Text>
-            <Picker 
-              selectedValue={tipologiaStudente}
-              style={styles.picker}
-              onValueChange={(itemValue: string) => setTipologiaStudente(itemValue)}
-            >
-              <Picker.Item label="Fuori sede" value="Fuori sede" />
-              <Picker.Item label="Pendolare" value="Pendolare" />
-              <Picker.Item label="In sede" value="In sede" />
-            </Picker>
-              <View style={styles.switchContainer}>
-              <Text style={styles.boxText}>Studente diversamente abile con disabilità pari o superiore al 66% o in possesso di attestazione di invalidità ex art. 3 c. 1 della l. 104/92.</Text>
-                <Switch
-                onValueChange={() => SetDisabilita(!Disabilita)}
-                value={Disabilita}
-                color='#007BFF'
-              />
-              </View>
-
-              <View style={styles.switchContainer}>
-            <Text style={styles.boxText}>Studentessa frequentante corso di laurea S.T.E.M.</Text>
-              <Switch
-                onValueChange={() => setCorsoSTEM(!corsoSTEM)}
-                value={corsoSTEM}
-                color='#007BFF'
-              />
-              </View>
-              </View>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.box} onPress={handleSimulaPress}>
-              <Text style={styles.buttonText}>Simula</Text>
-            </TouchableOpacity>
+          <Text style={styles.boxText}>Tipologia Studente</Text>
+          <Picker
+            selectedValue={tipologiaStudente}
+            style={styles.picker}
+            onValueChange={(itemValue: string) => setTipologiaStudente(itemValue)}
+          >
+            <Picker.Item label="Fuori sede" value="Fuori sede" />
+            <Picker.Item label="Pendolare" value="Pendolare" />
+            <Picker.Item label="In sede" value="In sede" />
+          </Picker>
+          <View style={styles.switchContainer}>
+            <Text style={styles.boxText}>Studente diversamente abile con disabilità pari o superiore al 66% o in possesso di attestazione di invalidità ex art. 3 c. 1 della l. 104/92.</Text>
+            <Switch
+              onValueChange={() => setDisabilita(!disabilita)}
+              value={disabilita}
+              color='#007BFF'
+            />
           </View>
 
-          {showResults && results && (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.inputLabel}>Importi</Text>
-              <Text style={styles.boxText}>Importo mensa</Text>
-              <TextInput style={styles.input} value={results.importoMensa} editable={false} />
-              <Text style={styles.boxText}>Importo alloggio</Text>
-              <TextInput style={styles.input} value={results.importoAlloggio} editable={false} />
-              <Text style={styles.boxText}>Importo totale</Text>
-              <TextInput style={styles.input} value={results.importoTotale} editable={false} />
-            </View>
-          )}
-        </ScrollView>
-      </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.boxText}>Studentessa frequentante corso di laurea S.T.E.M.</Text>
+            <Switch
+              onValueChange={() => setCorsoSTEM(!corsoSTEM)}
+              value={corsoSTEM}
+              color='#007BFF'
+            />
+          </View>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.box} onPress={handleSimulaPress}>
+            <Text style={styles.buttonText}>Simula</Text>
+          </TouchableOpacity>
+        </View>
+
+        {showResults && results && (
+          <View style={styles.sectionContainer}>
+            <Text style={styles.inputLabel}>Importi</Text>
+            <Text style={styles.boxText}>Importo mensa</Text>
+            <TextInput style={styles.input} value={results.importoMensa} editable={false} />
+            <Text style={styles.boxText}>Importo alloggio</Text>
+            <TextInput style={styles.input} value={results.importoAlloggio} editable={false} />
+            <Text style={styles.boxText}>Importo totale</Text>
+            <TextInput style={styles.input} value={results.importoTotale} editable={false} />
+          </View>
+        )}
+      </ScrollView>
+    </View>
   );
 }
 
@@ -270,11 +224,11 @@ const styles = StyleSheet.create({
   },
   box: {
     backgroundColor: '#007FFF',
-        padding: 10,
-        borderRadius: 10,
-        width: 300,
-        alignItems: 'center',
-        marginTop: 10,
+    padding: 10,
+    borderRadius: 10,
+    width: 300,
+    alignItems: 'center',
+    marginTop: 10,
   },
   card: {
     marginBottom: 20,
@@ -287,20 +241,20 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   boxText: {
-    marginLeft:15,
-    marginRight:15,
+    marginLeft: 15,
+    marginRight: 15,
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 5,
     color: '#555',
   },
   buttonText: {
-    marginLeft:15,
-    marginRight:15,
+    marginLeft: 15,
+    marginRight: 15,
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 5,
-    color:'white',
+    color: 'white',
   },
   sectionTitle: {
     fontSize: 20,
@@ -342,9 +296,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
     paddingHorizontal: 10,
-    marginLeft:15,
-    marginRight:15,
-    },
+    marginLeft: 15,
+    marginRight: 15,
+  },
   toggleGroup: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -375,8 +329,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 15,
-    marginLeft:15,
-    marginRight:15,
+    marginLeft: 15,
+    marginRight: 15,
     fontSize: 16,
     fontWeight: '500',
     color: '#555',
@@ -386,6 +340,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 15,
-    marginRight:15,
+    marginRight: 15,
   },
 });

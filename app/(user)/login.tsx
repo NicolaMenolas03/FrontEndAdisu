@@ -52,10 +52,9 @@ export default function Login() {
                 <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => router.push("/Registration")}>
-            <Text style={[styles.Registrati, { textDecorationLine: 'underline' }]}>
-                Non hai un account ? Registrati
-            </Text>
-
+                <Text style={[styles.Registrati, { textDecorationLine: 'underline' }]}>
+                    Non hai un account ? Registrati
+                </Text>
             </TouchableOpacity>
         </View>
     );

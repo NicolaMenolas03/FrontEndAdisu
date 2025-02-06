@@ -105,7 +105,7 @@ export const authService = {
         const response = await apiClient.post<AuthResponse>('/login/', data);
         if (response.data?.access) {
           await AsyncStorage.setItem('accessToken', response.data.access);
-
+          await AsyncStorage.setItem('username', data.username);
         }
         return response;
       } catch (error) {

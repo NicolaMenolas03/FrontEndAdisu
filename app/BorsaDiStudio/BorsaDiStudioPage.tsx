@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'expo-router';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useScholarshipRequestState } from '../../context/SelectionScholarshipRequest';
+import { apiService } from '@/services/api';
 
 export default function BorsaDiStudioPage() {
   const router = useRouter();
+  const { hasMadeARequest, sethasMadeARequest } = useScholarshipRequestState();
+
+  useEffect(() => {
+    const checkRequest = async () => {
+      const username = await AsyncStorage.getItem('username');
+      const response = await apiService.get(`/request/get-request-by-user/?nrUtente=` + username);
+      console.log(response);
+      // Verifica che la risposta sia stata ricevuta correttamente
+      if (response.data > 0) {
+        // Successo: gestisci la risposta qui
+        // E.g. aggiorna lo stato con i dati ottenuti
+        sethasMadeARequest(username);
+      } else {
+        // Gestisci altri errori se necessario
+        console.error('Errore: ', response.status);
+      }
+    };
+    checkRequest();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -13,10 +34,10 @@ export default function BorsaDiStudioPage() {
 
       {/* Pulsanti centrali */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/DatiBorsaDiStudio")}>
+        <TouchableOpacity style={[styles.button, !hasMadeARequest && styles.disabledButton]} onPress={() => router.push("/BorsaDiStudio/DatiBorsaDiStudio")} disabled={!hasMadeARequest}>
           <Text style={styles.buttonText}>Dati Borsa di Studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")}>
+        <TouchableOpacity style={[styles.button, hasMadeARequest && styles.disabledButton]} onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} disabled={hasMadeARequest != null}>
           <Text style={styles.buttonText}>Richiesta Borsa di Studio</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/SimulazioneBorsaDiStudio")}>
@@ -63,5 +84,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  disabledButton: {
+    backgroundColor: 'gray',  // Colore di sfondo per il pulsante disabilitato
+    opacity: 0.6,  // Leggero effetto di trasparenza per indicare che è disabilitato
   },
 });

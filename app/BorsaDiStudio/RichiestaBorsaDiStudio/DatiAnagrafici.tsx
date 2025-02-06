@@ -15,23 +15,53 @@ import GufoChat from "@/components/Gufochat";
 
 export default function DatiAnagraficiPage() {
   const router = useRouter();
+  const [formDatiAnagrafici, setformDatiAnagrafici] = useState({ nome: '', cognome: '', sesso: '', etaNascita: '', cittadinanza: '', disabilita: false, });
+  const [errors, setErrors] = useState({ nome: '', cognome: '', sesso: '', etaNascita: '', cittadinanza: '', });
 
-  const [formDatiAnagrafici, setformDatiAnagrafici] = useState({
-    nome: "",
-    cognome: "",
-    sesso: "",
-    etaNascita: "",
-    cittadinanza: "",
-    disabilita: false,
-  });
+  useEffect(() => {
+    const loadformDatiAnagrafici = async () => {
+      try {
+        const savedData = await AsyncStorage.getItem('formDatiAnagrafici');
+        if (savedData) {
+          setformDatiAnagrafici(JSON.parse(savedData));
+        }
+      } catch (error) {
+        console.error('Errore nel caricamento dei dati', error);
+      }
+    };
 
-  const [errors, setErrors] = useState({
-    nome: "",
-    cognome: "",
-    sesso: "",
-    etaNascita: "",
-    cittadinanza: "",
-  });
+    //TODO NICOLA
+    // const fetchFirstYear = async () => {
+    //   try {
+    //     const response = await apiService.get(`/academicyear/`);
+    //     const { data } = response;
+
+    //     if (data && data.length > 0) {
+    //       handleAnnoAccademico(data[0].academicYear);
+    //     }
+    //   } catch (error) {
+    //     console.error("Errore nel recuperare gli anni accademici:", error);
+    //   }
+    // };
+
+    // const fetchAnniAccademici = async () => {
+    //   try {
+    //     const response = await apiService.get('/academicyear/');
+    //     const { data } = response;
+
+    //     if (data && data.length > 0) {
+    //       setAnniAccademici(data);
+    //       setSelectedAnno(data[0].academicYear);
+    //     }
+    //   } catch (error) {
+    //     console.error("Errore nel recuperare gli anni accademici:", error);
+    //   }
+    // };
+
+    // fetchAnniAccademici();
+    // fetchFirstYear();
+    loadformDatiAnagrafici();
+  }, []);
 
   const handleNext = () => {
     if (validateFields()) {
@@ -53,25 +83,10 @@ export default function DatiAnagraficiPage() {
         ? ""
         : "Il campo Cittadinanza è obbligatorio.",
     };
-
     setErrors(newErrors);
 
     return Object.values(newErrors).every((error) => error === "");
   };
-
-  useEffect(() => {
-    const loadformDatiAnagrafici = async () => {
-      try {
-        const savedData = await AsyncStorage.getItem("formDatiAnagrafici");
-        if (savedData) {
-          setformDatiAnagrafici(JSON.parse(savedData));
-        }
-      } catch (error) {
-        console.error("Errore nel caricamento dei dati", error);
-      }
-    };
-    loadformDatiAnagrafici();
-  }, []);
 
   const handleInputChange = async (field: string, value: string | boolean) => {
     const updatedData = { ...formDatiAnagrafici, [field]: value };
@@ -88,8 +103,9 @@ export default function DatiAnagraficiPage() {
 
   //controllo data
   const handleData = (field: any, text: string) => {
-    // Rimuove qualsiasi carattere che non sia un numero o "/"
+    // Formattazione data (GG/MM/AAAA) eliminando caratteri non consentiti
     let formattedText = text.replace(/[^0-9]/g, "");
+
 
     // Aggiunge "/" alla terza e sesta posizione
     if (formattedText.length > 2) {
