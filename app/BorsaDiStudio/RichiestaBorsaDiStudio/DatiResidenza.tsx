@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
+import {StyleSheet,Text,View,ScrollView,TouchableOpacity,} from "react-native";
 import { TextInput, Button, Card, HelperText } from "react-native-paper";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -30,21 +23,11 @@ export default function DatiResidenzaPage() {
     cap: "",
   });
 
-  const validateFields = () => {
-    const newErrors = {
-      provincia: formDatiResidenza.provincia
-        ? ""
-        : "Il campo Provincia è obbligatorio.",
-      comune: formDatiResidenza.comune ? "" : "Il campo Comune è obbligatorio.",
-      indirizzo: formDatiResidenza.indirizzo
-        ? ""
-        : "Il campo Indirizzo è obbligatorio.",
-      cap: formDatiResidenza.cap ? "" : "Il campo CAP è obbligatorio.",
-    };
-
-    setErrors(newErrors);
-
-    return Object.values(newErrors).every((error) => error === "");
+  //Tasto avanti per passare alla pagina successiva
+  const handleNext = () => {
+    if (validateFields()) {
+      router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici");
+    }
   };
 
   useEffect(() => {
@@ -64,27 +47,44 @@ export default function DatiResidenzaPage() {
     loadformDatiResidenza();
   }, []);
 
-  const handleNext = () => {
-    if (validateFields()) {
-      router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici");
+
+  //Salvataggio dati
+  const handleInputChange = async (field: keyof typeof formDatiResidenza, value: string) => {
+    // Crea un nuovo oggetto con i dati aggiornati del modulo
+    const updatedData = { ...formDatiResidenza, [field]: value };
+
+    // Aggiorna lo stato del componente con i dati aggiornati
+    setformDatiResidenza(updatedData);
+
+    try {
+      // Salva i dati aggiornati in AsyncStorage per la persistenza
+      await AsyncStorage.setItem('formDatiResidenza', JSON.stringify(updatedData));
+    } catch (error) {
+      // Gestisce eventuali errori durante il salvataggio dei dati
+      console.error('Failed to save form data', error);
     }
+  };
+  
+  //Controllo campi vuoti
+  const validateFields = () => {
+    const newErrors = {
+      provincia: formDatiResidenza.provincia ? "": "Il campo Provincia è obbligatorio.",
+      comune: formDatiResidenza.comune ? "" : "Il campo Comune è obbligatorio.",
+      indirizzo: formDatiResidenza.indirizzo? "": "Il campo Indirizzo è obbligatorio.",
+      cap: formDatiResidenza.cap ? "" : "Il campo CAP è obbligatorio.",
+    };
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((error) => error === "");
   };
 
-  const handleInputChange = async (
-    field: keyof typeof formDatiResidenza,
-    value: string
-  ) => {
-    const updatedformDatiResidenza = { ...formDatiResidenza, [field]: value };
-    setformDatiResidenza(updatedformDatiResidenza);
-    try {
-      await AsyncStorage.setItem(
-        "formDatiResidenza",
-        JSON.stringify(updatedformDatiResidenza)
-      );
-    } catch (error) {
-      console.error("Failed to save form data", error);
+  //controlli valori numerici
+  const handleNumeric = (field: any, text: string) => {
+    if (!Number.isNaN(Number(text))) {
+      handleInputChange(field, text)
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -134,9 +134,10 @@ export default function DatiResidenzaPage() {
             <TextInput
               label="CAP"
               value={formDatiResidenza.cap}
-              onChangeText={(text) => handleInputChange("cap", text)}
+              onChangeText={(text) => handleNumeric('cap', text)}
               mode="outlined"
               keyboardType="numeric"
+              maxLength={5}
               style={styles.input}
               theme={{ colors: { primary: "#007BFF" } }}
             />

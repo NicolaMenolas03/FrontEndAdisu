@@ -4,7 +4,6 @@ import { Switch } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import Navbar from '@/components/Navbar';
 import { apiService } from '@/services/api';
 import { useCRUD } from '@/hooks/useCRUD';
 import TornaIndietro from '@/components/TornaIndietro';
@@ -138,10 +137,10 @@ export default function SimulazioneBorsaDiStudio() {
 
   return (
     <View style={styles.container}>
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={styles.topbar}>
-              <TornaIndietro />
-              <Text style={styles.title}>Simulazione Borsa di Studio</Text>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.topbar}>
+          <TornaIndietro />
+          <Text style={styles.title}>Simulazione Borsa di Studio</Text>
             </View>
           <View style={styles.sectionContainer}>
             <Text style={styles.inputLabel}>Dati personali</Text>

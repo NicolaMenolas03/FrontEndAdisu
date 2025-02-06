@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Alert, Modal, Pressable, TouchableOpacity } from 'react-native';
-import { TextInput, Button, Card } from 'react-native-paper';
+import { TextInput, Card } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Ionicons } from '@expo/vector-icons';
 import GufoChat from '@/components/Gufochat';
 import HomePage from '@/components/HomePage';
 
 export default function DatiScolasticiPage() {
   const router = useRouter();
-
-  const getAnnoAccademico = () => {
-    const currentYear = new Date().getFullYear();
-    return `${currentYear}/${currentYear + 1}`;
-  };
 
   const [formDatiScolatici, setformDatiScolatici] = useState({
     matricola: '',
@@ -34,6 +28,63 @@ export default function DatiScolasticiPage() {
     statoStudente: '',
   });
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  //Prossima pagina
+  const handleNext = () => {
+    if (validateFields()) {
+      setModalVisible(false);
+      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame'); // Cambia con la route della tua pagina principale
+    }
+  };
+
+  //Controllo campi numerici
+  const handleNumeric = (field: any, text: string) => {
+    if (!Number.isNaN(Number(text))) {
+      handleInputChange(field, text)
+    }
+  }
+
+  //Riempimento automatico del campo a.a.
+  const getAnnoAccademico = () => {
+    const currentYear = new Date().getFullYear();
+    return `${currentYear}/${currentYear + 1}`;
+  };
+
+  
+
+  useEffect(() => {
+    const loadformDatiScolatici = async () => {
+      try {
+        const savedformDatiScolatici = await AsyncStorage.getItem('formDatiScolatici');
+        if (savedformDatiScolatici) {
+          setformDatiScolatici(JSON.parse(savedformDatiScolatici));
+        }
+      } catch (error) {
+        console.error('Failed to load form data', error);
+      }
+    };
+    loadformDatiScolatici();
+  }, []);
+  
+  //Salvataggio dati
+  const handleInputChange = async (field: keyof typeof formDatiScolatici, value: string) => {
+    // Crea un nuovo oggetto con i dati aggiornati del modulo
+    const updatedData = { ...formDatiScolatici, [field]: value };
+
+    // Aggiorna lo stato del componente con i dati aggiornati
+    setformDatiScolatici(updatedData);
+
+    try {
+      // Salva i dati aggiornati in AsyncStorage per la persistenza
+      await AsyncStorage.setItem('formDatiScolatici', JSON.stringify(updatedData));
+    } catch (error) {
+      // Gestisce eventuali errori durante il salvataggio dei dati
+      console.error('Failed to save form data', error);
+    }
+  };
+
+  //Controllo campi vuoti
   const validateFields = () => {
     const newErrors = {
       matricola: formDatiScolatici.matricola ? '' : 'Il campo Matricola è obbligatorio.',
@@ -49,50 +100,14 @@ export default function DatiScolasticiPage() {
     return Object.values(newErrors).every((error) => error === '');
   };
 
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  useEffect(() => {
-    const loadformDatiScolatici = async () => {
-      try {
-        const savedformDatiScolatici = await AsyncStorage.getItem('formDatiScolatici');
-        if (savedformDatiScolatici) {
-          setformDatiScolatici(JSON.parse(savedformDatiScolatici));
-        }
-      } catch (error) {
-        console.error('Failed to load form data', error);
-      }
-    };
-    loadformDatiScolatici();
-  }, []);
-
-  const handleInputChange = async (field: keyof typeof formDatiScolatici, value: string) => {
-    const updatedData = { ...formDatiScolatici, [field]: value };
-    setformDatiScolatici(updatedData);
-    try {
-      await AsyncStorage.setItem('formDatiScolatici', JSON.stringify(updatedData));
-    } catch (error) {
-      console.error('Failed to save form data', error);
-    }
-  };
-
-  const handleHomePress = () => {
-    setModalVisible(true);
-  };
-
-  const handleNext = () => {
-    if (validateFields()) {
-      setModalVisible(false);
-      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame'); // Cambia con la route della tua pagina principale
-    }
-  };
 
   return (
     <View style={styles.container}>
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={styles.topbar}>
-              <HomePage />
-              <Text style={styles.title}>Dati di Residenza</Text>
-            </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.topbar}>
+          <HomePage />
+          <Text style={styles.title}>Dati Scolastici</Text>
+        </View>
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.label}>Iscrizione a.a.</Text>
@@ -102,9 +117,10 @@ export default function DatiScolasticiPage() {
               style={styles.input}
               label="Matricola"
               value={formDatiScolatici.matricola}
-              onChangeText={(text) => handleInputChange('matricola', text)}
+              onChangeText={(text) => handleNumeric('matricola', text)}
               mode="outlined"
               keyboardType="numeric"
+              maxLength={6}
               theme={{ colors: { primary: '#007BFF' } }}
             />
             <TextInput
@@ -135,7 +151,8 @@ export default function DatiScolasticiPage() {
               style={styles.input}
               label="Durata legale del corso (1-6)"
               value={formDatiScolatici.durata}
-              onChangeText={(text) => handleInputChange('durata', text)}
+              onChangeText={(text) => handleNumeric('durata', text)}
+              maxLength={1}
               mode="outlined"
               keyboardType="numeric"
               theme={{ colors: { primary: '#007BFF' } }}
@@ -153,16 +170,16 @@ export default function DatiScolasticiPage() {
           </Card.Content>
         </Card>
         <View style={styles.buttonContainer}>
-                  <TouchableOpacity
-                    style={styles.boxindietro}
-                    onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza')}
-                  >
-                    <Text style={styles.buttonTextindietro}>Indietro</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.box} onPress={handleNext}>
-                    <Text style={styles.buttonText}>Successivo</Text>
-                  </TouchableOpacity>
-                </View>
+          <TouchableOpacity
+            style={styles.boxindietro}
+            onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza')}
+          >
+            <Text style={styles.buttonTextindietro}>Indietro</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.box} onPress={handleNext}>
+            <Text style={styles.buttonText}>Successivo</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
       <GufoChat></GufoChat>
     </View>
@@ -255,13 +272,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  boxindietro: { 
-    backgroundColor: 'white', 
-    padding: 10, 
-    borderRadius: 10, 
-    width: 150, 
-    alignItems: 'center', 
-    marginTop: 10, 
+  boxindietro: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 10,
+    width: 150,
+    alignItems: 'center',
+    marginTop: 10,
     color: '#007FFF',
     borderColor: '#007FFF',
     borderWidth: 1,

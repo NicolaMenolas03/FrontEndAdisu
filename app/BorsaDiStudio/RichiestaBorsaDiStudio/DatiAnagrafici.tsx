@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { TextInput, Button, Card, HelperText, Switch } from 'react-native-paper';
+import { TextInput, Card, HelperText, Switch } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +27,13 @@ export default function DatiAnagraficiPage() {
     cittadinanza: '',
   });
 
+  
+  const handleNext = () => {
+    if (validateFields()) {
+      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza');
+    }
+  };
+
   const validateFields = () => {
     const newErrors = {
       nome: formDatiAnagrafici.nome ? '' : 'Il campo Nome è obbligatorio.',
@@ -52,9 +59,8 @@ export default function DatiAnagraficiPage() {
         console.error('Errore nel caricamento dei dati', error);
       }
     };
-
-    loadformDatiAnagrafici();
-  }, []);
+    loadformDatiAnagrafici();}, 
+    []);
 
   const handleInputChange = async (field: string, value: string | boolean) => {
     const updatedData = { ...formDatiAnagrafici, [field]: value };
@@ -66,12 +72,26 @@ export default function DatiAnagraficiPage() {
     }
   };
 
-  const handleNext = () => {
-    if (validateFields()) {
-      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza');
+  const handleData = (field: any, text: string) => {
+    // Rimuove qualsiasi carattere che non sia un numero o "/"
+    let formattedText = text.replace(/[^0-9]/g, "");
+  
+    // Aggiunge "/" alla terza e sesta posizione
+    if (formattedText.length > 2) {
+      formattedText = formattedText.slice(0, 2) + "/" + formattedText.slice(2);
     }
+    if (formattedText.length > 5) {
+      formattedText = formattedText.slice(0, 5) + "/" + formattedText.slice(5);
+    }
+  
+    // Evita che la lunghezza superi 10 caratteri (GG/MM/AAAA)
+    if (formattedText.length > 10) {
+      formattedText = formattedText.slice(0, 10);
+    }
+    // Aggiorna lo stato
+    handleInputChange(field,formattedText);
   };
-
+  
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -106,7 +126,7 @@ export default function DatiAnagraficiPage() {
             <TextInput
               label="Data di Nascita (GG/MM/AAAA)"
               value={formDatiAnagrafici.etaNascita}
-              onChangeText={(text) => handleInputChange('etaNascita', text)}
+              onChangeText={(text) => handleData('etaNascita', text)}
               mode="outlined"
               keyboardType="numeric"
               style={styles.input}

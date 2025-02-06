@@ -8,35 +8,30 @@ import GufoChat from '@/components/Gufochat';
 
 export default function DatiEconomiciPage() {
   const router = useRouter();
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const [formDatiEconomici, setformDatiEconomici] = useState({
     isee: '',
     dataRilascio: '',
     autorizzoINPS: false,
   });
+
   const [errors, setErrors] = useState({
     isee: '',
     dataRilascio: '',
   });
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const validateFields = () => {
-    const newErrors = {
-      isee: formDatiEconomici.isee ? '' : 'Il campo isee è obbligatorio.',
-      dataRilascio: formDatiEconomici.dataRilascio ? '' : 'Il campo dataRilascio è obbligatorio.',
-    };
-    setErrors(newErrors);
-    return Object.values(newErrors).every((error) => error === '');
+  
+  //menua a tendina dopo aver inviato la conferma della richiesta
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    router.push('/BorsaDiStudio/BorsaDiStudioPage');
   };
-
+  
+  //invo della richiesta
   const handleNext = () => {
     if (validateFields()) {
       setModalVisible(true);
     }
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-    router.push('/BorsaDiStudio/BorsaDiStudioPage');
   };
 
   useEffect(() => {
@@ -53,6 +48,7 @@ export default function DatiEconomiciPage() {
     loadformDatiEconomici();
   }, []);
 
+  //salvataggio dati
   const handleInputChange = async (field: string, value: string | boolean) => {
     const updatedformDatiEconomici = { ...formDatiEconomici, [field]: value };
     setformDatiEconomici(updatedformDatiEconomici);
@@ -63,6 +59,44 @@ export default function DatiEconomiciPage() {
     }
   };
 
+   //controllo campi vuoti
+   const validateFields = () => {
+    const newErrors = {
+      isee: formDatiEconomici.isee ? '' : 'Il campo isee è obbligatorio.',
+      dataRilascio: formDatiEconomici.dataRilascio ? '' : 'Il campo dataRilascio è obbligatorio.',
+    };
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === '');
+  };
+
+   //Controllo valori numerici
+  const handleNumeric = (field: any, text: string) => {
+    if(!Number.isNaN(Number(text))){
+        handleInputChange(field, text)
+    }
+  } 
+
+  //Controllo valori data
+  const handleData = (field: any, text: string) => {
+    // Rimuove qualsiasi carattere che non sia un numero o "/"
+    let formattedText = text.replace(/[^0-9]/g, "");
+  
+    // Aggiunge "/" alla terza e sesta posizione
+    if (formattedText.length > 2) {
+      formattedText = formattedText.slice(0, 2) + "/" + formattedText.slice(2);
+    }
+    if (formattedText.length > 5) {
+      formattedText = formattedText.slice(0, 5) + "/" + formattedText.slice(5);
+    }
+  
+    // Evita che la lunghezza superi 10 caratteri (GG/MM/AAAA)
+    if (formattedText.length > 10) {
+      formattedText = formattedText.slice(0, 10);
+    }
+    // Aggiorna lo stato
+    handleInputChange(field,formattedText );
+  };
+  
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -74,7 +108,8 @@ export default function DatiEconomiciPage() {
               label="ISEE"
               value={formDatiEconomici.isee}
               keyboardType="numeric"
-              onChangeText={(text) => handleInputChange('isee', text)}
+              onChangeText={(text) => handleNumeric('isee', text)}
+              maxLength={5}
               mode="outlined"
               style={styles.input}
             />
@@ -82,7 +117,7 @@ export default function DatiEconomiciPage() {
             <TextInput
               label="Data Rilascio ISEE"
               value={formDatiEconomici.dataRilascio}
-              onChangeText={(text) => handleInputChange('dataRilascio', text)}
+              onChangeText={(text) => handleData('dataRilascio', text)}
               mode="outlined"
               style={styles.input}
             />

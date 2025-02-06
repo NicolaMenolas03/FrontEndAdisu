@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Navbar from '@/components/Navbar';
-import Tornaindietro from '@/components/TornaIndietro';
 import { useRouter } from 'expo-router';
 
 

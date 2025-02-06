@@ -1,17 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import Navbar from '@/components/Navbar';
+import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper';
 import TornaIndietro from '@/components/TornaIndietro';
+
 
 export default function DatiBorsaDiStudio() {
   return (
     <View style={styles.container}>
-              <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={styles.topbar}>
-                  <TornaIndietro />
-                  <Text style={styles.title}>Dati Borsa di Studio</Text>
-                </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+
+        <View style={styles.topbar}>
+          <TornaIndietro />
+          <Text style={styles.title}>Dati Borsa di Studio</Text>
+        </View>
+        
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.sectionTitle}>Dati Personali</Text>
