@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { AxiosError } from 'axios';
 import { apiService, loadStoredToken } from '../services/api';
-
+interface QueryParams {
+  [key: string]: string | number | boolean;
+}
 export const useCRUD = <T extends { id: number }>(endpoint: string) => {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,6 +19,19 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
       setError(axiosError.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+
+  const getItems = async (params?: QueryParams) => {
+    try {
+      const response = await apiService.get<T[]>(endpoint, { params });
+      setData(response.data);
+      return response.data;
+    } catch (err) {
+      console.error('Error fetching items:', err);
+      const axiosError = err as AxiosError;
+      setError(axiosError.message);
     }
   };
 
@@ -60,5 +75,5 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
     fetchData();
   }, [endpoint]);
 
-  return { data, loading, error, createItem, updateItem, deleteItem };
+  return { data, loading, error, createItem, updateItem, deleteItem, getItems };
 };

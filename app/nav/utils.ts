@@ -4,6 +4,10 @@ export const navigateToMensa = () => {
     router.push(`/Mensa/mensa`);
 };
 
+export const navigateToAddMensa = () => {
+    router.push(`/Mensa/addMensa`);
+};
+
 export const navigateToHome = () => {
     router.push(`/(tabs)/landingPage`);
 };

@@ -9,13 +9,14 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useCRUD } from "@/hooks/useCRUD";
-import { TypeCanteen } from "../lib/definitions";
-import { navigateToHome } from "../nav/utils";
+import { TypeCanteen } from "../../lib/definitions";
+import { navigateToAddMensa, navigateToHome } from "../../nav/utils";
 import CanteenResult from "@/components/canteenResult";
 
 
 const Mensa = () => {
-    const { data, loading } = useCRUD<TypeCanteen>("/canteen/");
+    const { data, loading, getItems } = useCRUD<TypeCanteen>("/canteen/");
+
     const [canteenName, setCanteenName] = useState("");
     const [searchResults, setSearchResults] = useState<TypeCanteen[]>([]);
 
@@ -90,6 +91,15 @@ const Mensa = () => {
                                 </View>
                             </View>
 
+                            <View style={styles.searchContainer}>
+                                <TouchableOpacity
+                                    style={styles.addButton}
+                                    onPress={navigateToAddMensa}
+                                >
+                                    <Text style={styles.addButtonText}>Aggiungi mensa</Text>
+                                </TouchableOpacity>
+                            </View>
+
                             {/* Total Search Results */}
                             <View style={styles.containerTotalSearchCanteen}>
                                 <Text><Text style={{ color: "#005dff", fontWeight: 'bold', }}>{searchResults.length}</Text> mense trovate</Text>
@@ -110,6 +120,22 @@ const Mensa = () => {
 };
 
 const styles = StyleSheet.create({
+    searchContainer: {
+        width: '100%',
+        paddingHorizontal: 16,
+        paddingBottom: 10,
+    },
+    addButton: {
+        backgroundColor: '#007FFF',
+        padding: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    addButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+    },
     containerTotalSearchCanteen: {
         alignItems: "flex-start",
         width: "90%",
@@ -149,11 +175,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffffff",
         width: "100%",
     },
-    searchContainer: {
-        width: "90%",
-        alignSelf: "center",
-        marginVertical: 10,
-    },
     mensaList: {
         width: "100%",
         paddingHorizontal: 10,
@@ -187,7 +208,7 @@ const styles = StyleSheet.create({
     inputSection: {
         width: "100%",
         alignItems: "center",
-        paddingBottom: 20,
+        
     },
     input: {
         flex: 1,

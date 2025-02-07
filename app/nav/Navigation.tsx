@@ -16,6 +16,9 @@ export default function App() {
         <Stack.Screen name="RichiestaBorsaDiStudio"/>
         <Stack.Screen name="SimulazioneBorsaDiStudio"/>
         <Stack.Screen name="Cart"/>
+        <Stack.Screen name="Orders"/>
+        <Stack.Screen name="Pasti"/>
+        <Stack.Screen name="AddMensa"/>
       </Stack>
   );
 }
