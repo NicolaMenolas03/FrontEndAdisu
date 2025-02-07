@@ -6,35 +6,19 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GufoChat from '@/components/Gufochat';
 import HomePage from '@/components/HomePage';
+import { useStudentSchoolState } from '@/context/RequestContext';
 
 export default function DatiScolasticiPage() {
   const router = useRouter();
 
-  const [formDatiScolatici, setformDatiScolatici] = useState({
-    matricola: '',
-    ateneo: '',
-    corso: '',
-    dipartimento: '',
-    durata: '',
-    statoStudente: 'Full Time',
-  });
-
-  const [errors, setErrors] = useState({
-    matricola: '',
-    ateneo: '',
-    corso: '',
-    dipartimento: '',
-    durata: '',
-    statoStudente: '',
-  });
-
+  const { formDatiScolastici, setformDatiScolastici, errors, setErrors } = useStudentSchoolState();
   const [isModalVisible, setModalVisible] = useState(false);
 
   //Prossima pagina
   const handleNext = () => {
     if (validateFields()) {
       setModalVisible(false);
-      router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame'); // Cambia con la route della tua pagina principale
+      router.replace('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame'); // Cambia con la route della tua pagina principale
     }
   };
 
@@ -51,33 +35,33 @@ export default function DatiScolasticiPage() {
     return `${currentYear}/${currentYear + 1}`;
   };
 
-  
+
 
   useEffect(() => {
-    const loadformDatiScolatici = async () => {
+    const loadformDatiScolastici = async () => {
       try {
-        const savedformDatiScolatici = await AsyncStorage.getItem('formDatiScolatici');
-        if (savedformDatiScolatici) {
-          setformDatiScolatici(JSON.parse(savedformDatiScolatici));
+        const savedformDatiScolastici = await AsyncStorage.getItem('formDatiScolastici');
+        if (savedformDatiScolastici) {
+          setformDatiScolastici(JSON.parse(savedformDatiScolastici));
         }
       } catch (error) {
         console.error('Failed to load form data', error);
       }
     };
-    loadformDatiScolatici();
+    loadformDatiScolastici();
   }, []);
-  
+
   //Salvataggio dati
-  const handleInputChange = async (field: keyof typeof formDatiScolatici, value: string) => {
+  const handleInputChange = async (field: keyof typeof formDatiScolastici, value: string) => {
     // Crea un nuovo oggetto con i dati aggiornati del modulo
-    const updatedData = { ...formDatiScolatici, [field]: value };
+    const updatedData = { ...formDatiScolastici, [field]: value };
 
     // Aggiorna lo stato del componente con i dati aggiornati
-    setformDatiScolatici(updatedData);
+    setformDatiScolastici(updatedData);
 
     try {
       // Salva i dati aggiornati in AsyncStorage per la persistenza
-      await AsyncStorage.setItem('formDatiScolatici', JSON.stringify(updatedData));
+      await AsyncStorage.setItem('formDatiScolastici', JSON.stringify(updatedData));
     } catch (error) {
       // Gestisce eventuali errori durante il salvataggio dei dati
       console.error('Failed to save form data', error);
@@ -87,12 +71,12 @@ export default function DatiScolasticiPage() {
   //Controllo campi vuoti
   const validateFields = () => {
     const newErrors = {
-      matricola: formDatiScolatici.matricola ? '' : 'Il campo Matricola è obbligatorio.',
-      ateneo: formDatiScolatici.ateneo ? '' : 'Il campo Ateneo è obbligatorio.',
-      corso: formDatiScolatici.corso ? '' : 'Il campo Corso è obbligatorio.',
-      dipartimento: formDatiScolatici.dipartimento ? '' : 'Il campo Dipartimento è obbligatorio.',
-      durata: formDatiScolatici.durata ? '' : 'Il campo Durata è obbligatorio.',
-      statoStudente: formDatiScolatici.statoStudente ? '' : 'Il campo Stato Studente è obbligatorio.',
+      matricola: formDatiScolastici.matricola ? '' : 'Il campo Matricola è obbligatorio.',
+      ateneo: formDatiScolastici.ateneo ? '' : 'Il campo Ateneo è obbligatorio.',
+      corso: formDatiScolastici.corso ? '' : 'Il campo Corso è obbligatorio.',
+      dipartimento: formDatiScolastici.dipartimento ? '' : 'Il campo Dipartimento è obbligatorio.',
+      durata: formDatiScolastici.durata ? '' : 'Il campo Durata è obbligatorio.',
+      statoStudente: formDatiScolastici.statoStudente ? '' : 'Il campo Stato Studente è obbligatorio.',
     };
 
     setErrors(newErrors);
@@ -116,7 +100,7 @@ export default function DatiScolasticiPage() {
             <TextInput
               style={styles.input}
               label="Matricola"
-              value={formDatiScolatici.matricola}
+              value={formDatiScolastici.matricola}
               onChangeText={(text) => handleNumeric('matricola', text)}
               mode="outlined"
               keyboardType="numeric"
@@ -126,7 +110,7 @@ export default function DatiScolasticiPage() {
             <TextInput
               style={styles.input}
               label="Ateneo"
-              value={formDatiScolatici.ateneo}
+              value={formDatiScolastici.ateneo}
               onChangeText={(text) => handleInputChange('ateneo', text)}
               mode="outlined"
               theme={{ colors: { primary: '#007BFF' } }}
@@ -134,7 +118,7 @@ export default function DatiScolasticiPage() {
             <TextInput
               style={styles.input}
               label="Corso"
-              value={formDatiScolatici.corso}
+              value={formDatiScolastici.corso}
               onChangeText={(text) => handleInputChange('corso', text)}
               mode="outlined"
               theme={{ colors: { primary: '#007BFF' } }}
@@ -142,7 +126,7 @@ export default function DatiScolasticiPage() {
             <TextInput
               style={styles.input}
               label="Dipartimento"
-              value={formDatiScolatici.dipartimento}
+              value={formDatiScolastici.dipartimento}
               onChangeText={(text) => handleInputChange('dipartimento', text)}
               mode="outlined"
               theme={{ colors: { primary: '#007BFF' } }}
@@ -150,7 +134,7 @@ export default function DatiScolasticiPage() {
             <TextInput
               style={styles.input}
               label="Durata legale del corso (1-6)"
-              value={formDatiScolatici.durata}
+              value={formDatiScolastici.durata}
               onChangeText={(text) => handleNumeric('durata', text)}
               maxLength={1}
               mode="outlined"
@@ -160,7 +144,7 @@ export default function DatiScolasticiPage() {
 
             <Text style={styles.label}>Stato Studente</Text>
             <Picker
-              selectedValue={formDatiScolatici.statoStudente}
+              selectedValue={formDatiScolastici.statoStudente}
               onValueChange={(value) => handleInputChange('statoStudente', value)}
               style={styles.picker}
             >
@@ -172,7 +156,7 @@ export default function DatiScolasticiPage() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.boxindietro}
-            onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza')}
+            onPress={() => router.replace('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiResidenza')}
           >
             <Text style={styles.buttonTextindietro}>Indietro</Text>
           </TouchableOpacity>

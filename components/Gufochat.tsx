@@ -48,7 +48,7 @@ const GufoChat = () => {
   return (
     <>
       <TouchableOpacity style={styles.gufoButton} onPress={toggleChat}>
-        <Image source={require('../assets/images/Gufo.png')} style={styles.gufoImage} />
+        <Image source={require('@/assets/images/Gufo.png')} style={styles.gufoImage} />
       </TouchableOpacity>
 
       <Modal visible={isChatVisible} animationType="slide" transparent>

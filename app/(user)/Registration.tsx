@@ -6,12 +6,6 @@ import { authService } from '@/services/api';
 import { useRouter } from "expo-router";
 const { width } = Dimensions.get('window');
 
-type RootStackParamList = {
-    Registration: undefined;
-    landingPage: undefined;
-    login: undefined;
-};
-
 export default function Registration() {
     const [name, setName] = React.useState('');
     const [surname, setSurname] = React.useState('');
@@ -21,15 +15,13 @@ export default function Registration() {
     const [password2, setPassword2] = React.useState('');
     const router = useRouter();
 
-
-
     const register = async () => {
         let response = await authService.register({
             first_name: name, last_name: surname, username: username, email: email, password: password,
             password2: password2
         });
         if (response.status == 201) {
-            router.push("/landingPage")
+            router.replace("/landingPage")
         } else {
             // TODO: Create un messaggio di errore
             alert(response);
@@ -86,14 +78,14 @@ export default function Registration() {
                     onChangeText={(text) => setPassword2(text)}
                     theme={{ colors: { primary: '#007BFF' } }}
                 />
-                 <TouchableOpacity onPress={register} style={styles.RegisterButton}>
-                                <Text style={styles.RegisterButtonText}>Registrati</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>router.push("/login")}>
-                                <Text style={styles.Login}>
-                                    Non hai un account ? <Text style={{ textDecorationLine: 'underline' }}>Login</Text>
-                                </Text>
-                            </TouchableOpacity>
+                <TouchableOpacity onPress={register} style={styles.RegisterButton}>
+                    <Text style={styles.RegisterButtonText}>Registrati</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.replace("/login")}>
+                    <Text style={styles.Login}>
+                        Non hai un account ? <Text style={{ textDecorationLine: 'underline' }}>Login</Text>
+                    </Text>
+                </TouchableOpacity>
             </View>
         </ScrollView>
     );

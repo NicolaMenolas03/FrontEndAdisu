@@ -20,7 +20,7 @@ export default function HomeButton() {
     await AsyncStorage.removeItem('formDatiResidenza');
     await AsyncStorage.removeItem('formDatiScolatici');
     setModalVisible(false);
-    router.push('/BorsaDiStudio/BorsaDiStudioPage'); // Cambia con la route della tua pagina principale
+    router.replace('/BorsaDiStudio/BorsaDiStudioPage'); // Cambia con la route della tua pagina principale
   };
 
   return (
@@ -39,21 +39,21 @@ export default function HomeButton() {
         visible={isModalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        
+
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>Sei sicuro di voler abbandonare la richiesta?</Text>
             <View style={styles.buttonContainer}>
-                  <TouchableOpacity
-                    style={styles.boxindietro}
-                    onPress={() => setModalVisible(false)}
-                  >
-                    <Text style={styles.buttonTextindietro}>Annulla</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.box} onPress={confirmExit}>
-                    <Text style={styles.buttonText}>Conferma</Text>
-                  </TouchableOpacity>
-                </View>
+              <TouchableOpacity
+                style={styles.boxindietro}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.buttonTextindietro}>Annulla</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.box} onPress={confirmExit}>
+                <Text style={styles.buttonText}>Conferma</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

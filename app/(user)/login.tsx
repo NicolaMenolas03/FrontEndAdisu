@@ -15,7 +15,7 @@ export default function Login() {
     const handleLogin = async () => {
         let response = await authService.login({ username: username, password: password }) as { status: Number, response: { data: { username?: String, password?: String } } };
         if (response.status == 200) {
-            router.push("/(tabs)/landingPage");
+            router.replace("/(tabs)/landingPage");
         } else {
             setUsernameError(!!response.response.data.username);
             setPasswordError(!!response.response.data.password);
@@ -51,7 +51,7 @@ export default function Login() {
             <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
                 <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/Registration")}>
+            <TouchableOpacity onPress={() => router.replace("/Registration")}>
                 <Text style={[styles.Registrati, { textDecorationLine: 'underline' }]}>
                     Non hai un account ? Registrati
                 </Text>

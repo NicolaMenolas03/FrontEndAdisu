@@ -1,37 +1,22 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView, Modal, TouchableOpacity, } from "react-native";
 import { TextInput, Card, Switch, HelperText } from "react-native-paper";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomePage from "@/components/HomePage";
 import GufoChat from "@/components/Gufochat";
+import { useStudentEconomicState } from '@/context/RequestContext';
+import { createRequest } from '../../utils/CompleteFormUtil'; // Importiamo la funzione
 
 export default function DatiEconomiciPage() {
   const router = useRouter();
   const [isModalVisible, setModalVisible] = useState(false);
-
-  const [formDatiEconomici, setformDatiEconomici] = useState({
-    isee: "",
-    dataRilascio: "",
-    autorizzoINPS: false,
-  });
-
-  const [errors, setErrors] = useState({
-    isee: "",
-    dataRilascio: "",
-  });
+  const { formDatiEconomici, setformDatiEconomici, errors, setErrors } = useStudentEconomicState();
 
   //menua a tendina dopo aver inviato la conferma della richiesta
   const handleCloseModal = () => {
     setModalVisible(false);
-    router.push("/BorsaDiStudio/BorsaDiStudioPage");
+    router.replace("/BorsaDiStudio/BorsaDiStudioPage");
   };
 
   //invo della richiesta
@@ -44,9 +29,7 @@ export default function DatiEconomiciPage() {
   useEffect(() => {
     const loadformDatiEconomici = async () => {
       try {
-        const savedformDatiEconomici = await AsyncStorage.getItem(
-          "formDatiEconomici"
-        );
+        const savedformDatiEconomici = await AsyncStorage.getItem("formDatiEconomici");
         if (savedformDatiEconomici) {
           setformDatiEconomici(JSON.parse(savedformDatiEconomici));
         }
@@ -73,12 +56,7 @@ export default function DatiEconomiciPage() {
 
   //controllo campi vuoti
   const validateFields = () => {
-    const newErrors = {
-      isee: formDatiEconomici.isee ? "" : "Il campo isee è obbligatorio.",
-      dataRilascio: formDatiEconomici.dataRilascio
-        ? ""
-        : "Il campo dataRilascio è obbligatorio.",
-    };
+    const newErrors = { isee: formDatiEconomici.isee ? "" : "Il campo isee è obbligatorio.", dataRilascio: formDatiEconomici.dataRilascio ? "" : "Il campo dataRilascio è obbligatorio.", };
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
   };
@@ -117,20 +95,7 @@ export default function DatiEconomiciPage() {
     if (day > 31 || month > 12) return;
 
     // Verifica i giorni massimi per ogni mese
-    const daysInMonth = [
-      31,
-      year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28,
-      31,
-      30,
-      31,
-      30,
-      31,
-      31,
-      30,
-      31,
-      30,
-      31,
-    ];
+    const daysInMonth = [31, year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,];
 
     if (month > 0 && day > daysInMonth[month - 1]) return;
 
@@ -188,7 +153,7 @@ export default function DatiEconomiciPage() {
           <TouchableOpacity
             style={styles.boxindietro}
             onPress={() =>
-              router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame")
+              router.replace("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEsame")
             }
           >
             <Text style={styles.buttonTextindietro}>Indietro</Text>

@@ -1,32 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {StyleSheet,Text,View,ScrollView,TouchableOpacity,} from "react-native";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, } from "react-native";
 import { TextInput, Button, Card, HelperText } from "react-native-paper";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import HomePage from "../../../components/HomePage";
+import HomePage from "@/components/HomePage";
 import GufoChat from "@/components/Gufochat";
+import { useStudentPlaceState } from "@/context/RequestContext";
 
 export default function DatiResidenzaPage() {
   const router = useRouter();
-
-  const [formDatiResidenza, setformDatiResidenza] = useState({
-    provincia: "",
-    comune: "",
-    indirizzo: "",
-    cap: "",
-  });
-
-  const [errors, setErrors] = useState({
-    provincia: "",
-    comune: "",
-    indirizzo: "",
-    cap: "",
-  });
-
+  const { formDatiResidenza, setformDatiResidenza, errors, setErrors } = useStudentPlaceState();
   //Tasto avanti per passare alla pagina successiva
   const handleNext = () => {
     if (validateFields()) {
-      router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici");
+      router.replace("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici");
     }
   };
 
@@ -64,13 +51,13 @@ export default function DatiResidenzaPage() {
       console.error('Failed to save form data', error);
     }
   };
-  
+
   //Controllo campi vuoti
   const validateFields = () => {
     const newErrors = {
-      provincia: formDatiResidenza.provincia ? "": "Il campo Provincia è obbligatorio.",
+      provincia: formDatiResidenza.provincia ? "" : "Il campo Provincia è obbligatorio.",
       comune: formDatiResidenza.comune ? "" : "Il campo Comune è obbligatorio.",
-      indirizzo: formDatiResidenza.indirizzo? "": "Il campo Indirizzo è obbligatorio.",
+      indirizzo: formDatiResidenza.indirizzo ? "" : "Il campo Indirizzo è obbligatorio.",
       cap: formDatiResidenza.cap ? "" : "Il campo CAP è obbligatorio.",
     };
 
@@ -150,7 +137,7 @@ export default function DatiResidenzaPage() {
           <TouchableOpacity
             style={styles.boxindietro}
             onPress={() =>
-              router.push(
+              router.replace(
                 "/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici"
               )
             }

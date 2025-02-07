@@ -94,7 +94,7 @@ export default function landingPage() {
   return (
     <View style={styles.container}>
       {/* header */}
-    
+
 
       {/* Scroll dell'anno */}
       <View style={styles.ScrollAnno}>
@@ -115,17 +115,17 @@ export default function landingPage() {
         <HomeButton
           text="Borsa di studio"
           iconName="school"
-          onPress={() => router.push("/BorsaDiStudio/BorsaDiStudioPage")}
+          onPress={() => router.replace("/BorsaDiStudio/BorsaDiStudioPage")}
         />
         <HomeButton
           text="Mensa"
           iconName="fast-food"
-          onPress={() => router.push("/Mensa/Mensa")}
+          onPress={() => router.replace("/Mensa/Mensa")}
         />
         <HomeButton
           text="Biblioteca"
           iconName="library"
-          onPress={() => router.push("/Mensa/Mensa")}
+          onPress={() => router.replace("/Mensa/Mensa")}
         />
       </View>
 

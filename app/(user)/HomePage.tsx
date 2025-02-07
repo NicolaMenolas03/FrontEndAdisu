@@ -1,14 +1,23 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, Animated } from 'react-native';
 const { width, height } = Dimensions.get('window');
 import { useRouter } from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const topCircleAnim = useRef(new Animated.Value(0)).current;
   const bottomCircleAnim = useRef(new Animated.Value(0)).current;
   const logoOpacity = useRef(new Animated.Value(1)).current;
   const router = useRouter();
- 
+
+  useEffect(() => {
+    const clearAllData = async () => {
+      AsyncStorage.getAllKeys()
+        .then(keys => AsyncStorage.multiRemove(keys))
+    };
+    clearAllData();
+  }, []);
+
   const handlePress = () => {
     // Animazione di uscita
     Animated.parallel([
@@ -29,7 +38,7 @@ export default function App() {
       }),
     ]).start(() => {
       // Naviga alla schermata di login quando l'animazione finisce
-      router.push("/Onboarding");
+      router.replace("/Onboarding");
     });
   };
 

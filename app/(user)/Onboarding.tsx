@@ -35,7 +35,7 @@ export default function OnboardingMensa() {
     };
 
     const completeTutorial = () => {
-        router.push('/login');
+        router.replace('/login');
     };
 
     const getItemLayout = (data: any, index: number) => ({
@@ -79,14 +79,14 @@ export default function OnboardingMensa() {
                 ))}
             </View>
 
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={styles.circleButton}
                 onPress={currentIndex === slides.length - 1 ? completeTutorial : nextSlide}
             >
-                <Ionicons 
-                    name={currentIndex === slides.length - 1 ? "checkmark" : "arrow-forward"} 
-                    size={24} 
-                    color="white" 
+                <Ionicons
+                    name={currentIndex === slides.length - 1 ? "checkmark" : "arrow-forward"}
+                    size={24}
+                    color="white"
                 />
             </TouchableOpacity>
         </View>

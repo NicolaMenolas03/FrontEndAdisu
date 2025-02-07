@@ -23,3 +23,9 @@ export type AcademicYear = {
     id: number; 
     academicYear: string; 
 };
+
+export interface Esame {
+  materia: string;
+  cfu: string;
+  data: string;
+}

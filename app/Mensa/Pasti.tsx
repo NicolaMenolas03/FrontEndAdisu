@@ -37,7 +37,7 @@ const iconSize = width * 0.08;
 
 
 
-const FoodCard = ({ meal }: { meal: Pasti}) => {
+const FoodCard = ({ meal }: { meal: Pasti }) => {
 
     return (
         <View style={styles.card}>
@@ -50,12 +50,12 @@ const FoodCard = ({ meal }: { meal: Pasti}) => {
 
                 <View style={styles.allergenRow}>
                     {
-                    meal.allergens.map((allergen) => {
-                        return (<Image
-                            source={allergens[allergen.name]}
-                            style={styles.allergenIcon}
-                        />)
-                    })
+                        meal.allergens.map((allergen) => {
+                            return (<Image
+                                source={allergens[allergen.name]}
+                                style={styles.allergenIcon}
+                            />)
+                        })
                     }
                 </View>
 
@@ -107,11 +107,11 @@ const Pasti = () => {
     };
 
     const navigateToMensa = () => {
-        router.push(`/Mensa/Mensa`);
+        router.replace(`/Mensa/Mensa`);
     };
 
     const navigateToLeandingPage = () => {
-        router.push(`/(tabs)/landingPage`);
+        router.replace(`/(tabs)/landingPage`);
     };
 
     const searchMeals = () => {
@@ -158,14 +158,14 @@ const Pasti = () => {
                 />
                 <Text>
                     <TouchableOpacity onPress={navigateToMensa} style={styles.breadcrumbItem}>
-                        Home 
-                    </TouchableOpacity>/ 
-                    <TouchableOpacity onPress={navigateToMensa} style={styles.breadcrumbItem}>
-                        Mensa 
+                        Home
                     </TouchableOpacity>/
-                        <Text style={styles.breadcrumbItem}>Pasti</Text>
-                    </Text>
-                
+                    <TouchableOpacity onPress={navigateToMensa} style={styles.breadcrumbItem}>
+                        Mensa
+                    </TouchableOpacity>/
+                    <Text style={styles.breadcrumbItem}>Pasti</Text>
+                </Text>
+
             </View>
 
             {/* Categories Tabs */}
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
         borderRadius: 40
 
     },
-    breadcrumbItem:{
+    breadcrumbItem: {
         paddingLeft: 10,
         paddingRight: 10,
     },

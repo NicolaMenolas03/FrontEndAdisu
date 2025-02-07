@@ -7,10 +7,10 @@ export default function BackButton() {
   const router = useRouter();
 
   return (
-    <TouchableOpacity style={styles.backButton} onPress={() => router.push('/BorsaDiStudio/BorsaDiStudioPage')}>
+    <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/BorsaDiStudio/BorsaDiStudioPage')}>
       <Ionicons
-      name="arrow-back"
-      style={styles.backButtonText}>
+        name="arrow-back"
+        style={styles.backButtonText}>
 
       </Ionicons>
     </TouchableOpacity>

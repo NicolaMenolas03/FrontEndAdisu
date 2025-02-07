@@ -14,21 +14,21 @@ interface NavbarProps {
     namePage: string;
 }
 
-const Navbar = ({namePage}:NavbarProps) => {
+const Navbar = ({ namePage }: NavbarProps) => {
     const router = useRouter();
-    
+
     return (
         <View style={styles.navbar}>
-            <TouchableOpacity style={styles.navButton} onPress={() => router.push('/(tabs)/landingPage')}>
-                <Icon name="home" size={30} color='white'/>
+            <TouchableOpacity style={styles.navButton} onPress={() => router.replace('/(tabs)/landingPage')}>
+                <Icon name="home" size={30} color='white' />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navButton} onPress={() => router.push('/(tabs)/landingPage')}>
+            <TouchableOpacity style={styles.navButton} onPress={() => router.replace('/(tabs)/landingPage')}>
                 <Icon name="newspaper" size={30} color="#6fa3ff" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navButton} onPress={() => router.push('/(tabs)/landingPage')}>
+            <TouchableOpacity style={styles.navButton} onPress={() => router.replace('/(tabs)/landingPage')}>
                 <Icon name="help-circle" size={30} color="#6fa3ff" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navButton} onPress={() => router.push('/(tabs)/landingPage')}>
+            <TouchableOpacity style={styles.navButton} onPress={() => router.replace('/(tabs)/landingPage')}>
                 <Icon name="account" size={30} color="#6fa3ff" />
             </TouchableOpacity>
         </View>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         backgroundColor: '',
         borderRadius: 50,
         alignItems: 'center',
-        padding:10,
+        padding: 10,
     },
     navText: {
         color: 'white',

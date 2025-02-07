@@ -51,7 +51,7 @@ const Mensa = () => {
     };
 
     const navigateToPasti = (mensaId: string, mensaName: string) => {
-        router.push(`/Mensa/Pasti?mensaId=${mensaId}&mensaName=${mensaName}`);
+        router.replace(`/Mensa/Pasti?mensaId=${mensaId}&mensaName=${mensaName}`);
     };
 
     return (
@@ -64,65 +64,65 @@ const Mensa = () => {
                     </View>
 
                     {loading ? <Text>Loading...</Text> : <>
-                    <View style={styles.inputSection}>
-                        <View
-                            style={[
-                                styles.inputContainer,
-                                isFocused && styles.inputContainerFocused,
-                            ]}
-                        >
-                            <Icon
-                                name="magnify"
-                                size={30}
-                                color="#007FFF"
-                                style={styles.icon}
-                            />
-                            <TextInput
-                                value={mensaName}
-                                onChangeText={filterMensaList}
-                                placeholder="Inserisci il nome della mensa"
-                                placeholderTextColor="#cccccc"
-                                style={styles.input}
-                            />
-                        </View>
-                    </View>
-                        
-                    {/* Search Button */}
-                    <View style={styles.containerTotalSearchCanteen}>
-                        <Text><Text style={{ color: "#005dff", fontWeight: 'bold', }}>{searchResults.length}</Text> mense trovate</Text>
-
-                    </View>
-
-                    {/* Mensa List */}
-                    <View style={styles.mensaList}>
-                        {searchResults.map((mensa, index) => (
-                            <View key={index} style={styles.mensaItem}>
+                        <View style={styles.inputSection}>
+                            <View
+                                style={[
+                                    styles.inputContainer,
+                                    isFocused && styles.inputContainerFocused,
+                                ]}
+                            >
                                 <Icon
-                                    name="google-maps"
-                                    size={24}
-                                    color="#005dff"
-                                    style={styles.iconMaps}
+                                    name="magnify"
+                                    size={30}
+                                    color="#007FFF"
+                                    style={styles.icon}
                                 />
-                                <View style={styles.mensaInfo}>
-                                    <Text style={styles.mensaName}>{mensa.name}</Text>
-                                    <Text>{mensa.address}</Text>
-                                    <Text>
-                                        {mensa.city}, {mensa.province}
-                                    </Text>
-                                </View>
-                                <TouchableOpacity
-                                    style={styles.goButton}
-                                    onPress={() => navigateToPasti(mensa.id.toString(), mensa.name)}
-                                >
-                                    <Text style={styles.buttonText}><Icon
-                                        name="arrow-right"
-                                        size={20}
-                                        color="wihte"
-                                    /></Text>
-                                </TouchableOpacity>
+                                <TextInput
+                                    value={mensaName}
+                                    onChangeText={filterMensaList}
+                                    placeholder="Inserisci il nome della mensa"
+                                    placeholderTextColor="#cccccc"
+                                    style={styles.input}
+                                />
                             </View>
-                        ))}
-                    </View>
+                        </View>
+
+                        {/* Search Button */}
+                        <View style={styles.containerTotalSearchCanteen}>
+                            <Text><Text style={{ color: "#005dff", fontWeight: 'bold', }}>{searchResults.length}</Text> mense trovate</Text>
+
+                        </View>
+
+                        {/* Mensa List */}
+                        <View style={styles.mensaList}>
+                            {searchResults.map((mensa, index) => (
+                                <View key={index} style={styles.mensaItem}>
+                                    <Icon
+                                        name="google-maps"
+                                        size={24}
+                                        color="#005dff"
+                                        style={styles.iconMaps}
+                                    />
+                                    <View style={styles.mensaInfo}>
+                                        <Text style={styles.mensaName}>{mensa.name}</Text>
+                                        <Text>{mensa.address}</Text>
+                                        <Text>
+                                            {mensa.city}, {mensa.province}
+                                        </Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.goButton}
+                                        onPress={() => navigateToPasti(mensa.id.toString(), mensa.name)}
+                                    >
+                                        <Text style={styles.buttonText}><Icon
+                                            name="arrow-right"
+                                            size={20}
+                                            color="wihte"
+                                        /></Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                        </View>
                     </>}
                 </View>
             </ScrollView>
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         backgroundColor: 'transparent',
-        borderWidth: 0,  
+        borderWidth: 0,
     },
     searchButton: {
         backgroundColor: "#007FFF",

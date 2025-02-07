@@ -2,50 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { TextInput, Button, Card, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { useStudentExamState } from '@/context/RequestContext';
+import { Esame } from '@/app/lib/definitionsBDS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import HomePage from '../../../components/HomePage';
+import HomePage from '@/components/HomePage';
 import GufoChat from '@/components/Gufochat';
 
-interface Esame {
-  materia: string;
-  cfu: string;
-  data: string;
-}
 
 export default function DatiEsamePage() {
   const router = useRouter();
+  const { formDatiEsame, setFormDatiEsame, errori, setErrori, esami, setEsami } = useStudentExamState();
 
-  const [formDatiScolatici, setformDatiScolatici] = useState({
-    matricola: '',
-    corso: '',
-    dipartimento: '',
-  });
-
-  const [esami, setEsami] = useState<Esame[]>([{ materia: '', cfu: '', data: '' }]);
-
-  const [errori, setErrori] = useState<{ materia?: string; cfu?: string; data?: string }[]>([]);
-
-//Prossima pagina
-const handleNext = () => {
-  if (validaEsami()) {
-    router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici'); // Cambia con la route della tua pagina principale
-  }
-};
-
-
+  //Prossima pagina
+  const handleNext = () => {
+    if (validaEsami()) {
+      router.replace('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici'); // Cambia con la route della tua pagina principale
+    }
+  };
 
   useEffect(() => {
     const loadformDatiScolatici = async () => {
       try {
-        const savedformDatiScolatici = await AsyncStorage.getItem('formDatiScolatici');
-        if (savedformDatiScolatici) {
-          setformDatiScolatici(JSON.parse(savedformDatiScolatici));
+        const savedformDatiEsami = await AsyncStorage.getItem('formDatiEsame');
+        if (savedformDatiEsami) {
+          setFormDatiEsame(JSON.parse(savedformDatiEsami));
         }
       } catch (error) {
         console.error('Failed to load form data', error);
       }
     };
-    
+
     const loadesami = async () => {
       try {
         const savedesami = await AsyncStorage.getItem('esami');
@@ -78,10 +64,10 @@ const handleNext = () => {
     // Cloniamo l'array di esami per modificarlo in modo immutabile
     const updatedEsami = [...esami];
     updatedEsami[index] = { ...updatedEsami[index], [field]: value };
-  
+
     // Aggiorniamo lo stato
     setEsami(updatedEsami);
-  
+
     try {
       await AsyncStorage.setItem('esami', JSON.stringify(updatedEsami));
     } catch (error) {
@@ -145,41 +131,41 @@ const handleNext = () => {
     }
 
     // Estrai giorno, mese e anno
-  const parts = formattedText.split("/");
-  const day = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10);
-  const year = parseInt(parts[2], 10);
+    const parts = formattedText.split("/");
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
 
-  // Controllo base su giorno e mese
-  if (day > 31 || month > 12) return;
+    // Controllo base su giorno e mese
+    if (day > 31 || month > 12) return;
 
-  // Verifica i giorni massimi per ogni mese
-  const daysInMonth = [31, (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    // Verifica i giorni massimi per ogni mese
+    const daysInMonth = [31, (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-  if (month > 0 && day > daysInMonth[month - 1]) return;
+    if (month > 0 && day > daysInMonth[month - 1]) return;
 
-  if (year>2026) return;
+    if (year > 2026) return;
     // Aggiorna lo stato
-    handleInputChange(index,field,formattedText);
+    handleInputChange(index, field, formattedText);
   };
 
   return (
     <View style={styles.container}>
-              <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={styles.topbar}>
-                  <HomePage />
-                  <Text style={styles.title}>Dati Esami</Text>
-                </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.topbar}>
+          <HomePage />
+          <Text style={styles.title}>Dati Esami</Text>
+        </View>
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.label}>Matricola:</Text>
-            <Text style={styles.output}>{formDatiScolatici.matricola}</Text>
+            <Text style={styles.output}>{formDatiEsame.matricola}</Text>
 
             <Text style={styles.label}>Corso:</Text>
-            <Text style={styles.output}>{formDatiScolatici.corso}</Text>
+            <Text style={styles.output}>{formDatiEsame.corso}</Text>
 
             <Text style={styles.label}>Dipartimento:</Text>
-            <Text style={styles.output}>{formDatiScolatici.dipartimento}</Text>
+            <Text style={styles.output}>{formDatiEsame.dipartimento}</Text>
           </Card.Content>
         </Card>
 
@@ -232,21 +218,21 @@ const handleNext = () => {
           </Card>
         ))}
         <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.boxadd} onPress={handleAddEsame}>
-                            <Text style={styles.buttonText}>Aggiungi Esame</Text>
-                          </TouchableOpacity>
+          <TouchableOpacity style={styles.boxadd} onPress={handleAddEsame}>
+            <Text style={styles.buttonText}>Aggiungi Esame</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
-                          <TouchableOpacity
-                            style={styles.boxindietro}
-                            onPress={() => router.push('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici')}
-                          >
-                            <Text style={styles.buttonTextindietro}>Indietro</Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.box} onPress={handleNext}>
-                            <Text style={styles.buttonText}>Successivo</Text>
-                          </TouchableOpacity>
-                        </View>
+          <TouchableOpacity
+            style={styles.boxindietro}
+            onPress={() => router.replace('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici')}
+          >
+            <Text style={styles.buttonTextindietro}>Indietro</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.box} onPress={handleNext}>
+            <Text style={styles.buttonText}>Successivo</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
       <GufoChat />
     </View>
@@ -329,13 +315,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  boxindietro: { 
-    backgroundColor: 'white', 
-    padding: 10, 
-    borderRadius: 10, 
-    width: 150, 
-    alignItems: 'center', 
-    marginTop: 10, 
+  boxindietro: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 10,
+    width: 150,
+    alignItems: 'center',
+    marginTop: 10,
     color: '#007FFF',
     borderColor: '#007FFF',
     borderWidth: 1,

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useScholarshipRequestState } from '../../context/SelectionScholarshipRequest';
+import { useScholarshipRequestState } from '@/context/SelectionScholarshipRequest';
 import { apiService } from '@/services/api';
 
 export default function BorsaDiStudioPage() {
@@ -14,14 +14,9 @@ export default function BorsaDiStudioPage() {
     const checkRequest = async () => {
       const username = await AsyncStorage.getItem('username');
       const response = await apiService.get(`/request/get-request-by-user/?nrUtente=` + username);
-      console.log(response);
-      // Verifica che la risposta sia stata ricevuta correttamente
       if (response.data > 0) {
-        // Successo: gestisci la risposta qui
-        // E.g. aggiorna lo stato con i dati ottenuti
         sethasMadeARequest(username);
       } else {
-        // Gestisci altri errori se necessario
         console.error('Errore: ', response.status);
       }
     };
@@ -34,13 +29,13 @@ export default function BorsaDiStudioPage() {
 
       {/* Pulsanti centrali */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button, !hasMadeARequest && styles.disabledButton]} onPress={() => router.push("/BorsaDiStudio/DatiBorsaDiStudio")} disabled={!hasMadeARequest}>
+        <TouchableOpacity style={[styles.button, !hasMadeARequest && styles.disabledButton]} onPress={() => router.replace("/BorsaDiStudio/DatiBorsaDiStudio")} disabled={!hasMadeARequest}>
           <Text style={styles.buttonText}>Dati Borsa di Studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, hasMadeARequest && styles.disabledButton]} onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} disabled={hasMadeARequest != null}>
+        <TouchableOpacity style={[styles.button, hasMadeARequest && styles.disabledButton]} onPress={() => router.replace("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} disabled={hasMadeARequest != null}>
           <Text style={styles.buttonText}>Richiesta Borsa di Studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/SimulazioneBorsaDiStudio")}>
+        <TouchableOpacity style={styles.button} onPress={() => router.replace("/BorsaDiStudio/SimulazioneBorsaDiStudio")}>
           <Text style={styles.buttonText}>Simulazione Borsa di Studio</Text>
         </TouchableOpacity>
       </View>
