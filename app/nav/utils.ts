@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 
 export const navigateToMensa = () => {
-    router.push(`/Mensa/mensa`);
+    router.push(`/Mensa/(mensa)/mensa`);
 };
 
 export const navigateToAddMensa = () => {
@@ -13,7 +13,7 @@ export const navigateToHome = () => {
 };
 
 export const navigateToPasti = (canteen_id: string) => {
-    router.push(`/Mensa/pasti?id=${canteen_id}`);
+    router.push(`/Mensa/Pasti?id=${canteen_id}`);
 }
 
 export const navigateToCart = () => {

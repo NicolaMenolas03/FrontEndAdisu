@@ -29,6 +29,7 @@ export type TypeCanteen = {
     address: string;
     city: string;
     province: string;
+    postal_code : number;
     average_rating: number;
 };
 
