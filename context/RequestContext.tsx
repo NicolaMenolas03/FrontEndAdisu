@@ -11,7 +11,7 @@ export const useStudentDataState = () => {
 }
 
 export const useStudentSchoolState = () => {
-    const [formDatiScolastici, setformDatiScolastici] = useState({ matricola: '', ateneo: '', corso: '', dipartimento: '', durata: '', statoStudente: 'Full Time', });
+    const [formDatiScolastici, setformDatiScolastici] = useState({ matricola: '', ateneo: '', corso: '', dipartimento: '', durata: '', annoIscrizioneStudente: '1 anno', statoStudente: 'Full Time', });
     const [errors, setErrors] = useState({ matricola: '', ateneo: '', corso: '', dipartimento: '', durata: '', statoStudente: '', });
 
     return {
@@ -39,8 +39,8 @@ export const useStudentExamState = () => {
 }
 
 export const useStudentEconomicState = () => {
-    const [formDatiEconomici, setformDatiEconomici] = useState({ isee: "", dataRilascio: "", autorizzoINPS: false, });
-    const [errors, setErrors] = useState({ isee: "", dataRilascio: "", });
+    const [formDatiEconomici, setformDatiEconomici] = useState({ isee: 0, dataRilascio: "", autorizzoINPS: false, });
+    const [errors, setErrors] = useState({ isee: 0, dataRilascio: "", });
 
     return {
         formDatiEconomici, setformDatiEconomici, errors, setErrors

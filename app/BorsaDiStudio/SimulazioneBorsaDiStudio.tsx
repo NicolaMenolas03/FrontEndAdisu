@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, } from "react-native";
 import { Switch } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { apiService } from "@/services/api";
@@ -14,28 +7,8 @@ import TornaIndietro from "@/components/TornaIndietro";
 import { useSimulazioneState } from "@/context/SimulationContext";
 
 export default function SimulazioneBorsaDiStudio() {
-  const {
-    showResults,
-    setShowResults,
-    selectedAnno,
-    setSelectedAnno,
-    results,
-    setResults,
-    tipologiaStudente,
-    setTipologiaStudente,
-    anniAccademici,
-    setAnniAccademici,
-    isee,
-    isees,
-    setIsees,
-    selectedRange,
-    setSelectedRange,
-    disabilita,
-    setDisabilita,
-    pastiAggiuntivi,
-    corsoSTEM,
-    setCorsoSTEM,
-  } = useSimulazioneState();
+  const { showResults, setShowResults, selectedAnno, setSelectedAnno, results, setResults, tipologiaStudente, setTipologiaStudente, anniAccademici, setAnniAccademici,
+    isee, isees, setIsees, selectedRange, setSelectedRange, disabilita, setDisabilita, pastiAggiuntivi, corsoSTEM, setCorsoSTEM, } = useSimulazioneState();
 
   useEffect(() => {
     const fetchFirstYear = async () => {
@@ -117,7 +90,6 @@ export default function SimulazioneBorsaDiStudio() {
   };
 
   const handleAnnoAccademico = async (itemValue: string) => {
-    console.log("Anno selezionato:", itemValue);
     setSelectedAnno(itemValue);
     let response = await apiService.get(
       `/iseerange/get-isee-range/?academicYear=${itemValue}`

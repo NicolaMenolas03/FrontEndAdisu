@@ -34,7 +34,7 @@ export default function DatiEsamePage() {
 
     const loadesami = async () => {
       try {
-        const savedesami = await AsyncStorage.getItem('esami');
+        const savedesami = await AsyncStorage.getItem('formDatiEsame');
         if (savedesami) {
           setEsami(JSON.parse(savedesami));
         }
@@ -69,7 +69,7 @@ export default function DatiEsamePage() {
     setEsami(updatedEsami);
 
     try {
-      await AsyncStorage.setItem('esami', JSON.stringify(updatedEsami));
+      await AsyncStorage.setItem('formDatiEsame', JSON.stringify(updatedEsami));
     } catch (error) {
       console.error('Failed to save form data', error);
     }

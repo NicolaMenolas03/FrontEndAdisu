@@ -142,6 +142,19 @@ export default function DatiScolasticiPage() {
               theme={{ colors: { primary: '#007BFF' } }}
             />
 
+            <Text style={styles.label}>Anno di Iscrizione</Text>
+            <Picker
+              selectedValue={formDatiScolastici.statoStudente}
+              onValueChange={(value) => handleInputChange('annoIscrizioneStudente', value)}
+              style={styles.picker}
+            >
+              <Picker.Item label="1 anno" value="1 anno" />
+              <Picker.Item label="2 anno" value="2 anno" />
+              <Picker.Item label="3 anno" value="3 anno" />
+              <Picker.Item label="4 anno laurea a ciclo unico" value="4 anno laurea a ciclo unico" />
+              <Picker.Item label="5 anno laurea a ciclo unico" value="5 anno laurea a ciclo unico" />
+            </Picker>
+
             <Text style={styles.label}>Stato Studente</Text>
             <Picker
               selectedValue={formDatiScolastici.statoStudente}
