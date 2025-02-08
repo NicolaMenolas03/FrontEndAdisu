@@ -31,6 +31,7 @@ export type Request = {
     academicYear: number;
     studentName: string;
     nrRange: number;
+    nrStudent: string;
 };
 
 export interface Esame {

@@ -15,7 +15,6 @@ export async function createRequest() {
     const [datiAnagrafici, datiEconomici, datiEsami, datiResidenza, datiScolastici, username] =
         await Promise.all([AsyncStorage.getItem('formDatiAnagrafici'), AsyncStorage.getItem('formDatiEconomici'), AsyncStorage.getItem('formDatiEsame'), AsyncStorage.getItem('formDatiResidenza'), AsyncStorage.getItem('formDatiScolastici'), AsyncStorage.getItem('username')]);
 
-    // Parsing dei dati
     const anagrafici = JSON.parse(datiAnagrafici || "{}");
     const economici = JSON.parse(datiEconomici || "{}");
     const esami = JSON.parse(datiEsami || "{}");
@@ -41,6 +40,7 @@ export async function createRequest() {
                 yearType: scolastici.annoIscrizioneStudente,
                 physicalCondition: anagrafici.disabilita,
                 nrRange: iseeRange?.nrRange ?? "",
+                nrStudent: scolastici.matricola
             };
 
             apiService.post('/request/post-request-by-user/', newItemValue)
