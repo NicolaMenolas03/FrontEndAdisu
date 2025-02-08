@@ -24,6 +24,15 @@ export type AcademicYear = {
     academicYear: string; 
 };
 
+export type Request = { 
+    physicalCondition: boolean;
+    studentType: string;
+    yearType: string;
+    academicYear: number;
+    studentName: string;
+    nrRange: number;
+};
+
 export interface Esame {
   materia: string;
   cfu: string;

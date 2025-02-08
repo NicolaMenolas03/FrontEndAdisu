@@ -20,8 +20,9 @@ export default function DatiEconomiciPage() {
   };
 
   //invo della richiesta
-  const handleNext = () => {
+  const handleNext = async () => {
     if (validateFields()) {
+      await createRequest();
       setModalVisible(true);
     }
   };
@@ -56,7 +57,7 @@ export default function DatiEconomiciPage() {
 
   //controllo campi vuoti
   const validateFields = () => {
-    const newErrors = { isee: formDatiEconomici.isee ? "" : "Il campo isee è obbligatorio.", dataRilascio: formDatiEconomici.dataRilascio ? "" : "Il campo dataRilascio è obbligatorio.", };
+    const newErrors = { dataRilascio: formDatiEconomici.dataRilascio ? "" : "Il campo dataRilascio è obbligatorio.", };
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
   };
@@ -115,7 +116,7 @@ export default function DatiEconomiciPage() {
           <Card.Content>
             <TextInput
               label="ISEE"
-              value={formDatiEconomici.isee}
+              value={formDatiEconomici.isee.toString()}
               keyboardType="numeric"
               onChangeText={(text) => handleNumeric("isee", text)}
               maxLength={5}

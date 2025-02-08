@@ -24,7 +24,7 @@ export default function DatiBorsaDiStudio() {
 
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Tipo Borsa di Studio</Text>
-              <TextInput style={styles.input} value="--------" editable={false} />
+              <TextInput style={styles.input} value="Adisu 2025" editable={false} />
             </View>
 
             <View style={styles.inputGroup}>
