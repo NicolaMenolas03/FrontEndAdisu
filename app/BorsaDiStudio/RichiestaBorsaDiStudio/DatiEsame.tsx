@@ -8,7 +8,10 @@ import {
 } from "react-native";
 import { TextInput, Button, Card, IconButton } from "react-native-paper";
 import { useRouter } from "expo-router";
-import { useStudentExamState } from "@/context/RequestContext";
+import {
+  useStudentExamState,
+  useStudentSchoolState,
+} from "@/context/RequestContext";
 import { Esame } from "@/app/lib/definitionsBDS";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomePage from "@/components/HomePage";
@@ -25,6 +28,8 @@ export default function DatiEsamePage() {
     setEsami,
   } = useStudentExamState();
 
+  const { formDatiScolastici, setformDatiScolastici } = useStudentSchoolState();
+
   //Prossima pagina
   const handleNext = () => {
     if (validaEsami()) {
@@ -33,11 +38,13 @@ export default function DatiEsamePage() {
   };
 
   useEffect(() => {
-    const loadformDatiScolatici = async () => {
+    const loadformDatiScolastici = async () => {
       try {
-        const savedformDatiEsami = await AsyncStorage.getItem("formDatiEsame");
-        if (savedformDatiEsami) {
-          setFormDatiEsame(JSON.parse(savedformDatiEsami));
+        const savedformDatiScolastici = await AsyncStorage.getItem(
+          "formDatiScolastici"
+        );
+        if (savedformDatiScolastici) {
+          setformDatiScolastici(JSON.parse(savedformDatiScolastici));
         }
       } catch (error) {
         console.error("Failed to load form data", error);
@@ -55,7 +62,7 @@ export default function DatiEsamePage() {
       }
     };
 
-    loadformDatiScolatici();
+    loadformDatiScolastici();
     loadesami();
   }, []);
 
@@ -188,13 +195,13 @@ export default function DatiEsamePage() {
         <Card style={styles.card}>
           <Card.Content>
             <Text style={styles.label}>Matricola:</Text>
-            <Text style={styles.output}>{formDatiEsame.matricola}</Text>
+            <Text style={styles.output}>{formDatiScolastici.matricola}</Text>
 
             <Text style={styles.label}>Corso:</Text>
-            <Text style={styles.output}>{formDatiEsame.corso}</Text>
+            <Text style={styles.output}>{formDatiScolastici.corso}</Text>
 
             <Text style={styles.label}>Dipartimento:</Text>
-            <Text style={styles.output}>{formDatiEsame.dipartimento}</Text>
+            <Text style={styles.output}>{formDatiScolastici.dipartimento}</Text>
           </Card.Content>
         </Card>
 
