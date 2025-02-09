@@ -13,14 +13,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomePage from "@/components/HomePage";
 import GufoChat from "@/components/Gufochat";
 import { useStudentEconomicState } from "@/context/RequestContext";
-import { createRequest } from "../../utils/CompleteFormUtil"; // Importiamo la funzione
+import { useScholarshipRequest } from "../../utils/CompleteFormUtil";
 import { deleteAllData } from "@/context/SelectionScholarshipRequestContext";
 
 export default function DatiEconomiciPage() {
   const router = useRouter();
   const [isModalVisible, setModalVisible] = useState(false);
-  const { formDatiEconomici, setformDatiEconomici, errors, setErrors } =
-    useStudentEconomicState();
+  const { formDatiEconomici, setformDatiEconomici, errors, setErrors } = useStudentEconomicState();
+  const { createRequest } = useScholarshipRequest();
 
   //menua a tendina dopo aver inviato la conferma della richiesta
   const handleCloseModal = () => {
