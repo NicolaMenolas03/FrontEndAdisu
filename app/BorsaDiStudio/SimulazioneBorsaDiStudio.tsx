@@ -97,7 +97,7 @@ export default function SimulazioneBorsaDiStudio() {
   const handleAnnoAccademico = async (itemValue: string) => {
     setSelectedAnno(itemValue);
     let response = await apiService.get(
-      `/ iseerange / get - isee - range /? academicYear = ${itemValue} `
+      `/iseerange/get-isee-range/?academicYear=${itemValue}`
     );
     const { data } = response;
     if (response.status == 200 && Array.isArray(data) && data.length > 0) {

@@ -29,13 +29,13 @@ export default function BorsaDiStudioPage() {
 
       {/* Pulsanti centrali */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button, !hasMadeARequest && styles.disabledButton]} onPress={() => router.replace("/BorsaDiStudio/DatiBorsaDiStudio")} disabled={!hasMadeARequest}>
+        <TouchableOpacity style={[styles.button, !hasMadeARequest && styles.disabledButton]} onPress={() => router.push("/BorsaDiStudio/DatiBorsaDiStudio")} disabled={!hasMadeARequest}>
           <Text style={styles.buttonText}>Dati Borsa di Studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, hasMadeARequest && styles.disabledButton]} onPress={() => router.replace("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} disabled={hasMadeARequest != null}>
+        <TouchableOpacity style={[styles.button, hasMadeARequest && styles.disabledButton]} onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} disabled={hasMadeARequest != null}>
           <Text style={styles.buttonText}>Richiesta Borsa di Studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.replace("/BorsaDiStudio/SimulazioneBorsaDiStudio")}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/SimulazioneBorsaDiStudio")}>
           <Text style={styles.buttonText}>Simulazione Borsa di Studio</Text>
         </TouchableOpacity>
       </View>
