@@ -144,7 +144,7 @@ export default function DatiScolasticiPage() {
 
             <Text style={styles.label}>Anno di Iscrizione</Text>
             <Picker
-              selectedValue={formDatiScolastici.statoStudente}
+              selectedValue={formDatiScolastici.annoIscrizioneStudente}
               onValueChange={(value) => handleInputChange('annoIscrizioneStudente', value)}
               style={styles.picker}
             >
