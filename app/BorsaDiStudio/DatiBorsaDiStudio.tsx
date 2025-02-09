@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper';
 import TornaIndietro from '@/components/TornaIndietro';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { apiService } from '@/services/api';
+import { useScholarshipDataState } from '@/context/DataScholarshipContext';
+
+const { scholarshipData, setscholarshipData } = useScholarshipDataState();
 
 export default function DatiBorsaDiStudio() {
+
+  useEffect(() => {
+    const checkRequest = async () => {
+      const username = await AsyncStorage.getItem('username');
+      const response = await apiService.get(`/request/get-request-by-user/?nrUtente=` + username);
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        setscholarshipData(response.data[0]);
+
+      } else {
+        console.error('Errore: ', response.status);
+      }
+    };
+    checkRequest();
+  }, []);
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>

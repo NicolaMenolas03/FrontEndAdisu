@@ -7,6 +7,7 @@ import HomePage from "@/components/HomePage";
 import GufoChat from "@/components/Gufochat";
 import { useStudentEconomicState } from '@/context/RequestContext';
 import { createRequest } from '../../utils/CompleteFormUtil'; // Importiamo la funzione
+import { deleteAllData } from '@/context/SelectionScholarshipRequestContext';
 
 export default function DatiEconomiciPage() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function DatiEconomiciPage() {
   //menua a tendina dopo aver inviato la conferma della richiesta
   const handleCloseModal = () => {
     setModalVisible(false);
+    deleteAllData();
     router.replace("/BorsaDiStudio/BorsaDiStudioPage");
   };
 
@@ -57,7 +59,7 @@ export default function DatiEconomiciPage() {
 
   //controllo campi vuoti
   const validateFields = () => {
-    const newErrors = { dataRilascio: formDatiEconomici.dataRilascio ? "" : "Il campo dataRilascio è obbligatorio.", };
+    const newErrors = { dataRilascio: formDatiEconomici.dataRilascio ? "" : "Il campo dataRilascio è obbligatorio.", isee: formDatiEconomici.isee ? "" : "Il campo ISEE è obbligatorio." };
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
   };

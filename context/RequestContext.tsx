@@ -40,7 +40,7 @@ export const useStudentExamState = () => {
 
 export const useStudentEconomicState = () => {
     const [formDatiEconomici, setformDatiEconomici] = useState({ isee: 0, dataRilascio: "", autorizzoINPS: false, });
-    const [errors, setErrors] = useState({ dataRilascio: "", });
+    const [errors, setErrors] = useState({ isee: "", dataRilascio: "", });
 
     return {
         formDatiEconomici, setformDatiEconomici, errors, setErrors

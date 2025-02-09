@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { deleteAllData } from '@/context/SelectionScholarshipRequestContext';
 
 export default function HomeButton() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -14,11 +13,7 @@ export default function HomeButton() {
   };
 
   const confirmExit = async () => {
-    await AsyncStorage.removeItem('formDatiAnagrafici');
-    await AsyncStorage.removeItem('formDatiEconomici');
-    await AsyncStorage.removeItem('formDatiEsame');
-    await AsyncStorage.removeItem('formDatiResidenza');
-    await AsyncStorage.removeItem('formDatiScolatici');
+    deleteAllData();
     setModalVisible(false);
     router.replace('/BorsaDiStudio/BorsaDiStudioPage'); // Cambia con la route della tua pagina principale
   };

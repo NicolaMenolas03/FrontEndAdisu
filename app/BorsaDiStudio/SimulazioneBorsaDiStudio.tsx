@@ -14,9 +14,9 @@ export default function SimulazioneBorsaDiStudio() {
     const fetchFirstYear = async () => {
       try {
         const response = await apiService.get(`/academicyear/`);
-        const { data } = response;
 
-        if (data && data.length > 0) {
+        if (Array.isArray(response.data) && response.data.length > 0) {
+          const { data } = response;
           handleAnnoAccademico(data[0].academicYear);
         }
       } catch (error) {
@@ -29,7 +29,7 @@ export default function SimulazioneBorsaDiStudio() {
         const response = await apiService.get("/academicyear/");
         const { data } = response;
 
-        if (data && data.length > 0) {
+        if (Array.isArray(data) && data.length > 0) {
           setAnniAccademici(data);
           setSelectedAnno(data[0].academicYear);
         }
@@ -44,42 +44,47 @@ export default function SimulazioneBorsaDiStudio() {
 
   const handleSimulaPress = async () => {
     const calcoloSimulazione = async () => {
+      let importoMensa = ``;
+      let importoAlloggio = ``;
+      let importoTotale = ``;
       let response = await apiService.get(
         `/iseerange/get-isee-range-by-id/?nr=${selectedRange}`
       );
       const { data } = response;
-      let iseeMax = data[0].iseeMax;
 
-      let tempisee = 0;
-      let tempOutSite = 0;
-      if (iseeMax < 15000) {
-        tempisee = 2000;
-      } else if (iseeMax < 25000) {
-        tempisee = 1200;
-      } else {
-        tempisee = 0;
-      }
+      if (Array.isArray(data) && data.length > 0) {
+        let iseeMax = data[0].iseeMax;
 
-      if (tipologiaStudente === "Fuori sede") {
-        tempisee += 3000;
-        tempOutSite = 3000;
-      } else if (tipologiaStudente === "Pendolare") {
-        tempisee += 1500;
-      } else {
-        tempisee += 0;
-      }
+        let tempisee = 0;
+        let tempOutSite = 0;
+        if (iseeMax < 15000) {
+          tempisee = 2000;
+        } else if (iseeMax < 25000) {
+          tempisee = 1200;
+        } else {
+          tempisee = 0;
+        }
 
-      // Aggiustamenti
-      if (disabilita) {
-        tempisee *= 1.2;
-      }
-      if (corsoSTEM) {
-        tempisee *= 1.1;
-      }
+        if (tipologiaStudente === "Fuori sede") {
+          tempisee += 3000;
+          tempOutSite = 3000;
+        } else if (tipologiaStudente === "Pendolare") {
+          tempisee += 1500;
+        } else {
+          tempisee += 0;
+        }
 
-      const importoMensa = iseeMax < 25000 ? "600 €" : "0 €";
-      const importoAlloggio = `${tempOutSite.toFixed(2)}€`;
-      const importoTotale = `${tempisee.toFixed(2)} €`;
+        if (disabilita) {
+          tempisee *= 1.2;
+        }
+        if (corsoSTEM) {
+          tempisee *= 1.1;
+        }
+
+        importoMensa = iseeMax < 25000 ? "600 €" : "0 €";
+        importoAlloggio = `${tempOutSite.toFixed(2)}€`;
+        importoTotale = `${tempisee.toFixed(2)} €`;
+      }
 
       return { importoMensa, importoAlloggio, importoTotale };
     };
@@ -92,11 +97,11 @@ export default function SimulazioneBorsaDiStudio() {
   const handleAnnoAccademico = async (itemValue: string) => {
     setSelectedAnno(itemValue);
     let response = await apiService.get(
-      `/iseerange/get-isee-range/?academicYear=${itemValue}`
+      `/ iseerange / get - isee - range /? academicYear = ${itemValue} `
     );
     const { data } = response;
-    if (response.status == 200) {
-      data.sort((a, b) => a.iseeMin - b.iseeMin); // Ordinamento per iseeMin crescente
+    if (response.status == 200 && Array.isArray(data) && data.length > 0) {
+      data.sort((a: { iseeMin: number; }, b: { iseeMin: number; }) => a.iseeMin - b.iseeMin); // Ordinamento per iseeMin crescente
       setIsees(data); // Imposta i range ISEE ricevuti
       setSelectedRange(data[0].nrRange);
     }
@@ -123,7 +128,7 @@ export default function SimulazioneBorsaDiStudio() {
             >
               {anniAccademici.map((annoAccademico) => (
                 <Picker.Item
-                  label={`${annoAccademico.academicYear}`}
+                  label={`${annoAccademico.academicYear} `}
                   value={annoAccademico.academicYear}
                 />
               ))}
