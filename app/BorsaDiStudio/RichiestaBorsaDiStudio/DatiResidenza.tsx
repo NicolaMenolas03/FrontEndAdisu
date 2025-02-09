@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomePage from "@/components/HomePage";
 import GufoChat from "@/components/Gufochat";
 import { useStudentPlaceState } from "@/context/RequestContext";
+import { Picker } from "@react-native-picker/picker";
 
 export default function DatiResidenzaPage() {
   const router = useRouter();
@@ -147,6 +148,17 @@ export default function DatiResidenzaPage() {
             {errors.cap ? (
               <HelperText type="error">{errors.cap}</HelperText>
             ) : null}
+
+            <Text style={styles.label}>Tipo Studente</Text>
+            <Picker
+              selectedValue={formDatiResidenza.TipoStudente}
+              onValueChange={(text) => handleInputChange("TipoStudente", text)}
+              style={styles.picker}
+            >
+              <Picker.Item label="In sede" value="In sede" />
+              <Picker.Item label="Pendolare" value="Pendolare" />
+              <Picker.Item label="Fuori sede" value="Fuori sede" />
+            </Picker>
           </Card.Content>
         </Card>
         <View style={styles.buttonContainer}>
@@ -192,6 +204,11 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 15,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 10,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -245,5 +262,17 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginBottom: 5,
     color: "#007FFF",
+  },
+  picker: {
+    height: 50,
+    borderColor: "#87828b",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 15,
+    marginBottom: 15,
+    padding: 10,
+    fontSize: 16,
+    fontWeight: "500",
+    color: "black",
   },
 });

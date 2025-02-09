@@ -212,7 +212,7 @@ export default function DatiAnagraficiPage() {
             ) : null}
 
             <View style={styles.switchContainer}>
-              <Text style={styles.label}>Disabilità</Text>
+              <Text style={styles.label}>Studente diversamente abile</Text>
               <Switch
                 value={formDatiAnagrafici.disabilita}
                 onValueChange={(value) =>
