@@ -11,7 +11,7 @@ export const useScholarshipDataState = () => {
     const [iseeMin, setIseeMin] = useState<number>(0);
     const [iseeMax, setIseeMax] = useState<number>(0);
     const [physicalCondition, setPhysicalCondition] = useState<boolean>(false);
-    const [result, setResult] = useState({ importoMensa: "", importoAlloggio: "", importoTotale: "" });
+    const [result, setResult] = useState({ importoMensa: "", importoAlloggio: "", importoRimborso: "", importoTotale: "" });
 
     return {
         scholarshipData, setscholarshipData,

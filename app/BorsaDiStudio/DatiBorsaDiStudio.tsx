@@ -47,10 +47,11 @@ export default function DatiBorsaDiStudio() {
       let importoMensa = ``;
       let importoAlloggio = ``;
       let importoTotale = ``;
+      let importoRimborso = ``;
 
-      let tempisee = 0;
-      let tempOutSite = 0;
-
+      let tempisee: number = 0;
+      let tempOutSite: number = 0;
+    
       if (iseeMax < 15000) {
         tempisee = 2000;
       } else if (iseeMax < 25000) {
@@ -58,23 +59,33 @@ export default function DatiBorsaDiStudio() {
       } else {
         tempisee = 0;
       }
-
+    
       if (studentType === "Fuori sede") {
         tempisee += 3000;
         tempOutSite = 3000;
       } else if (studentType === "Pendolare") {
         tempisee += 1500;
       }
-
+    
       if (physicalCondition) {
         tempisee *= 1.2;
       }
+    
+      // Calcolo importi come numeri
+      let mensaValue: number = iseeMax < 25000 ? 600 : 0;
+      let alloggioValue: number = tempOutSite;
+      let totaleValue: number = tempisee;
+    
+      // Calcolo del rimborso
+      let rimborsoValue: number =totaleValue - mensaValue + alloggioValue ;
+    
+      // Converti i numeri in stringhe formattate
+      importoMensa = `${mensaValue.toFixed(2)} €`;
+      importoAlloggio = `${alloggioValue.toFixed(2)} €`;
+      importoTotale = `${totaleValue.toFixed(2)} €`;
+      importoRimborso = `${rimborsoValue.toFixed(2)} €`;
 
-      importoMensa = iseeMax < 25000 ? "600 €" : "0 €";
-      importoAlloggio = `${tempOutSite.toFixed(2)}€`;
-      importoTotale = `${tempisee.toFixed(2)} €`;
-
-      setResult({ importoMensa, importoAlloggio, importoTotale });
+      setResult({ importoMensa, importoAlloggio, importoRimborso, importoTotale});
     };
 
     setTimeout(loadAmounts, 500);
@@ -128,6 +139,11 @@ export default function DatiBorsaDiStudio() {
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Importo Alloggio</Text>
               <TextInput style={styles.input} value={result.importoAlloggio} editable={false} />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Importo Rimborso spese</Text>
+              <TextInput style={styles.input} value={result.importoRimborso} editable={false} />
             </View>
 
             <View style={styles.inputGroup}>

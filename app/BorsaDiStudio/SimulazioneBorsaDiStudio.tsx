@@ -74,6 +74,7 @@ export default function SimulazioneBorsaDiStudio() {
       let importoMensa = ``;
       let importoAlloggio = ``;
       let importoTotale = ``;
+      let importoRimborso = ``;
       let response = await apiService.get(
         `/iseerange/get-isee-range-by-id/?nr=${selectedRange}`
       );
@@ -108,12 +109,16 @@ export default function SimulazioneBorsaDiStudio() {
           tempisee *= 1.1;
         }
 
+        let numImportoMensa = iseeMax < 25000 ? 600 : 0;
+
+        let rimborsoValue: number = tempisee - tempOutSite - numImportoMensa;
+        importoRimborso = `${rimborsoValue.toFixed(2)}€`;
         importoMensa = iseeMax < 25000 ? "600 €" : "0 €";
         importoAlloggio = `${tempOutSite.toFixed(2)}€`;
         importoTotale = `${tempisee.toFixed(2)} €`;
       }
 
-      return { importoMensa, importoAlloggio, importoTotale };
+      return { importoMensa, importoAlloggio, importoTotale, importoRimborso};
     };
 
     const simulationResults = await calcoloSimulazione();
@@ -248,6 +253,14 @@ export default function SimulazioneBorsaDiStudio() {
               value={results.importoAlloggio}
               editable={false}
             />
+
+            <Text style={styles.boxText}>importo Rimborso</Text>
+            <TextInput
+              style={styles.input}
+              value={results.importoRimborso}
+              editable={false}
+            />
+
             <Text style={styles.boxText}>Importo totale</Text>
             <TextInput
               style={styles.input}
