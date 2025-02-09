@@ -76,6 +76,7 @@ export default function DatiResidenzaPage() {
         ? ""
         : "Il campo Indirizzo è obbligatorio.",
       cap: formDatiResidenza.cap ? "" : "Il campo CAP è obbligatorio.",
+      tipoStudente: formDatiResidenza.tipoStudente ? "" : "Seleziona un tipo.",
     };
 
     setErrors(newErrors);
@@ -151,8 +152,8 @@ export default function DatiResidenzaPage() {
 
             <Text style={styles.label}>Tipo Studente</Text>
             <Picker
-              selectedValue={formDatiResidenza.TipoStudente}
-              onValueChange={(text) => handleInputChange("TipoStudente", text)}
+              selectedValue={formDatiResidenza.tipoStudente}
+              onValueChange={(text) => handleInputChange("tipoStudente", text)}
               style={styles.picker}
             >
               <Picker.Item label="In sede" value="In sede" />

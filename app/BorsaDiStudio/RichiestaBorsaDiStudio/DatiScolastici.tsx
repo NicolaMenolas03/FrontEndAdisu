@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Alert,
-  Modal,
-  Pressable,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView, Alert, Modal, Pressable, TouchableOpacity, } from "react-native";
 import { TextInput, Card } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
@@ -87,22 +78,12 @@ export default function DatiScolasticiPage() {
   //Controllo campi vuoti
   const validateFields = () => {
     const newErrors = {
-      matricola: formDatiScolastici.matricola
-        ? ""
-        : "Il campo Matricola è obbligatorio.",
-      ateneo: formDatiScolastici.ateneo
-        ? ""
-        : "Il campo Ateneo è obbligatorio.",
+      matricola: formDatiScolastici.matricola ? "" : "Il campo Matricola è obbligatorio.",
+      ateneo: formDatiScolastici.ateneo ? "" : "Il campo Ateneo è obbligatorio.",
       corso: formDatiScolastici.corso ? "" : "Il campo Corso è obbligatorio.",
-      dipartimento: formDatiScolastici.dipartimento
-        ? ""
-        : "Il campo Dipartimento è obbligatorio.",
-      durata: formDatiScolastici.durata
-        ? ""
-        : "Il campo Durata è obbligatorio.",
-      statoStudente: formDatiScolastici.statoStudente
-        ? ""
-        : "Il campo Stato Studente è obbligatorio.",
+      dipartimento: formDatiScolastici.dipartimento ? "" : "Il campo Dipartimento è obbligatorio.",
+      durata: formDatiScolastici.durata ? "" : "Il campo Durata è obbligatorio.",
+      statoStudente: formDatiScolastici.statoStudente ? "" : "Il campo Stato Studente è obbligatorio.",
     };
 
     setErrors(newErrors);

@@ -43,7 +43,7 @@ export function useScholarshipRequest() {
                 const newItemValue = {
                     ...prevState,
                     academicYear: prevState.academicYear,
-                    studentType: scolastici?.statoStudente ?? "",
+                    studentType: residenza?.tipoStudente ?? "",
                     studentName: username || "",
                     yearType: scolastici?.annoIscrizioneStudente ?? "",
                     physicalCondition: anagrafici?.disabilita ?? false,
