@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import Navbar from '@/components/Navbar';
-import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useScholarshipRequestState } from '@/context/SelectionScholarshipRequestContext';
-import { apiService } from '@/services/api';
+import React, { useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import Navbar from "@/components/Navbar";
+import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useScholarshipRequestState } from "@/context/SelectionScholarshipRequestContext";
+import { apiService } from "@/services/api";
 
 export default function BorsaDiStudioPage() {
   const router = useRouter();
@@ -12,12 +12,14 @@ export default function BorsaDiStudioPage() {
 
   useEffect(() => {
     const checkRequest = async () => {
-      const username = await AsyncStorage.getItem('username');
-      const response = await apiService.get(`/request/get-request-by-user/?nrUtente=` + username);
+      const username = await AsyncStorage.getItem("username");
+      const response = await apiService.get(
+        `/request/get-request-by-user/?nrUtente=` + username
+      );
       if (Array.isArray(response.data) && response.data.length > 0) {
         sethasMadeARequest(username);
       } else {
-        console.error('Errore: ', response.status);
+        console.error("Errore: ", response.status);
       }
     };
     checkRequest();
@@ -29,13 +31,26 @@ export default function BorsaDiStudioPage() {
 
       {/* Pulsanti centrali */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button, !hasMadeARequest && styles.disabledButton]} onPress={() => router.push("/BorsaDiStudio/DatiBorsaDiStudio")} disabled={!hasMadeARequest}>
+        <TouchableOpacity
+          style={[styles.button, !hasMadeARequest && styles.disabledButton]}
+          onPress={() => router.push("/BorsaDiStudio/DatiBorsaDiStudio")}
+          disabled={!hasMadeARequest}
+        >
           <Text style={styles.buttonText}>Dati Borsa di Studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, hasMadeARequest && styles.disabledButton]} onPress={() => router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")} disabled={hasMadeARequest != null}>
+        <TouchableOpacity
+          style={[styles.button, hasMadeARequest && styles.disabledButton]}
+          onPress={() =>
+            router.push("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiAnagrafici")
+          }
+          disabled={hasMadeARequest != null}
+        >
           <Text style={styles.buttonText}>Richiesta Borsa di Studio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/BorsaDiStudio/SimulazioneBorsaDiStudio")}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/BorsaDiStudio/SimulazioneBorsaDiStudio")}
+        >
           <Text style={styles.buttonText}>Simulazione Borsa di Studio</Text>
         </TouchableOpacity>
       </View>
@@ -49,14 +64,14 @@ export default function BorsaDiStudioPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   title: {
     padding: 20,
     fontSize: 24,
-    fontWeight: 'bold',
-    color: 'Black',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "Black",
+    textAlign: "center",
     marginBottom: 0, // 20
   },
   buttonContainer: {
@@ -64,24 +79,24 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   button: {
-    backgroundColor: '#007fff',
+    backgroundColor: "#007fff",
     paddingVertical: 20,
     borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   disabledButton: {
-    backgroundColor: 'gray',  // Colore di sfondo per il pulsante disabilitato
-    opacity: 0.6,  // Leggero effetto di trasparenza per indicare che è disabilitato
+    backgroundColor: "gray", // Colore di sfondo per il pulsante disabilitato
+    opacity: 0.6, // Leggero effetto di trasparenza per indicare che è disabilitato
   },
 });

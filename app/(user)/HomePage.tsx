@@ -1,8 +1,14 @@
-import React, { useRef, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity, Animated } from 'react-native';
-const { width, height } = Dimensions.get('window');
+import React, { useRef, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
+const { width, height } = Dimensions.get("window");
 import { useRouter } from "expo-router";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const topCircleAnim = useRef(new Animated.Value(0)).current;
@@ -12,8 +18,7 @@ export default function App() {
 
   useEffect(() => {
     const clearAllData = async () => {
-      AsyncStorage.getAllKeys()
-        .then(keys => AsyncStorage.multiRemove(keys))
+      AsyncStorage.getAllKeys().then((keys) => AsyncStorage.multiRemove(keys));
     };
     clearAllData();
   }, []);
@@ -38,7 +43,7 @@ export default function App() {
       }),
     ]).start(() => {
       // Naviga alla schermata di login quando l'animazione finisce
-      router.replace("/Onboarding");
+      router.push("/Onboarding");
     });
   };
 
@@ -121,7 +126,7 @@ const Circle = StyleSheet.create({
     top: 0,
     left: 0,
     backgroundColor: "#007FFF",
-    width: width * 0.50, // 50% of screen width
+    width: width * 0.5, // 50% of screen width
     height: height * 0.25, // 25% of screen height
     borderBottomRightRadius: 1000, // half of the width to make a circle
   },
@@ -130,7 +135,7 @@ const Circle = StyleSheet.create({
     bottom: 0,
     right: 0,
     backgroundColor: "#007FFF",
-    width: width * 0.50, // 50% of screen width
+    width: width * 0.5, // 50% of screen width
     height: height * 0.25, // 25% of screen height
     borderTopLeftRadius: 1000, // half of the width to make a circle
   },

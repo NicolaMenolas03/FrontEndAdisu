@@ -95,7 +95,6 @@ export default function landingPage() {
     <View style={styles.container}>
       {/* header */}
 
-
       {/* Scroll dell'anno */}
       <View style={styles.ScrollAnno}>
         <TouchableOpacity onPress={decrementYear} style={styles.arrowLeft}>
@@ -115,17 +114,17 @@ export default function landingPage() {
         <HomeButton
           text="Borsa di studio"
           iconName="school"
-          onPress={() => router.replace("/BorsaDiStudio/BorsaDiStudioPage")}
+          onPress={() => router.push("/BorsaDiStudio/BorsaDiStudioPage")}
         />
         <HomeButton
           text="Mensa"
           iconName="fast-food"
-          onPress={() => router.replace("/Mensa/Mensa")}
+          onPress={() => router.push("/Mensa/Mensa")}
         />
         <HomeButton
           text="Biblioteca"
           iconName="library"
-          onPress={() => router.replace("/Mensa/Mensa")}
+          onPress={() => router.push("/Mensa/Mensa")}
         />
       </View>
 

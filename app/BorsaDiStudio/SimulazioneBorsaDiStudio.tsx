@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Switch } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { apiService } from "@/services/api";
@@ -7,8 +14,28 @@ import TornaIndietro from "@/components/TornaIndietro";
 import { useSimulazioneState } from "@/context/SimulationContext";
 
 export default function SimulazioneBorsaDiStudio() {
-  const { showResults, setShowResults, selectedAnno, setSelectedAnno, results, setResults, tipologiaStudente, setTipologiaStudente, anniAccademici, setAnniAccademici,
-    isee, isees, setIsees, selectedRange, setSelectedRange, disabilita, setDisabilita, pastiAggiuntivi, corsoSTEM, setCorsoSTEM, } = useSimulazioneState();
+  const {
+    showResults,
+    setShowResults,
+    selectedAnno,
+    setSelectedAnno,
+    results,
+    setResults,
+    tipologiaStudente,
+    setTipologiaStudente,
+    anniAccademici,
+    setAnniAccademici,
+    isee,
+    isees,
+    setIsees,
+    selectedRange,
+    setSelectedRange,
+    disabilita,
+    setDisabilita,
+    pastiAggiuntivi,
+    corsoSTEM,
+    setCorsoSTEM,
+  } = useSimulazioneState();
 
   useEffect(() => {
     const fetchFirstYear = async () => {
@@ -101,7 +128,10 @@ export default function SimulazioneBorsaDiStudio() {
     );
     const { data } = response;
     if (response.status == 200 && Array.isArray(data) && data.length > 0) {
-      data.sort((a: { iseeMin: number; }, b: { iseeMin: number; }) => a.iseeMin - b.iseeMin); // Ordinamento per iseeMin crescente
+      data.sort(
+        (a: { iseeMin: number }, b: { iseeMin: number }) =>
+          a.iseeMin - b.iseeMin
+      ); // Ordinamento per iseeMin crescente
       setIsees(data); // Imposta i range ISEE ricevuti
       setSelectedRange(data[0].nrRange);
     }
