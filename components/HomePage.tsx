@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { deleteAllData } from '@/context/SelectionScholarshipRequestContext';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { deleteAllData } from "@/context/SelectionScholarshipRequestContext";
 
 export default function HomeButton() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -15,7 +15,7 @@ export default function HomeButton() {
   const confirmExit = async () => {
     deleteAllData();
     setModalVisible(false);
-    router.replace('/BorsaDiStudio/BorsaDiStudioPage'); // Cambia con la route della tua pagina principale
+    router.push("/BorsaDiStudio/BorsaDiStudioPage"); // Cambia con la route della tua pagina principale
   };
 
   return (
@@ -34,10 +34,11 @@ export default function HomeButton() {
         visible={isModalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Sei sicuro di voler abbandonare la richiesta?</Text>
+            <Text style={styles.modalText}>
+              Sei sicuro di voler abbandonare la richiesta?
+            </Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.boxindietro}
@@ -62,16 +63,16 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
-    width: '80%',
-    alignItems: 'center',
+    width: "80%",
+    alignItems: "center",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -80,14 +81,14 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
   },
   box: {
     backgroundColor: "#cc0000",

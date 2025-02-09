@@ -1,45 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { TextInput, Button, Card, IconButton } from 'react-native-paper';
-import { useRouter } from 'expo-router';
-import { useStudentExamState } from '@/context/RequestContext';
-import { Esame } from '@/app/lib/definitionsBDS';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import HomePage from '@/components/HomePage';
-import GufoChat from '@/components/Gufochat';
-
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { TextInput, Button, Card, IconButton } from "react-native-paper";
+import { useRouter } from "expo-router";
+import { useStudentExamState } from "@/context/RequestContext";
+import { Esame } from "@/app/lib/definitionsBDS";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import HomePage from "@/components/HomePage";
+import GufoChat from "@/components/Gufochat";
 
 export default function DatiEsamePage() {
   const router = useRouter();
-  const { formDatiEsame, setFormDatiEsame, errori, setErrori, esami, setEsami } = useStudentExamState();
+  const {
+    formDatiEsame,
+    setFormDatiEsame,
+    errori,
+    setErrori,
+    esami,
+    setEsami,
+  } = useStudentExamState();
 
   //Prossima pagina
   const handleNext = () => {
     if (validaEsami()) {
-      router.replace('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici'); // Cambia con la route della tua pagina principale
+      router.replace("/BorsaDiStudio/RichiestaBorsaDiStudio/DatiEconomici"); // Cambia con la route della tua pagina principale
     }
   };
 
   useEffect(() => {
     const loadformDatiScolatici = async () => {
       try {
-        const savedformDatiEsami = await AsyncStorage.getItem('formDatiEsame');
+        const savedformDatiEsami = await AsyncStorage.getItem("formDatiEsame");
         if (savedformDatiEsami) {
           setFormDatiEsame(JSON.parse(savedformDatiEsami));
         }
       } catch (error) {
-        console.error('Failed to load form data', error);
+        console.error("Failed to load form data", error);
       }
     };
 
     const loadesami = async () => {
       try {
-        const savedesami = await AsyncStorage.getItem('formDatiEsame');
+        const savedesami = await AsyncStorage.getItem("formDatiEsame");
         if (savedesami) {
           setEsami(JSON.parse(savedesami));
         }
       } catch (error) {
-        console.error('Failed to load form data', error);
+        console.error("Failed to load form data", error);
       }
     };
 
@@ -48,8 +60,8 @@ export default function DatiEsamePage() {
   }, []);
 
   const handleAddEsame = () => {
-    setEsami([...esami, { materia: '', cfu: '', data: '' }]);
-    setErrori([...errori, { materia: '', cfu: '', data: '' }]);
+    setEsami([...esami, { materia: "", cfu: "", data: "" }]);
+    setErrori([...errori, { materia: "", cfu: "", data: "" }]);
   };
 
   const handleRemoveEsame = (index: number) => {
@@ -60,7 +72,11 @@ export default function DatiEsamePage() {
     setErrori(updatedErrori);
   };
 
-  const handleInputChange = async (index: number, field: keyof Esame, value: string) => {
+  const handleInputChange = async (
+    index: number,
+    field: keyof Esame,
+    value: string
+  ) => {
     // Cloniamo l'array di esami per modificarlo in modo immutabile
     const updatedEsami = [...esami];
     updatedEsami[index] = { ...updatedEsami[index], [field]: value };
@@ -69,9 +85,9 @@ export default function DatiEsamePage() {
     setEsami(updatedEsami);
 
     try {
-      await AsyncStorage.setItem('formDatiEsame', JSON.stringify(updatedEsami));
+      await AsyncStorage.setItem("formDatiEsame", JSON.stringify(updatedEsami));
     } catch (error) {
-      console.error('Failed to save form data', error);
+      console.error("Failed to save form data", error);
     }
   };
 
@@ -83,24 +99,24 @@ export default function DatiEsamePage() {
       let erroriEsame: { materia?: string; cfu?: string; data?: string } = {};
 
       if (!esame.materia.trim()) {
-        erroriEsame.materia = 'La materia è obbligatoria';
+        erroriEsame.materia = "La materia è obbligatoria";
         valido = false;
       }
 
       const cfuNumero = parseInt(esame.cfu, 10);
       if (!esame.cfu.trim()) {
-        erroriEsame.cfu = 'I CFU sono obbligatori';
+        erroriEsame.cfu = "I CFU sono obbligatori";
         valido = false;
       } else if (isNaN(cfuNumero) || cfuNumero <= 0) {
-        erroriEsame.cfu = 'Inserisci un numero valido di CFU';
+        erroriEsame.cfu = "Inserisci un numero valido di CFU";
         valido = false;
       } else if (cfuNumero > 12 || cfuNumero < 2) {
-        erroriEsame.cfu = 'I CFU devono essere compresi tra 2 e 12';
+        erroriEsame.cfu = "I CFU devono essere compresi tra 2 e 12";
         valido = false;
       }
 
       if (!esame.data.trim()) {
-        erroriEsame.data = 'La data è obbligatoria';
+        erroriEsame.data = "La data è obbligatoria";
         valido = false;
       }
 
@@ -140,7 +156,20 @@ export default function DatiEsamePage() {
     if (day > 31 || month > 12) return;
 
     // Verifica i giorni massimi per ogni mese
-    const daysInMonth = [31, (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const daysInMonth = [
+      31,
+      year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28,
+      31,
+      30,
+      31,
+      30,
+      31,
+      31,
+      30,
+      31,
+      30,
+      31,
+    ];
 
     if (month > 0 && day > daysInMonth[month - 1]) return;
 
@@ -175,10 +204,12 @@ export default function DatiEsamePage() {
               <TextInput
                 label="Materia"
                 value={esame.materia}
-                onChangeText={(text) => handleInputChange(index, 'materia', text)}
+                onChangeText={(text) =>
+                  handleInputChange(index, "materia", text)
+                }
                 mode="outlined"
                 style={styles.input}
-                theme={{ colors: { primary: '#007BFF' } }}
+                theme={{ colors: { primary: "#007BFF" } }}
                 error={!!errori[index]?.materia}
               />
               {errori[index]?.materia && <Text>{errori[index]?.materia}</Text>}
@@ -187,22 +218,22 @@ export default function DatiEsamePage() {
                 label="CFU"
                 value={esame.cfu}
                 keyboardType="numeric"
-                onChangeText={(text) => handleInputChange(index, 'cfu', text)}
+                onChangeText={(text) => handleInputChange(index, "cfu", text)}
                 mode="outlined"
                 maxLength={2}
                 error={!!errori[index]?.cfu}
                 style={styles.input}
-                theme={{ colors: { primary: '#007BFF' } }}
+                theme={{ colors: { primary: "#007BFF" } }}
               />
               {errori[index]?.cfu && <Text>{errori[index]?.cfu}</Text>}
 
               <TextInput
                 label="Data"
                 value={esame.data}
-                onChangeText={(text) => handleData(index, 'data', text)}
+                onChangeText={(text) => handleData(index, "data", text)}
                 mode="outlined"
                 style={styles.input}
-                theme={{ colors: { primary: '#007BFF' } }}
+                theme={{ colors: { primary: "#007BFF" } }}
                 error={!!errori[index]?.data}
               />
               {errori[index]?.data && <Text>{errori[index]?.data}</Text>}
@@ -212,7 +243,7 @@ export default function DatiEsamePage() {
                 iconColor="#990000"
                 size={30}
                 onPress={() => handleRemoveEsame(index)}
-                style={{ alignSelf: 'flex-end' }}
+                style={{ alignSelf: "flex-end" }}
               />
             </Card.Content>
           </Card>
@@ -225,7 +256,11 @@ export default function DatiEsamePage() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.boxindietro}
-            onPress={() => router.replace('/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici')}
+            onPress={() =>
+              router.push(
+                "/BorsaDiStudio/RichiestaBorsaDiStudio/DatiScolastici"
+              )
+            }
           >
             <Text style={styles.buttonTextindietro}>Indietro</Text>
           </TouchableOpacity>
@@ -242,38 +277,38 @@ export default function DatiEsamePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
-    backgroundColor: '#f5f5f5',
+    justifyContent: "space-between",
+    backgroundColor: "#f5f5f5",
   },
   scrollContainer: {
     padding: 20,
-    marginBottom: '35%',
+    marginBottom: "35%",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "black",
+    textAlign: "center",
     marginStart: 90,
   },
   card: {
     marginBottom: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   esameCard: {
     marginBottom: 15,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   output: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
     padding: 10,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     borderRadius: 5,
     marginBottom: 15,
   },
@@ -284,74 +319,74 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    flexDirection: "row",
+    justifyContent: "space-evenly",
     marginTop: 20,
   },
   gufoChat: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    width: '100%',
+    width: "100%",
   },
   topbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
     marginBottom: 20,
   },
   boxadd: {
-    backgroundColor: '#007FFF',
+    backgroundColor: "#007FFF",
     padding: 10,
     borderRadius: 10,
     width: 330,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
   },
   box: {
-    backgroundColor: '#007FFF',
+    backgroundColor: "#007FFF",
     padding: 10,
     borderRadius: 10,
     width: 150,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
   },
   boxindietro: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
     width: 150,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
-    color: '#007FFF',
-    borderColor: '#007FFF',
+    color: "#007FFF",
+    borderColor: "#007FFF",
     borderWidth: 1,
   },
   buttonText: {
     marginLeft: 15,
     marginRight: 15,
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
     marginBottom: 5,
-    color: 'white',
+    color: "white",
   },
   buttonTextindietro: {
     marginLeft: 15,
     marginRight: 15,
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
     marginBottom: 5,
-    color: '#007FFF',
+    color: "#007FFF",
   },
   picker: {
     height: 50,
-    borderColor: '#87828b',
+    borderColor: "#87828b",
     borderWidth: 1,
     borderRadius: 5,
     marginTop: 15,
     marginBottom: 15,
     padding: 10,
     fontSize: 16,
-    fontWeight: '500',
-    color: 'black',
+    fontWeight: "500",
+    color: "black",
   },
 });

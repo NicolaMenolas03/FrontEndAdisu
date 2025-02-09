@@ -1,26 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { TextInput, Card, HelperText, Switch } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomePage from "@/components/HomePage";
 import GufoChat from "@/components/Gufochat";
-import { useStudentDataState } from '@/context/RequestContext';
+import { useStudentDataState } from "@/context/RequestContext";
 
 export default function DatiAnagraficiPage() {
   const router = useRouter();
-  const { formDatiAnagrafici, setformDatiAnagrafici, errors, setErrors } = useStudentDataState();
+  const { formDatiAnagrafici, setformDatiAnagrafici, errors, setErrors } =
+    useStudentDataState();
 
   useEffect(() => {
     const loadformDatiAnagrafici = async () => {
       try {
-        const savedData = await AsyncStorage.getItem('formDatiAnagrafici');
+        const savedData = await AsyncStorage.getItem("formDatiAnagrafici");
         if (savedData) {
           setformDatiAnagrafici(JSON.parse(savedData));
         }
       } catch (error) {
-        console.error('Errore nel caricamento dei dati', error);
+        console.error("Errore nel caricamento dei dati", error);
       }
     };
 
@@ -36,8 +43,18 @@ export default function DatiAnagraficiPage() {
   const validateFields = () => {
     const newErrors = {
       nome: formDatiAnagrafici.nome ? "" : "Il campo Nome è obbligatorio.",
-      cognome: formDatiAnagrafici.cognome ? "" : "Il campo Cognome è obbligatorio.", sesso: formDatiAnagrafici.sesso ? "" : "Il campo Sesso è obbligatorio.", etaNascita: formDatiAnagrafici.etaNascita ? "" : "Inserire una età valida (numerica).", cittadinanza: formDatiAnagrafici.cittadinanza ? "" : "Il campo Cittadinanza è obbligatorio.",
-    }; setErrors(newErrors);
+      cognome: formDatiAnagrafici.cognome
+        ? ""
+        : "Il campo Cognome è obbligatorio.",
+      sesso: formDatiAnagrafici.sesso ? "" : "Il campo Sesso è obbligatorio.",
+      etaNascita: formDatiAnagrafici.etaNascita
+        ? ""
+        : "Inserire una età valida (numerica).",
+      cittadinanza: formDatiAnagrafici.cittadinanza
+        ? ""
+        : "Il campo Cittadinanza è obbligatorio.",
+    };
+    setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
   };
 
@@ -45,7 +62,10 @@ export default function DatiAnagraficiPage() {
     const updatedData = { ...formDatiAnagrafici, [field]: value };
     setformDatiAnagrafici(updatedData);
     try {
-      await AsyncStorage.setItem("formDatiAnagrafici", JSON.stringify(updatedData));
+      await AsyncStorage.setItem(
+        "formDatiAnagrafici",
+        JSON.stringify(updatedData)
+      );
     } catch (error) {
       console.error("Errore nel salvataggio dei dati", error);
     }
@@ -55,7 +75,6 @@ export default function DatiAnagraficiPage() {
   const handleData = (field: any, text: string) => {
     // Formattazione data (GG/MM/AAAA) eliminando caratteri non consentiti
     let formattedText = text.replace(/[^0-9]/g, "");
-
 
     // Aggiunge "/" alla terza e sesta posizione
     if (formattedText.length > 2) {
@@ -80,7 +99,20 @@ export default function DatiAnagraficiPage() {
     if (day > 31 || month > 12) return;
 
     // Verifica i giorni massimi per ogni mese
-    const daysInMonth = [31, year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,];
+    const daysInMonth = [
+      31,
+      year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28,
+      31,
+      30,
+      31,
+      30,
+      31,
+      31,
+      30,
+      31,
+      30,
+      31,
+    ];
 
     if (month > 0 && day > daysInMonth[month - 1]) return;
 
