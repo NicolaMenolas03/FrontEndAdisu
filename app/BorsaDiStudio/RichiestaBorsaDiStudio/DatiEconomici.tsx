@@ -26,7 +26,7 @@ export default function DatiEconomiciPage() {
   const handleCloseModal = () => {
     setModalVisible(false);
     deleteAllData();
-    router.replace("/BorsaDiStudio/BorsaDiStudioPage");
+    router.push("/BorsaDiStudio/BorsaDiStudioPage");
   };
 
   //invo della richiesta
