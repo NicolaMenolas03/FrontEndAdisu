@@ -14,66 +14,72 @@ export default function DatiBorsaDiStudio() {
     const checkRequest = async () => {
       const username = await AsyncStorage.getItem('username');
       let response = await apiService.get(`/request/get-request-by-user/?nrUtente=` + username);
-      console.log(response.data);
-      if (Array.isArray(response.data) && response.data.length > 0) {
-        await setscholarshipData(response.data[0]);
-        await setStudentNr(response.data[0].nrStudent);
-        await setStudentType(response.data[0].studentType);
-        await setNrRange(response.data[0].nrRange);
 
-        response = await apiService.get(`/iseerange/get-isee-range-by-id/?nr=${response.data[0].nrRange}`);
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        const requestData = response.data[0];
+
+        setscholarshipData(requestData);
+        setStudentNr(requestData.nrStudent);
+        setStudentType(requestData.studentType);
+        setNrRange(requestData.nrRange);
+
+        response = await apiService.get(`/iseerange/get-isee-range-by-id/?nr=${requestData.nrRange}`);
+
         if (Array.isArray(response.data) && response.data.length > 0) {
-          await setIseeMin(response.data[0].iseeMin);
-          await setIseeMax(response.data[0].iseeMax);
+          setIseeMin(response.data[0].iseeMin);
+          setIseeMax(response.data[0].iseeMax);
         }
       } else {
         console.error('Errore: ', response.status);
       }
     };
 
-    const loadAmounts = async () => {
-      const calcoloSimulazione = async () => {
-        let importoMensa = ``;
-        let importoAlloggio = ``;
-        let importoTotale = ``;
+    checkRequest();
+  }, []);
 
-        let tempisee = 0;
-        let tempOutSite = 0;
-        if (iseeMax < 15000) {
-          tempisee = 2000;
-        } else if (iseeMax < 25000) {
-          tempisee = 1200;
-        } else {
-          tempisee = 0;
-        }
-
-        if (studentType === "Fuori sede") {
-          tempisee += 3000;
-          tempOutSite = 3000;
-        } else if (studentType === "Pendolare") {
-          tempisee += 1500;
-        } else {
-          tempisee += 0;
-        }
-
-        if (physicalCondition) {
-          tempisee *= 1.2;
-        }
-
-        importoMensa = iseeMax < 25000 ? "600 €" : "0 €";
-        importoAlloggio = `${tempOutSite.toFixed(2)}€`;
-        importoTotale = `${tempisee.toFixed(2)} €`;
-
-        return { importoMensa, importoAlloggio, importoTotale };
-      };
-
-      const simulationResults = await calcoloSimulazione();
-      setResult(simulationResults);
+  useEffect(() => {
+    if (!studentType || iseeMax === null) {
+      console.log("Dati non ancora disponibili, riprovando...");
+      return;
     }
 
-    checkRequest();
-    loadAmounts();
-  }, []);
+    const loadAmounts = async () => {
+      let importoMensa = ``;
+      let importoAlloggio = ``;
+      let importoTotale = ``;
+
+      let tempisee = 0;
+      let tempOutSite = 0;
+
+      if (iseeMax < 15000) {
+        tempisee = 2000;
+      } else if (iseeMax < 25000) {
+        tempisee = 1200;
+      } else {
+        tempisee = 0;
+      }
+
+      if (studentType === "Fuori sede") {
+        tempisee += 3000;
+        tempOutSite = 3000;
+      } else if (studentType === "Pendolare") {
+        tempisee += 1500;
+      }
+
+      if (physicalCondition) {
+        tempisee *= 1.2;
+      }
+
+      importoMensa = iseeMax < 25000 ? "600 €" : "0 €";
+      importoAlloggio = `${tempOutSite.toFixed(2)}€`;
+      importoTotale = `${tempisee.toFixed(2)} €`;
+
+      setResult({ importoMensa, importoAlloggio, importoTotale });
+    };
+
+    setTimeout(loadAmounts, 500);
+  }, [studentType, iseeMax]);
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
