@@ -1,14 +1,21 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { Card } from 'react-native-paper';
 import TornaIndietro from '@/components/TornaIndietro';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiService } from '@/services/api';
 import { useScholarshipDataState } from '@/context/DataScholarshipContext';
+import { router } from 'expo-router';
 
 
 export default function DatiBorsaDiStudio() {
   const { scholarshipData, setscholarshipData, studentNr, setStudentNr, studentType, setStudentType, nrRange, setNrRange, iseeMin, setIseeMin, iseeMax, setIseeMax, physicalCondition, setPhysicalCondition, result, setResult } = useScholarshipDataState();
+  const [isModalVisible, setModalVisible] = useState(false);
+  //const [dataDeleteRequest, setDataDeleteRequest] = useState<DeleteRequest>({ nrStudent: '' });
+
+  
+
+
 
   useEffect(() => {
     const checkRequest = async () => {
@@ -91,6 +98,33 @@ export default function DatiBorsaDiStudio() {
     setTimeout(loadAmounts, 500);
   }, [studentType, iseeMax]);
 
+//Tenddina per tornare alla home
+  const handleHomePress = () => {
+    setModalVisible(true);
+  };
+
+  const confirmExit = async () => {
+    setModalVisible(false);
+    await ClearDB();
+    router.push("/BorsaDiStudio/BorsaDiStudioPage"); // Cambia con la route della tua pagina principale
+  };
+  
+//Eliminazione dati dal DB
+const ClearDB = async () => {
+  //setDataDeleteRequest({ nrStudent: nrStudent });
+  const data = { nrStudent: studentNr }; 
+  await apiService.post('/request/delete-request/',  data )
+      .then(response => {
+        if (response.status === 200) { // Il tuo backend risponde con 200, non 201
+            console.log('Eliminazione DB avvenuta con successo');
+            }
+          })
+          .catch(error => {
+          console.error('Errore nella Eliminazione del DB', error);
+          });
+  };
+
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -150,15 +184,72 @@ export default function DatiBorsaDiStudio() {
               <Text style={styles.inputLabel}>Importo Totale</Text>
               <TextInput style={styles.input} value={result.importoTotale} editable={false} />
             </View>
+
+            
+          
           </Card.Content>
         </Card>
 
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.box} onPress={handleHomePress}>
+              <Text style={styles.buttonText}>Annulla RIchiseta</Text>
+              </TouchableOpacity>
+            </View>
+
       </ScrollView>
+      <Modal
+              animationType="fade"
+              transparent={true}
+              visible={isModalVisible}
+              onRequestClose={() => setModalVisible(false)}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalText}>
+                    Sei sicuro di voler abbandonare la richiesta?
+                  </Text>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.boxindietro}
+                      onPress={() => setModalVisible(false)}
+                    >
+                      <Text style={styles.buttonTextindietro}>Annulla</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.box1} onPress={confirmExit}>
+                      <Text style={styles.buttonText1}>Conferma</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
     </View>
+
+    
   );
 }
 
 const styles = StyleSheet.create({
+  buttonText: {
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 5,
+    color: "white",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  box: {
+    backgroundColor: "#007FFF",
+    padding: 10,
+    borderRadius: 10,
+    width: 300,
+    alignItems: "center",
+    marginTop: 10,
+  },
   scrollContainer: {
     padding: 20,
     marginBottom: '35%',
@@ -217,5 +308,73 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#f9f9f9',
     paddingHorizontal: 10,
+  },
+
+  //Finestra modale 
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+    alignItems: "center",
+  },
+  buttonContainer1: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 20,
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+  },
+  box1: {
+    backgroundColor: "#cc0000",
+    padding: 10,
+    borderRadius: 10,
+    width: 100,
+    alignItems: "center",
+    marginTop: 10,
+    marginLeft: 10,
+  },
+  boxindietro: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 10,
+    width: 100,
+    alignItems: "center",
+    marginTop: 10,
+    marginRight: 10,
+    color: "#007FFF",
+    borderColor: "#007FFF",
+    borderWidth: 1,
+  },
+  buttonText1: {
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 5,
+    color: "white",
+  },
+  buttonTextindietro: {
+    marginLeft: 15,
+    marginRight: 15,
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 5,
+    color: "#007FFF",
   },
 });
