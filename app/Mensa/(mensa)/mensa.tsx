@@ -3,23 +3,22 @@ import {
     View,
     Text,
     StyleSheet,
-    TextInput,
     ScrollView,
     TouchableOpacity,
+    ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useCRUD } from "@/hooks/useCRUD";
 import { TypeCanteen } from "../../lib/definitions";
 import { navigateToAddMensa, navigateToHome } from "../../nav/utils";
 import CanteenResult from "@/components/canteenResult";
+import { MD2Colors, Searchbar } from "react-native-paper";
 
 
 const Mensa = () => {
-    const { data, loading, getItems } = useCRUD<TypeCanteen>("/canteen/");
-
+    const { data, loading } = useCRUD<TypeCanteen>("/canteen/");
     const [canteenName, setCanteenName] = useState("");
     const [searchResults, setSearchResults] = useState<TypeCanteen[]>([]);
-
     const canteenList: TypeCanteen[] = data;
 
     useEffect(() => {
@@ -67,25 +66,14 @@ const Mensa = () => {
 
                     </View>
 
-                    {loading ? <Text>Loading...</Text> :
+                    {loading ? <ActivityIndicator animating={true} color={MD2Colors.blue400} /> :
                         <>
                             <View style={styles.inputSection}>
-                                <View
-                                    style={[
-                                        styles.inputContainer,
-                                    ]}
-                                >
-                                    <Icon
-                                        name="magnify"
-                                        size={30}
-                                        color="#007FFF"
-                                        style={styles.icon}
-                                    />
-                                    <TextInput
-                                        value={canteenName}
+                                <View style={styles.inputContainer}>
+                                    <Searchbar
+                                        placeholder="Search"
                                         onChangeText={filterCanteenList}
-                                        placeholder="Inserisci il nome della mensa"
-                                        placeholderTextColor="#cccccc"
+                                        value={canteenName}
                                         style={styles.input}
                                     />
                                 </View>
@@ -140,12 +128,6 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         width: "90%",
     },
-    containerMensaList: {
-        width: "90%",
-        alignItems: "center",
-        backgroundColor: "#ffffff",
-        alignSelf: "center",
-    },
     containerMensa: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -155,7 +137,6 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'flex-start',
     },
-
     breadcrumbItem: {
         fontSize: 16,
         color: '#007FFF',
@@ -204,16 +185,15 @@ const styles = StyleSheet.create({
     icon: {
         paddingRight: 10,
     },
-
     inputSection: {
         width: "100%",
         alignItems: "center",
-        
+
     },
     input: {
         flex: 1,
-        backgroundColor: 'transparent',
         borderWidth: 0,
+        backgroundColor: "transparent",
     },
 });
 

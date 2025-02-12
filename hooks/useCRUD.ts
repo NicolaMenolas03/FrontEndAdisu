@@ -25,11 +25,22 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
 
   const getItems = async (params?: QueryParams) => {
     try {
-      const response = await apiService.get<T[]>(endpoint, { params });
+      const response = await apiService.get<T[]>(endpoint, params);
       setData(response.data);
       return response.data;
     } catch (err) {
       console.error('Error fetching items:', err);
+      const axiosError = err as AxiosError;
+      setError(axiosError.message);
+    }
+  };
+
+  const getSingleItem = async (id: number) => {
+    try {
+      const response = await apiService.get<T>(`${endpoint}${id}/`);
+      return response.data;
+    } catch (err) {
+      console.error('Error fetching single item:', err);
       const axiosError = err as AxiosError;
       setError(axiosError.message);
     }
@@ -75,5 +86,5 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
     fetchData();
   }, [endpoint]);
 
-  return { data, loading, error, createItem, updateItem, deleteItem, getItems };
+  return { data, loading, error, createItem, updateItem, deleteItem, getItems, getSingleItem };
 };

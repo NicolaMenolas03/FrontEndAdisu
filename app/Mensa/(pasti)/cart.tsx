@@ -156,7 +156,7 @@ export default function Cart() {
 
                 <ConfirmationModal
                     visible={showConfirmModal}
-                    body="Confermi l'ordine?"
+                    message="Confermi l'ordine?"
                     onConfirm={() => {
                         setShowConfirmModal(false);
                         handleConfirmOrder();

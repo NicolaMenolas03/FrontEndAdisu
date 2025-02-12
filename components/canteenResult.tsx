@@ -1,10 +1,11 @@
 import { TypeCanteen } from "@/app/lib/definitions";
-import { navigateToPasti } from "@/app/nav/utils";
+import { navigateToChangeMensa, navigateToPasti } from "@/app/nav/utils";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Button } from 'react-native-paper';
 
 
-const CanteenResult = ({canteen}: { canteen: TypeCanteen}) => {
+const CanteenResult = ({ canteen }: { canteen: TypeCanteen }) => {
     return (
         <View style={styles.mensaItem}>
             <Icon
@@ -14,7 +15,15 @@ const CanteenResult = ({canteen}: { canteen: TypeCanteen}) => {
                 style={styles.iconMaps}
             />
             <View style={styles.mensaInfo}>
-                <Text style={styles.mensaName}>{canteen.name}</Text>
+                <View style={styles.headerContainer}>
+                    <Button
+                        icon="pencil"
+                        mode="text"
+                        onPress={() => navigateToChangeMensa(canteen.id.toString())}
+                        style={styles.editButton}
+                        contentStyle={styles.editButtonContent} children={undefined}                    />
+                    <Text style={styles.mensaName}>{canteen.name}</Text>
+                </View>
                 <Text>{canteen.address}</Text>
                 <Text>
                     {canteen.city}, {canteen.province}
@@ -47,6 +56,21 @@ const CanteenResult = ({canteen}: { canteen: TypeCanteen}) => {
 }
 
 const styles = StyleSheet.create({
+    editButton: {
+        margin: 0,
+        padding: 0,
+        minWidth: 32,
+        height: 32
+    },
+    editButtonContent: {
+        margin: 0,
+        padding: 0
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        
+    },
     mensaItem: {
         width: "100%",
         padding: 15,
@@ -65,6 +89,7 @@ const styles = StyleSheet.create({
     },
     mensaName: {
         fontWeight: "bold",
+        flex: 1  // This will allow the text to take remaining space
     },
     ratingContainer: {
         flexDirection: 'row',

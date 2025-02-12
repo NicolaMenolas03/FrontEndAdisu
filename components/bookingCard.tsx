@@ -81,7 +81,7 @@ const bookingCard = ({ item, deleteItem }: { item: TypeBooking, deleteItem: (id:
                 </View>
                 <ConfirmationModal
                     visible={confirmationDelete}
-                    body="Sei sicuro di voler eliminare l'ordine?"
+                    message="Sei sicuro di voler eliminare l'ordine?"
                     onConfirm={() => {
                         setConfirmationDelete(false);
                         deleteOrder({ id: item.id })
