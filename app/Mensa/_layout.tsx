@@ -1,8 +1,9 @@
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack } from 'expo-router';
-import { CartProvider, useCart } from '../../../context/CartContext';
+import { CartProvider, useCart } from '../../context/CartContext';
 import { navigateToCart, navigateToHome, navigateToOrders } from '@/app/nav/utils';
+import { Badge } from 'react-native-paper';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
@@ -43,9 +44,9 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                     <View style={styles.cartContainer}>
                         <Ionicons name="cart-outline" size={24} color="#FFFFFF" />
                         {cartItems > 0 && (
-                            <View style={styles.badge}>
-                                <Text style={styles.badgeText}>{cartItems}</Text>
-                            </View>
+                            <Badge style={styles.badge}>
+                                {cartItems}
+                            </Badge>
                         )}
                     </View>
                 </TouchableOpacity>

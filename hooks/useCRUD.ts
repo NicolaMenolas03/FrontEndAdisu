@@ -22,7 +22,6 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
     }
   };
 
-
   const getItems = async (params?: QueryParams) => {
     try {
       const response = await apiService.get<T[]>(endpoint, params);
@@ -45,7 +44,6 @@ export const useCRUD = <T extends { id: number }>(endpoint: string) => {
       setError(axiosError.message);
     }
   };
-
 
   const createItem = async (item: Partial<T>) => {
     try {

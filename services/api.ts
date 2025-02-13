@@ -6,15 +6,13 @@ import { router } from 'expo-router';
 
 const getBaseUrl = () => {
   if (__DEV__) {
-    // In sviluppo
     if (Platform.OS === 'web') {
       return 'http://127.0.0.1:8000/api';
     } else {
       return 'http://192.168.1.75:8000/api';  
     }
   } else {
-    // In produzione
-    return 'https://tuodominio.com/api';
+    return 'https://dominio.com/api';
   }
 };
 const API_BASE_URL = getBaseUrl();

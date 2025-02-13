@@ -2,16 +2,16 @@ import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-nati
 import { useLocalSearchParams, router } from 'expo-router';
 import { useState, useEffect, useRef } from 'react';
 import { TypeCanteen } from '@/app/lib/definitions';
-import { useCRUD } from '@/hooks/useCRUD';
 import MensaForm, { MensaFormMethods } from '@/components/form/mensaForm';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { navigateToMensa } from '@/app/nav/utils';
 import ResultModal from "@/components/ResultModal";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import { useCanteen } from '@/context/CanteenContext';
 
 const ChangeMensa = () => {
     const { id } = useLocalSearchParams();
-    const { getSingleItem, updateItem, deleteItem } = useCRUD<TypeCanteen>('/canteen/');
+    const { getSingleItem, updateItem, deleteItem } = useCanteen();
     const [mensa, setMensa] = useState<TypeCanteen | null>(null);
     const formRef = useRef<MensaFormMethods>(null);
     const [resultModalVisible, setResultModalVisible] = useState(false);

@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions} from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCRUD } from "@/hooks/useCRUD";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { TypeMeal } from '../../lib/definitions';
 import FoodCard from '@/components/foodCard';
 import { useCart } from '@/context/CartContext';
 import { navigateToHome, navigateToMensa } from '@/app/nav/utils';
-
-type RootStackParamList = {
-    Pasti: TypeMeal;
-};
+import { useLocalSearchParams } from 'expo-router';
 
 const categories = [
     {
@@ -35,12 +31,10 @@ const categories = [
     }
 ];
 
-type PastiScreenRouteProp = RouteProp<RootStackParamList, 'Pasti'>;
 
 const Pasti = () => {
     const { setCanteenId } = useCart();
-    const route = useRoute<PastiScreenRouteProp>();
-    const { id } = route.params;
+    const { id } = useLocalSearchParams();
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const { data, loading } = useCRUD<TypeMeal>(`/daily_meals/${id}/get_meals_by_id/`);
     const searchMeals = () => {
@@ -52,7 +46,7 @@ const Pasti = () => {
     const filteredMeals = searchMeals();
 
     useEffect(() => {
-        setCanteenId(id);
+        setCanteenId(Number(id));
     }, [id]);
 
     return (

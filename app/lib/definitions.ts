@@ -30,7 +30,7 @@ export type TypeCanteen = {
     city: string;
     province: string;
     postal_code : number;
-    average_rating?: number;
+    average_rating: number;
 };
 
 

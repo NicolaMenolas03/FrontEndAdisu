@@ -8,16 +8,16 @@ import {
     ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useCRUD } from "@/hooks/useCRUD";
 import { TypeCanteen } from "../../lib/definitions";
 import { navigateToAddMensa, navigateToHome } from "../../nav/utils";
 import CanteenResult from "@/components/canteenResult";
 import { MD2Colors, Searchbar } from "react-native-paper";
+import { useCanteen } from "@/context/CanteenContext";
 
 
 const Mensa = () => {
-    const { data, loading } = useCRUD<TypeCanteen>("/canteen/");
-    const [canteenName, setCanteenName] = useState("");
+    const { data, loading } = useCanteen();
+    const [canteenName, setCanteenName] = useState<string>("");
     const [searchResults, setSearchResults] = useState<TypeCanteen[]>([]);
     const canteenList: TypeCanteen[] = data;
 
@@ -66,40 +66,43 @@ const Mensa = () => {
 
                     </View>
 
-                    {loading ? <ActivityIndicator animating={true} color={MD2Colors.blue400} /> :
-                        <>
-                            <View style={styles.inputSection}>
-                                <View style={styles.inputContainer}>
-                                    <Searchbar
-                                        placeholder="Search"
-                                        onChangeText={filterCanteenList}
-                                        value={canteenName}
-                                        style={styles.input}
-                                    />
+                    {
+                        loading
+                            ?
+                            <ActivityIndicator animating={true} color={MD2Colors.blue400} />
+                            :
+                            <>
+                                <View style={styles.inputSection}>
+                                    <View style={styles.inputContainer}>
+                                        <Searchbar
+                                            placeholder="Search"
+                                            onChangeText={filterCanteenList}
+                                            value={canteenName}
+                                            style={styles.input}
+                                        />
+                                    </View>
                                 </View>
-                            </View>
 
-                            <View style={styles.searchContainer}>
-                                <TouchableOpacity
-                                    style={styles.addButton}
-                                    onPress={navigateToAddMensa}
-                                >
-                                    <Text style={styles.addButtonText}>Aggiungi mensa</Text>
-                                </TouchableOpacity>
-                            </View>
+                                <View style={styles.searchContainer}>
+                                    <TouchableOpacity
+                                        style={styles.addButton}
+                                        onPress={navigateToAddMensa}
+                                    >
+                                        <Text style={styles.addButtonText}>Aggiungi mensa</Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                            {/* Total Search Results */}
-                            <View style={styles.containerTotalSearchCanteen}>
-                                <Text><Text style={{ color: "#005dff", fontWeight: 'bold', }}>{searchResults.length}</Text> mense trovate</Text>
-                            </View>
+                                <View style={styles.containerTotalSearchCanteen}>
+                                    <Text><Text style={{ color: "#005dff", fontWeight: 'bold', }}>{searchResults.length}</Text> mense trovate</Text>
+                                </View>
 
-                            {/* Mensa List */}
-                            <View style={styles.mensaList}>
-                                {searchResults.map((canteen, index) => (
-                                    <CanteenResult key={index} canteen={canteen} />
-                                ))}
-                            </View>
-                        </>}
+                                <View style={styles.mensaList}>
+                                    {searchResults.map((canteen, index) => (
+                                        <CanteenResult key={index} canteen={canteen} />
+                                    ))}
+                                </View>
+                            </>
+                    }
                 </View>
             </ScrollView>
 

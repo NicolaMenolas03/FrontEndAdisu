@@ -1,22 +1,20 @@
 import { TypeCanteen } from "@/app/lib/definitions";
-import { useCRUD } from "@/hooks/useCRUD";
 import { useState, useRef } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal } from "react-native";
-import { useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { navigateToMensa } from "@/app/nav/utils";
+import { navigateToHome, navigateToMensa } from "@/app/nav/utils";
 import MensaForm, { MensaFormMethods } from "@/components/form/mensaForm";
 import ResultModal from "@/components/ResultModal";
+import { useCanteen } from "@/context/CanteenContext";
 
 const AddMensa = () => {
-    const router = useRouter();
-    const { createItem, loading } = useCRUD<TypeCanteen>("/canteen/");
+    const { createItem, loading } = useCanteen();
     const [modalVisible, setModalVisible] = useState(false);
     const [success, setSuccess] = useState(false);
     const formRef = useRef<MensaFormMethods>(null);
 
     const handleSubmit = async () => {
-        const formData = formRef.current?.getFormData();
+        const formData = formRef.current?.getFormData() as TypeCanteen;
         if (!formData) return;
         try {
             await createItem(formData);
@@ -39,11 +37,11 @@ const AddMensa = () => {
                     style={styles.icon}
                     onPress={navigateToMensa}
                 />
-                <TouchableOpacity onPress={() => router.push("/(tabs)/landingPage")}>
+                <TouchableOpacity onPress={navigateToHome}>
                     <Text style={styles.breadcrumbItem}>Home</Text>
                 </TouchableOpacity>
                 <Text style={styles.breadcrumbSeparator}>/</Text>
-                <TouchableOpacity onPress={() => router.push("/Mensa/(mensa)/mensa")}>
+                <TouchableOpacity onPress={navigateToMensa}>
                     <Text style={styles.breadcrumbItem}>Mense</Text>
                 </TouchableOpacity>
                 <Text style={styles.breadcrumbSeparator}>/</Text>

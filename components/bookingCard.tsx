@@ -1,18 +1,19 @@
 import { TypeBooking } from "@/app/lib/definitions";
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Animated } from "react-native";
 import ImagePasto from "./imagePasto";
 import ConfirmationModal from "./ConfirmationModal";
 import ResultModal from "./ResultModal";
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Image } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
 const statusColors: { [key: string]: string } = {
     'completo': '#4CAF50',
     'in corso': '#FFC107',
-    'confermanto': '#007FFF',
+    'confermato': '#007FFF',
     'creato': '#4287f5'
 };
 const bookingCard = ({ item, deleteItem }: { item: TypeBooking, deleteItem: (id: number) => void }) => {
@@ -20,6 +21,8 @@ const bookingCard = ({ item, deleteItem }: { item: TypeBooking, deleteItem: (id:
     const [confirmationDelete, setConfirmationDelete] = useState(false);
     const [resultDelete, setResultDelete] = useState(false);
     const [deleteSuccess, setDeleteSuccess] = useState(false);
+    const [isFlipped, setIsFlipped] = useState(false);
+    const flipAnimation = new Animated.Value(0);
 
     const formatDate = (dateString: string) => {
         const date = parseISO(dateString);
@@ -36,67 +39,116 @@ const bookingCard = ({ item, deleteItem }: { item: TypeBooking, deleteItem: (id:
         setDeleteSuccess(true);
     }
 
+    const flipCard = () => {
+        setIsFlipped(!isFlipped);
+        Animated.spring(flipAnimation, {
+            toValue: isFlipped ? 0 : 180,
+            friction: 8,
+            tension: 10,
+            useNativeDriver: true,
+        }).start();
+    };
+
+    const frontAnimatedStyle = {
+        transform: [
+            {
+                rotateY: flipAnimation.interpolate({
+                    inputRange: [0, 180],
+                    outputRange: ['0deg', '180deg'],
+                }),
+            },
+        ],
+    };
+
+    const backAnimatedStyle = {
+        transform: [
+            {
+                rotateY: flipAnimation.interpolate({
+                    inputRange: [0, 180],
+                    outputRange: ['180deg', '360deg'],
+                }),
+            },
+        ],
+    };
 
     return (
-        <View style={styles.bookingCard}>
-            <View style={styles.topContainer}>
-                <Text style={styles.orderNumber}>#{item.id}</Text>
-                <Text style={[
-                    styles.statusText,
-                    { backgroundColor: statusColors[item.status.toLowerCase()] || '#000000', borderRadius: 5, padding: 3, color: 'white' }
-                ]}>
-
-                    {item.status}
-
-                </Text>
-            </View>
-            <View style={styles.middleContainer}>
-                <Text style={styles.bookingText}>Data creazione: {formatDate(item.booking_date)}</Text>
-                <Text style={styles.bookingText}>Ritiro: {formatDate(item.collection_date)}</Text>
-                <Text style={styles.bookingText}>Mensa: {item.canteen.name}</Text>
-
-                <View style={styles.mealsContainer}>
-                    {item.items?.map((value, index) => (
-                        <View
-                            key={value.meal}
-                            style={[
-                                styles.mealImageWrapper,
-                                { left: index * 50 }
-                            ]}
-                        >
-                            <ImagePasto meal_type={value.meal_type || ""} style={styles.mealImage} />
-                        </View>
-                    ))}
+        <View style={styles.container}>
+            <Animated.View style={[styles.bookingCard, frontAnimatedStyle, isFlipped && styles.hidden]}>
+                <View style={styles.topContainer}>
+                    <Text style={styles.orderNumber}>#{item.id}</Text>
+                    <View style={styles.statusContainer}>
+                        <Text style={[
+                            styles.statusText,
+                            { backgroundColor: statusColors[item.status.toLowerCase()] || '#000000', borderRadius: 5, padding: 3, color: 'white' }
+                        ]}>
+                            {item.status}
+                        </Text>
+                        {item.status.toLocaleLowerCase() === 'confermato' && (
+                            <TouchableOpacity onPress={flipCard} style={styles.qrIcon}>
+                                <Icon name="qrcode" size={24} color="#007FFF" />
+                            </TouchableOpacity>
+                        )}
+                    </View>
                 </View>
-            </View>
-            <View style={styles.bottomContainer}>
-                <View style={{ flex: 1 }}>
-                    {item.status === 'Creato' &&
-                        <TouchableOpacity onPress={() => setConfirmationDelete(true)}>
+                <View style={styles.middleContainer}>
+                    <Text style={styles.bookingText}>Data creazione: {formatDate(item.booking_date)}</Text>
+                    <Text style={styles.bookingText}>Ritiro: {formatDate(item.collection_date)}</Text>
+                    <Text style={styles.bookingText}>Mensa: {item.canteen.name}</Text>
 
-                            <Icon name="trash-can-outline" size={24} color="grey" selectionColor={"red"} />
-
-                        </TouchableOpacity>
-                    }
+                    <View style={styles.mealsContainer}>
+                        {item.items?.map((value, index) => (
+                            <View
+                                key={value.meal}
+                                style={[
+                                    styles.mealImageWrapper,
+                                    { left: index * 50 }
+                                ]}
+                            >
+                                <ImagePasto meal_type={value.meal_type || ""} style={styles.mealImage} />
+                            </View>
+                        ))}
+                    </View>
                 </View>
-                <ConfirmationModal
-                    visible={confirmationDelete}
-                    message="Sei sicuro di voler eliminare l'ordine?"
-                    onConfirm={() => {
-                        setConfirmationDelete(false);
-                        deleteOrder({ id: item.id })
-                    }}
-                    onCancel={() => setConfirmationDelete(false)}
+                <View style={styles.bottomContainer}>
+                    <View style={{ flex: 1 }}>
+                        {item.status === 'Creato' &&
+                            <TouchableOpacity onPress={() => setConfirmationDelete(true)}>
+
+                                <Icon name="trash-can-outline" size={24} color="grey" selectionColor={"red"} />
+
+                            </TouchableOpacity>
+                        }
+                    </View>
+                    <ConfirmationModal
+                        visible={confirmationDelete}
+                        message="Sei sicuro di voler eliminare l'ordine?"
+                        onConfirm={() => {
+                            setConfirmationDelete(false);
+                            deleteOrder({ id: item.id })
+                        }}
+                        onCancel={() => setConfirmationDelete(false)}
+                    />
+                    <ResultModal
+                        visible={resultDelete}
+                        successMessage='Ordine eliminato con successo'
+                        errorMessage="Errore durante l'eliminazione dell'ordine"
+                        success={deleteSuccess}
+                        onClose={() => setResultDelete(false)}
+                    />
+                    <Text style={styles.totalText}>€{item.total_price}</Text>
+                </View>
+            </Animated.View>
+
+            <Animated.View style={[styles.bookingCard, styles.cardBack, backAnimatedStyle, !isFlipped && styles.hidden]}>
+                <TouchableOpacity onPress={flipCard} style={styles.backButton}>
+                    <Icon name="arrow-left" size={24} color="#007FFF" />
+                </TouchableOpacity>
+                <Image
+                    source={require('../assets/images/qr_code_test.png')}
+                    style={styles.qrImage}
+                    resizeMode="contain"
                 />
-                <ResultModal
-                    visible={resultDelete}
-                    successMessage='Ordine eliminato con successo'
-                    errorMessage="Errore durante l'eliminazione dell'ordine"
-                    success={deleteSuccess}
-                    onClose={() => setResultDelete(false)}
-                />
-                <Text style={styles.totalText}>€{item.total_price}</Text>
-            </View>
+            </Animated.View>
         </View>
     );
 };
@@ -170,7 +222,42 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#005dff',
-    }
+    },
+    container: {
+        width: width * 0.9,
+        height: 250, // Adjust this value based on your card height
+        alignSelf: 'center',
+        marginBottom:50,
+    },
+    hidden: {
+        backfaceVisibility: 'hidden',
+    },
+    statusContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    qrIcon: {
+        padding: 5,
+    },
+    cardBack: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    backButton: {
+        position: 'absolute',
+        top: 16,
+        left: 16,
+    },
+    qrImage: {
+        width: 200,
+        height: 200,
+    },
 });
 
 export default bookingCard;

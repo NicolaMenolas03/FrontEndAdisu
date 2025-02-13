@@ -21,12 +21,14 @@ const CanteenResult = ({ canteen }: { canteen: TypeCanteen }) => {
                         mode="text"
                         onPress={() => navigateToChangeMensa(canteen.id.toString())}
                         style={styles.editButton}
-                        contentStyle={styles.editButtonContent} children={undefined}                    />
+                        contentStyle={styles.editButtonContent} 
+                        children={undefined}
+                    />
                     <Text style={styles.mensaName}>{canteen.name}</Text>
                 </View>
                 <Text>{canteen.address}</Text>
                 <Text>
-                    {canteen.city}, {canteen.province}
+                    {canteen.city} ({canteen.postal_code}), {canteen.province} 
                 </Text>
                 <View style={styles.ratingContainer}>
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -45,11 +47,13 @@ const CanteenResult = ({ canteen }: { canteen: TypeCanteen }) => {
                 style={styles.goButton}
                 onPress={() => navigateToPasti(canteen.id.toString())}
             >
-                <Text style={styles.buttonText}><Icon
-                    name="arrow-right"
-                    size={20}
-                    color="wihte"
-                /></Text>
+                <Text style={styles.buttonText}>
+                    <Icon
+                        name="arrow-right"
+                        size={20}
+                        color="wihte"
+                    />
+                </Text>
             </TouchableOpacity>
         </View>
     );
