@@ -192,7 +192,7 @@ const ClearDB = async () => {
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.box} onPress={handleHomePress}>
-              <Text style={styles.buttonText}>Annulla RIchiseta</Text>
+              <Text style={styles.buttonText}>Annulla Richiesta</Text>
               </TouchableOpacity>
             </View>
 
@@ -206,7 +206,7 @@ const ClearDB = async () => {
               <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                   <Text style={styles.modalText}>
-                    Sei sicuro di voler abbandonare la richiesta?
+                    Sei sicuro di voler cancellare la richiesta?
                   </Text>
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity

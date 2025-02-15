@@ -3,13 +3,6 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useRouter } from "expo-router";
 
-type RootStackParamList = {
-  landingPage: undefined;
-  Profilo: undefined;
-  Assistenza: undefined;
-  News: undefined;
-};
-
 interface NavbarProps {
   namePage: string;
 }
