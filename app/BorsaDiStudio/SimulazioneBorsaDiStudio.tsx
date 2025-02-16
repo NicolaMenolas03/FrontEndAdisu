@@ -11,7 +11,7 @@ import { Switch } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { apiService } from "@/services/api";
 import TornaIndietro from "@/components/BackButton";
-import { useSimulazioneState } from "@/context/SimulationContext";
+import { useSimulationState } from "@/hooks/useSimulationState";
 
 export default function SimulazioneBorsaDiStudio() {
   const {
@@ -35,7 +35,7 @@ export default function SimulazioneBorsaDiStudio() {
     pastiAggiuntivi,
     corsoSTEM,
     setCorsoSTEM,
-  } = useSimulazioneState();
+  } = useSimulationState();
 
   useEffect(() => {
     const fetchFirstYear = async () => {

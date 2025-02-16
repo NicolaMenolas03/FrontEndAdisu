@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomePage from "@/components/HomePage";
 import GufoChat from "@/components/Gufochat";
-import { useStudentPlaceState } from "@/context/RequestContext";
+import { useStudentPlaceState } from "@/hooks/useRequestState";
 import { Picker } from "@react-native-picker/picker";
 
 export default function DatiResidenzaPage() {

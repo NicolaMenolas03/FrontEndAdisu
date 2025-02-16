@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import {
   useStudentExamState,
   useStudentSchoolState,
-} from "@/context/RequestContext";
+} from "@/hooks/useRequestState";
 import { Esame } from "@/app/lib/definitionsBDS";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomePage from "@/components/HomePage";

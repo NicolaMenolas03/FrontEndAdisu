@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { deleteAllData } from "@/context/SelectionScholarshipRequestContext";
+import { deleteAllData } from "@/hooks/useScholarshipRequestState";
 
 export default function HomeButton() {
   const [isModalVisible, setModalVisible] = useState(false);

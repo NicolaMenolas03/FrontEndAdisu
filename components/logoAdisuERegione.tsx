@@ -6,18 +6,18 @@ const { width, height } = Dimensions.get('window');
 const LogoAdisuERegione = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
-        <View style={styles.container}>
-            <Image
-                source={require('@/assets/images/LogoRegionePuglia.png')}
-                style={styles.logo}
-            />
-            <Image
-                source={require('@/assets/images/LogoAdisu.png')}
-                style={styles.logo}
-            />
-            
-        </View>
-        {children}
+            <View style={styles.container}>
+                <Image
+                    source={require('@/assets/images/LogoRegionePuglia.png')}
+                    style={styles.logo}
+                />
+                <Image
+                    source={require('@/assets/images/LogoAdisu.png')}
+                    style={styles.logo}
+                />
+
+            </View>
+            {children}
         </>
     );
 };

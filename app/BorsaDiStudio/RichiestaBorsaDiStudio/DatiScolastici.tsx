@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import GufoChat from "@/components/Gufochat";
 import HomePage from "@/components/HomePage";
-import { useStudentSchoolState } from "@/context/RequestContext";
+import { useStudentSchoolState } from "@/hooks/useRequestState";
 
 export default function DatiScolasticiPage() {
   const router = useRouter();

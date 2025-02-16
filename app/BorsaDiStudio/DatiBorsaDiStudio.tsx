@@ -4,7 +4,7 @@ import { Card } from 'react-native-paper';
 import TornaIndietro from '@/components/BackButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiService } from '@/services/api';
-import { useScholarshipDataState } from '@/context/DataScholarshipContext';
+import { useScholarshipDataState } from '@/hooks/DataScholarshipContext';
 import { router } from 'expo-router';
 
 

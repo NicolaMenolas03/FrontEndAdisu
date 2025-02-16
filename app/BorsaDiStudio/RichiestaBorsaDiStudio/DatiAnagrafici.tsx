@@ -12,7 +12,7 @@ import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomePage from "@/components/HomePage";
 import GufoChat from "@/components/Gufochat";
-import { useStudentDataState } from "@/context/RequestContext";
+import { useStudentDataState } from "@/hooks/useRequestState";
 
 export default function DatiAnagraficiPage() {
   const router = useRouter();
