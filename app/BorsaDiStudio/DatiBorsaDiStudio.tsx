@@ -11,11 +11,6 @@ import { router } from 'expo-router';
 export default function DatiBorsaDiStudio() {
   const { scholarshipData, setscholarshipData, studentNr, setStudentNr, studentType, setStudentType, nrRange, setNrRange, iseeMin, setIseeMin, iseeMax, setIseeMax, physicalCondition, setPhysicalCondition, result, setResult } = useScholarshipDataState();
   const [isModalVisible, setModalVisible] = useState(false);
-  //const [dataDeleteRequest, setDataDeleteRequest] = useState<DeleteRequest>({ nrStudent: '' });
-
-
-
-
 
   useEffect(() => {
     const checkRequest = async () => {

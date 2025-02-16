@@ -122,7 +122,7 @@ const Pasti = () => {
   };
 
   const navigateToLeandingPage = () => {
-    router.push(`/(tabs)/landingPage`);
+    router.push(`./app/(tabs)/landingPage`);
   };
 
   const searchMeals = () => {

@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 
-type SimulationResults = any; // Sostituisci con il tipo corretto
-type RootStackParamList = any; // Sostituisci con il tipo corretto
+type SimulationResults = any;
+type RootStackParamList = any;
 
 export const useSimulationState = () => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();

@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView, Modal, TouchableOpacity, } from "react-native";
 import { TextInput, Card, Switch, HelperText } from "react-native-paper";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";

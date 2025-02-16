@@ -15,26 +15,10 @@ import { useSimulationState } from "@/hooks/useSimulationState";
 
 export default function SimulazioneBorsaDiStudio() {
   const {
-    showResults,
-    setShowResults,
-    selectedAnno,
-    setSelectedAnno,
-    results,
-    setResults,
-    tipologiaStudente,
-    setTipologiaStudente,
-    anniAccademici,
-    setAnniAccademici,
-    isee,
-    isees,
-    setIsees,
-    selectedRange,
-    setSelectedRange,
-    disabilita,
-    setDisabilita,
-    pastiAggiuntivi,
-    corsoSTEM,
-    setCorsoSTEM,
+    showResults, setShowResults, selectedAnno, setSelectedAnno, results, setResults,
+    tipologiaStudente, setTipologiaStudente, anniAccademici, setAnniAccademici, isee, isees, setIsees,
+    selectedRange, setSelectedRange, disabilita, setDisabilita,
+    pastiAggiuntivi, corsoSTEM, setCorsoSTEM,
   } = useSimulationState();
 
   useEffect(() => {

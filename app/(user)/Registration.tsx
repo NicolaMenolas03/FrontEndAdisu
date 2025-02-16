@@ -31,7 +31,7 @@ export default function Registration() {
       password2: password2,
     });
     if (response.status == 201) {
-      router.push("/landingPage");
+      router.push("./(tabs)/landingPage");
     } else {
       // TODO: Create un messaggio di errore
       alert(response);
