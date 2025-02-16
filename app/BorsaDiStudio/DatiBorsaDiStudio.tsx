@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { Card } from 'react-native-paper';
-import TornaIndietro from '@/components/TornaIndietro';
+import TornaIndietro from '@/components/BackButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiService } from '@/services/api';
 import { useScholarshipDataState } from '@/context/DataScholarshipContext';
@@ -13,7 +13,7 @@ export default function DatiBorsaDiStudio() {
   const [isModalVisible, setModalVisible] = useState(false);
   //const [dataDeleteRequest, setDataDeleteRequest] = useState<DeleteRequest>({ nrStudent: '' });
 
-  
+
 
 
 
@@ -58,7 +58,7 @@ export default function DatiBorsaDiStudio() {
 
       let tempisee: number = 0;
       let tempOutSite: number = 0;
-    
+
       if (iseeMax < 15000) {
         tempisee = 2000;
       } else if (iseeMax < 25000) {
@@ -66,39 +66,39 @@ export default function DatiBorsaDiStudio() {
       } else {
         tempisee = 0;
       }
-    
+
       if (studentType === "Fuori sede") {
         tempisee += 3000;
         tempOutSite = 3000;
       } else if (studentType === "Pendolare") {
         tempisee += 1500;
       }
-    
+
       if (physicalCondition) {
         tempisee *= 1.2;
       }
-    
+
       // Calcolo importi come numeri
       let mensaValue: number = iseeMax < 25000 ? 600 : 0;
       let alloggioValue: number = tempOutSite;
       let totaleValue: number = tempisee;
-    
+
       // Calcolo del rimborso
-      let rimborsoValue: number =totaleValue - mensaValue + alloggioValue ;
-    
+      let rimborsoValue: number = totaleValue - mensaValue + alloggioValue;
+
       // Converti i numeri in stringhe formattate
       importoMensa = `${mensaValue.toFixed(2)} €`;
       importoAlloggio = `${alloggioValue.toFixed(2)} €`;
       importoTotale = `${totaleValue.toFixed(2)} €`;
       importoRimborso = `${rimborsoValue.toFixed(2)} €`;
 
-      setResult({ importoMensa, importoAlloggio, importoRimborso, importoTotale});
+      setResult({ importoMensa, importoAlloggio, importoRimborso, importoTotale });
     };
 
     setTimeout(loadAmounts, 500);
   }, [studentType, iseeMax]);
 
-//Tenddina per tornare alla home
+  //Tenddina per tornare alla home
   const handleHomePress = () => {
     setModalVisible(true);
   };
@@ -108,20 +108,20 @@ export default function DatiBorsaDiStudio() {
     await ClearDB();
     router.push("/BorsaDiStudio/BorsaDiStudioPage"); // Cambia con la route della tua pagina principale
   };
-  
-//Eliminazione dati dal DB
-const ClearDB = async () => {
-  //setDataDeleteRequest({ nrStudent: nrStudent });
-  const data = { nrStudent: studentNr }; 
-  await apiService.post('/request/delete-request/',  data )
+
+  //Eliminazione dati dal DB
+  const ClearDB = async () => {
+    //setDataDeleteRequest({ nrStudent: nrStudent });
+    const data = { nrStudent: studentNr };
+    await apiService.post('/request/delete-request/', data)
       .then(response => {
         if (response.status === 200) { // Il tuo backend risponde con 200, non 201
-            console.log('Eliminazione DB avvenuta con successo');
-            }
-          })
-          .catch(error => {
-          console.error('Errore nella Eliminazione del DB', error);
-          });
+          console.log('Eliminazione DB avvenuta con successo');
+        }
+      })
+      .catch(error => {
+        console.error('Errore nella Eliminazione del DB', error);
+      });
   };
 
 
@@ -185,46 +185,46 @@ const ClearDB = async () => {
               <TextInput style={styles.input} value={result.importoTotale} editable={false} />
             </View>
 
-            
-          
+
+
           </Card.Content>
         </Card>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.box} onPress={handleHomePress}>
-              <Text style={styles.buttonText}>Annulla Richiesta</Text>
-              </TouchableOpacity>
-            </View>
+            <Text style={styles.buttonText}>Annulla Richiesta</Text>
+          </TouchableOpacity>
+        </View>
 
       </ScrollView>
       <Modal
-              animationType="fade"
-              transparent={true}
-              visible={isModalVisible}
-              onRequestClose={() => setModalVisible(false)}
-            >
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <Text style={styles.modalText}>
-                    Sei sicuro di voler cancellare la richiesta?
-                  </Text>
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                      style={styles.boxindietro}
-                      onPress={() => setModalVisible(false)}
-                    >
-                      <Text style={styles.buttonTextindietro}>Annulla</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.box1} onPress={confirmExit}>
-                      <Text style={styles.buttonText1}>Conferma</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            </Modal>
+        animationType="fade"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              Sei sicuro di voler cancellare la richiesta?
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.boxindietro}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.buttonTextindietro}>Annulla</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.box1} onPress={confirmExit}>
+                <Text style={styles.buttonText1}>Conferma</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
 
-    
+
   );
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput as PaperTextInput } from "react-native-paper";
-import LogoAdisu from "@/components/logoAdisu";
+import LogoAdisu from "@/components/LogoAdisu";
 import { authService } from "@/services/api";
 import { useRouter } from "expo-router";
 

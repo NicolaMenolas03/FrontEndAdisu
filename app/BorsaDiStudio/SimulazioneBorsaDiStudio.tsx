@@ -10,7 +10,7 @@ import {
 import { Switch } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { apiService } from "@/services/api";
-import TornaIndietro from "@/components/TornaIndietro";
+import TornaIndietro from "@/components/BackButton";
 import { useSimulazioneState } from "@/context/SimulationContext";
 
 export default function SimulazioneBorsaDiStudio() {
@@ -118,7 +118,7 @@ export default function SimulazioneBorsaDiStudio() {
         importoTotale = `${tempisee.toFixed(2)} €`;
       }
 
-      return { importoMensa, importoAlloggio, importoTotale, importoRimborso};
+      return { importoMensa, importoAlloggio, importoTotale, importoRimborso };
     };
 
     const simulationResults = await calcoloSimulazione();

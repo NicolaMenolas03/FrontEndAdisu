@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { TextInput, Text, Title } from "react-native-paper";
-import LogoAdisu from "@/components/logoAdisu";
+import LogoAdisu from "@/components/LogoAdisu";
 import { authService } from "@/services/api";
 import { useRouter } from "expo-router";
 const { width } = Dimensions.get("window");

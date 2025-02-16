@@ -1,4 +1,4 @@
-import HomeButton from "@/components/homeButton";
+import HomeButton from "@/components/HomeButton";
 import React, { useState, useEffect, useRef } from "react";
 import {
   View,
@@ -43,7 +43,7 @@ const newsData = [
   // Aggiungi altre news qui
 ];
 
-export default function landingPage() {
+export default function LandingPage() {
   const currentYear = new Date().getFullYear(); // Get the current year
   const [startYear, setStartYear] = useState(currentYear); // Stato per l'anno corrente
   const [currentIndex, setCurrentIndex] = useState(0);
