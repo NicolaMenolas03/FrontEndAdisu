@@ -9,7 +9,7 @@ const getBaseUrl = () => {
     if (Platform.OS === 'web') {
       return 'http://127.0.0.1:8000/api';
     } else {
-      return 'http://192.168.1.75:8000/api';  
+      return 'http://192.168.1.75:8000/api';
     }
   } else {
     return 'https://dominio.com/api';
@@ -24,6 +24,11 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+export async function getGroupsUser(){
+  const groups = await AsyncStorage.getItem('groups');
+  return groups
+}
 
 // Add request interceptor
 apiClient.interceptors.request.use(
@@ -46,7 +51,7 @@ const refreshToken = async () => {
     const response = await axios.post(`${API_BASE_URL}/auth/refresh/`, {
       refresh: refreshToken
     });
-    
+
     if (response.data.access) {
       await AsyncStorage.setItem('accessToken', response.data.access);
       return response.data.access;
@@ -68,7 +73,7 @@ apiClient.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      
+
       const newToken = await refreshToken();
       if (newToken) {
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
@@ -132,25 +137,33 @@ export const apiService = {
 };
 
 export const authService = {
-    register: (data: RegisterData): Promise<AxiosResponse<AuthResponse>> =>
-      apiClient.post('/register/', data).then(response => {
-        return response;
-      }).catch(error => {
-        return error;
-      }),
-    login: async (data: LoginData)  => {
-      try {
-        const response = await apiClient.post<AuthResponse>('/login/', data);
-        if (response.data?.access) {
-          await AsyncStorage.setItem('accessToken', response.data.access);
-
-        }
-        return response;
-      } catch (error) {
-        console.error('Login error:', error);
-        return error;
+  register: (data: RegisterData): Promise<AxiosResponse<AuthResponse>> =>
+    apiClient.post('/register/', data).then(response => {
+      return response;
+    }).catch(error => {
+      return error;
+    }),
+  login: async (data: LoginData) => {
+    try {
+      const response = await apiClient.post<AuthResponse>('/login/', data);
+      if (response.data?.access) {
+        await AsyncStorage.setItem('accessToken', response.data.access);
       }
-    },
-    refreshToken: (token: string): Promise<AxiosResponse<{ access: string }>> =>
-      apiClient.post('/refresh/', { refresh: token }),
-  };
+      return response;
+    } catch (error) {
+      console.error('Login error:', error);
+      return error;
+    }
+  },
+  refreshToken: (token: string): Promise<AxiosResponse<{ access: string }>> =>
+    apiClient.post('/refresh/', { refresh: token }),
+  getGroupsUser: async () => {
+    await apiClient.get("/get_groups_user/").then(response => {
+      if (response.data) {
+        AsyncStorage.setItem('groups', response.data.groups);
+      }
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+};

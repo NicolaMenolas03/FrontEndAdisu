@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions} from 'react-native';
 import { useCRUD } from "@/hooks/useCRUD";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { TypeMeal } from '../../lib/definitions';
 import FoodCard from '@/components/foodCard';
 import { useCart } from '@/context/CartContext';
-import { navigateToHome, navigateToMensa } from '@/app/nav/utils';
 import { useLocalSearchParams } from 'expo-router';
+import BreadCrumbDealyMeals from '@/components/breadcrumb/BreadCrumbDailyMeals';
+import GlobalStyles from '@/app/GlobalStyles';
 
 const categories = [
     {
@@ -50,37 +50,8 @@ const Pasti = () => {
     }, [id]);
 
     return (
-        <View style={styles.container}>
-            <View style={styles.containerMensa}>
-                <Icon
-                    name="arrow-left"
-                    size={28}
-                    color="#007FFF"
-                    style={styles.icon}
-                    onPress={navigateToMensa}
-                />
-                <Text>
-                    <TouchableOpacity 
-                        onPress={navigateToHome} 
-                        style={styles.breadcrumbItem}
-                        activeOpacity={0.6}
-                    >
-                        <Text style={styles.breadcrumbItem}>Home</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.breadcrumbSeparator}>/</Text>
-                    <TouchableOpacity 
-                        onPress={navigateToMensa} 
-                        style={styles.breadcrumbItem}
-                        activeOpacity={0.6}
-                    >
-                        <Text style={styles.breadcrumbItem}>Mensa</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.breadcrumbSeparator}>/</Text>
-                    <Text style={[styles.breadcrumbItem, styles.breadcrumbActive]}>Pasti</Text>
-                </Text>
-            </View>
-
-            {/* Categories Tabs */}
+        <View style={GlobalStyles.mainContainer}>
+            <BreadCrumbDealyMeals/>
             <View style={styles.categoriesContainer}>
                 {categories.map(category => (
                     <TouchableOpacity
@@ -105,7 +76,6 @@ const Pasti = () => {
                 ))}
             </View>
 
-            {/* Meals List */}
             <ScrollView style={styles.scrollContainer}>
                 {loading ? (
                     <Text style={styles.loadingText}>Loading...</Text>
@@ -122,6 +92,11 @@ const Pasti = () => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        paddingVertical: 10,
+    },
     cartBadge: {
         position: 'absolute',
         top: -5,
@@ -144,30 +119,6 @@ const styles = StyleSheet.create({
         bottom: 0,
         borderRadius: 40
 
-    },
-    breadcrumbItem:{
-        fontSize: 16,
-        color: '#007FFF',
-        marginHorizontal: 5,
-        textDecorationLine: 'underline',
-    },
-    breadcrumbActive: {
-        color: '#666',
-        textDecorationLine: 'none',
-    },
-    breadcrumbSeparator: {
-        color: '#666',
-        marginHorizontal: 5,
-    },
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        paddingVertical: 10,
-    },
-    containerMensa: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
     },
     categoriesContainer: {
         flexDirection: 'row',

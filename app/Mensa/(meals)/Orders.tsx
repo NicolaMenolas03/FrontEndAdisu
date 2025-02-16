@@ -1,5 +1,7 @@
+import GlobalStyles from "@/app/GlobalStyles";
 import { TypeBooking } from "@/app/lib/definitions";
 import BookingCard from "@/components/bookingCard";
+import BreadCrumbOrder from "@/components/breadcrumb/BreadCrumbOrder";
 import { useCRUD } from "@/hooks/useCRUD";
 import React from "react";
 import { View, Text, FlatList, StyleSheet } from 'react-native';
@@ -8,8 +10,8 @@ const Orders = () => {
     const { data, deleteItem } = useCRUD<TypeBooking>('/booking/');
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.header}>I tuoi ordini</Text>
+        <View style={GlobalStyles.mainContainer}>
+            <BreadCrumbOrder/>
             <FlatList
                 data={data}
                 renderItem={({ item }) => <BookingCard item={item} deleteItem={deleteItem} />}
@@ -21,16 +23,6 @@ const Orders = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 16,
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
     listContainer: {
         paddingBottom: 90, 
     },

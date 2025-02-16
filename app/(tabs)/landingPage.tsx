@@ -15,6 +15,8 @@ import {
 } from "react-native-responsive-screen";
 import Navbar from "@/components/Navbar";
 import { router } from "expo-router";
+import { navigateToCanteen } from "../nav/utils";
+import { authService } from "@/services/api";
 
 const { width } = Dimensions.get("window");
 
@@ -48,7 +50,7 @@ export default function landingPage() {
   const [startYear, setStartYear] = useState(currentYear); // Stato per l'anno corrente
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
-
+  authService.getGroupsUser()
   const incrementYear = () => {
     setStartYear(startYear + 1);
   };
@@ -120,12 +122,12 @@ export default function landingPage() {
         <HomeButton
           text="Mensa"
           iconName="fast-food"
-          onPress={() => router.push("/Mensa/(mensa)/mensa")}
+          onPress={navigateToCanteen}
         />
         <HomeButton
           text="Biblioteca"
           iconName="library"
-          onPress={() => router.push("/Mensa/(mensa)/mensa")}
+          onPress={() => {}}
         />
       </View>
 

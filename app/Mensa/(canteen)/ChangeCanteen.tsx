@@ -4,10 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import { TypeCanteen } from '@/app/lib/definitions';
 import MensaForm, { MensaFormMethods } from '@/components/form/mensaForm';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { navigateToMensa } from '@/app/nav/utils';
+import { navigateToCanteen, navigateToHome } from '@/app/nav/utils';
 import ResultModal from "@/components/ResultModal";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import { useCanteen } from '@/context/CanteenContext';
+import BreadCrumbChangeCanteen from '@/components/breadcrumb/BreadCrumbChangeCanteen';
+import GlobalStyles from '@/app/GlobalStyles';
 
 const ChangeMensa = () => {
     const { id } = useLocalSearchParams();
@@ -70,28 +72,9 @@ const ChangeMensa = () => {
     }
 
     return (
-        <ScrollView style={styles.mainContainer}>
-            <View style={styles.container}>
-                <View style={styles.breadcrumbContainer}>
-                    <Icon
-                        name="arrow-left"
-                        size={28}
-                        color="#007FFF"
-                        style={styles.icon}
-                        onPress={navigateToMensa}
-                    />
-                    <TouchableOpacity onPress={() => router.push("/(tabs)/landingPage")}>
-                        <Text style={styles.breadcrumbItem}>Home</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.breadcrumbSeparator}>/</Text>
-                    <TouchableOpacity onPress={() => router.push("/Mensa/(mensa)/mensa")}>
-                        <Text style={styles.breadcrumbItem}>Mense</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.breadcrumbSeparator}>/</Text>
-                    <Text style={[styles.breadcrumbItem, styles.breadcrumbActive]}>
-                        Modifica Mensa
-                    </Text>
-                </View>
+        <View style={GlobalStyles.mainContainer}>
+            <BreadCrumbChangeCanteen />
+            <ScrollView style={GlobalStyles.scrollContainer}>
                 <MensaForm
                     ref={formRef}
                     name={mensa.name}
@@ -115,76 +98,34 @@ const ChangeMensa = () => {
                         <Text style={styles.buttonText}>Salva</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
-            <ResultModal 
-                visible={resultModalVisible}
-                success={success}
-                successMessage={success ? 
-                    "Operazione completata con successo" : 
-                    "Si è verificato un errore durante l'operazione"}
-                errorMessage="Si è verificato un errore"
-                onClose={() => {
-                    setResultModalVisible(false);
-                    if (success) {
-                        navigateToMensa();
-                    }
-                }}
-            />
+                <ResultModal
+                    visible={resultModalVisible}
+                    success={success}
+                    successMessage={success ?
+                        "Operazione completata con successo" :
+                        "Si è verificato un errore durante l'operazione"}
+                    errorMessage="Si è verificato un errore"
+                    onClose={() => {
+                        setResultModalVisible(false);
+                        if (success) {
+                            navigateToCanteen();
+                        }
+                    }}
+                />
 
-            <ConfirmationModal
-                visible={confirmDeleteVisible}
-                message="Sei sicuro di voler eliminare questa mensa?"
-                onConfirm={confirmDelete}
-                onCancel={() => setConfirmDeleteVisible(false)}
-            />
-        </ScrollView>
+                <ConfirmationModal
+                    visible={confirmDeleteVisible}
+                    message="Sei sicuro di voler eliminare questa mensa?"
+                    onConfirm={confirmDelete}
+                    onCancel={() => setConfirmDeleteVisible(false)}
+                />
+            </ScrollView>
+        </View>
+
     );
 };
 
 const styles = StyleSheet.create({
-    icon: {
-        marginRight: 10,
-    },
-    breadcrumbContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-        paddingHorizontal: 5,
-    },
-    containerMensa: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingBottom: 15,
-        backgroundColor: 'white',
-        width: '100%',
-        justifyContent: 'flex-start',
-    },
-
-    breadcrumbItem: {
-        fontSize: 16,
-        color: '#007FFF',
-        marginHorizontal: 5,
-        textDecorationLine: 'underline',
-    },
-    breadcrumbActive: {
-        color: '#666',
-        textDecorationLine: 'none',
-    },
-    breadcrumbSeparator: {
-        color: '#666',
-        marginHorizontal: 5,
-    },
-    mainContainer: {
-        flex: 1,
-        backgroundColor: "#ffffff",
-        width: "100%",
-    },
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#fff'
-    },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',

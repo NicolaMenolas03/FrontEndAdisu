@@ -22,11 +22,11 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
         <View style={styles.container}>
              
             <View style={styles.content}>
-            <Stack
-                    screenOptions={{ headerShown: false }}
-                    >
-            </Stack>
-                {children}
+                <Stack
+                        screenOptions={{ headerShown: false }}
+                        >
+                </Stack>
+                    {children}
             </View>
             
             <View style={styles.navbar}>
@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        paddingBottom: 60, // Exact height of navbar without extra padding
+        paddingBottom: 60,
     },
     navbar: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems: 'center', // Add this to center items vertically
+        alignItems: 'center',
         width: '90%',
         backgroundColor: '#005dff',
         borderRadius: 40,

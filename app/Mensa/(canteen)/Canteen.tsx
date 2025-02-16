@@ -7,20 +7,20 @@ import {
     TouchableOpacity,
     ActivityIndicator,
 } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { TypeCanteen } from "../../lib/definitions";
-import { navigateToAddMensa, navigateToHome } from "../../nav/utils";
+import { navigateToAddCanteen } from "../../nav/utils";
 import CanteenResult from "@/components/canteenResult";
 import { MD2Colors, Searchbar } from "react-native-paper";
 import { useCanteen } from "@/context/CanteenContext";
+import BreadCrumbCanteen from "@/components/breadcrumb/BreadCrumbCanteen";
+import GlobalStyles from "@/app/GlobalStyles";
 
 
-const Mensa = () => {
-    const { data, loading } = useCanteen();
+const Canteen = () => {
+    const { data, loading, groups } = useCanteen();
     const [canteenName, setCanteenName] = useState<string>("");
     const [searchResults, setSearchResults] = useState<TypeCanteen[]>([]);
     const canteenList: TypeCanteen[] = data;
-
     useEffect(() => {
         if (data) {
             setSearchResults(data);
@@ -40,31 +40,10 @@ const Mensa = () => {
     };
 
     return (
-        <View style={styles.mainContainer}>
-
+        <View style={GlobalStyles.mainContainer}>
+            <BreadCrumbCanteen />
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.container}>
-                    <View style={styles.containerMensa}>
-                        <Icon
-                            name="arrow-left"
-                            size={28}
-                            color="#007FFF"
-                            style={styles.icon}
-                            onPress={navigateToHome}
-                        />
-                        <Text>
-                            <TouchableOpacity
-                                onPress={navigateToHome}
-                                style={styles.breadcrumbItem}
-                                activeOpacity={0.6}
-                            >
-                                <Text style={styles.breadcrumbItem}>Home</Text>
-                            </TouchableOpacity>
-                            <Text style={styles.breadcrumbSeparator}>/</Text>
-                            <Text style={[styles.breadcrumbItem, styles.breadcrumbActive]}>Mensa</Text>
-                        </Text>
-
-                    </View>
 
                     {
                         loading
@@ -83,14 +62,16 @@ const Mensa = () => {
                                     </View>
                                 </View>
 
-                                <View style={styles.searchContainer}>
-                                    <TouchableOpacity
-                                        style={styles.addButton}
-                                        onPress={navigateToAddMensa}
-                                    >
-                                        <Text style={styles.addButtonText}>Aggiungi mensa</Text>
-                                    </TouchableOpacity>
-                                </View>
+                                {
+                                    groups.includes("Admin") && <View style={styles.searchContainer}>
+                                        <TouchableOpacity
+                                            style={styles.addButton}
+                                            onPress={navigateToAddCanteen}
+                                        >
+                                            <Text style={styles.addButtonText}>Aggiungi mensa</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                }
 
                                 <View style={styles.containerTotalSearchCanteen}>
                                     <Text><Text style={{ color: "#005dff", fontWeight: 'bold', }}>{searchResults.length}</Text> mense trovate</Text>
@@ -98,7 +79,7 @@ const Mensa = () => {
 
                                 <View style={styles.mensaList}>
                                     {searchResults.map((canteen, index) => (
-                                        <CanteenResult key={index} canteen={canteen} />
+                                        <CanteenResult key={index} canteen={canteen} groups={groups} />
                                     ))}
                                 </View>
                             </>
@@ -131,47 +112,15 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         width: "90%",
     },
-    containerMensa: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingBottom: 15,
-        backgroundColor: 'white',
-        width: '100%',
-        justifyContent: 'flex-start',
-    },
-    breadcrumbItem: {
-        fontSize: 16,
-        color: '#007FFF',
-        marginHorizontal: 5,
-        textDecorationLine: 'underline',
-    },
-    breadcrumbActive: {
-        color: '#666',
-        textDecorationLine: 'none',
-    },
-    breadcrumbSeparator: {
-        color: '#666',
-        marginHorizontal: 5,
-    },
-    mainContainer: {
-        flex: 1,
-        backgroundColor: "#ffffff",
-        width: "100%",
-    },
     mensaList: {
         width: "100%",
         paddingHorizontal: 10,
     },
     scrollContainer: {
-        flexGrow: 1,
-        backgroundColor: "#ffffff",
-        paddingBottom: 40,
     },
     container: {
         flex: 1,
         alignItems: "center",
-        padding: 20,
         width: "100%",
     },
     inputContainer: {
@@ -200,4 +149,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Mensa;
+export default Canteen;

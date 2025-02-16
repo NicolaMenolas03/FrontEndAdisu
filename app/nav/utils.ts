@@ -1,30 +1,30 @@
 import { router } from "expo-router";
 
-export const navigateToMensa = () => {
-    router.push(`/Mensa/(mensa)/mensa`);
+export const navigateToCanteen = () => {
+    router.push(`/Mensa/Canteen`);
 };
 
-export const navigateToAddMensa = () => {
-    router.push(`/Mensa/addMensa`);
+export const navigateToAddCanteen = () => {
+    router.push(`/Mensa/AddCanteen`);
 };
 
-export const navigateToChangeMensa = (id: string) => {
-    router.push(`/Mensa/changeMensa?id=${id}`);
+export const navigateToChangeCanteen = (id: string) => {
+    router.push(`/Mensa/ChangeCanteen?id=${id}`);
 };
 
 export const navigateToHome = () => {
     router.push(`/(tabs)/landingPage`);
 };
 
-export const navigateToPasti = (id: string) => {
-    router.push(`/Mensa/pasti?id=${id}`);
+export const navigateToDailyMeals = (id: string) => {
+    router.push(`/Mensa/DailyMeals?id=${id}`);
 }
 
 export const navigateToCart = () => {
-    router.push(`/Mensa/(pasti)/cart`);
+    router.push(`/Mensa/Cart`);
 };
 
 export const navigateToOrders = () => {
-    router.push(`/Mensa/(pasti)/orders`);
+    router.push(`/Mensa/Orders`);
 };
 

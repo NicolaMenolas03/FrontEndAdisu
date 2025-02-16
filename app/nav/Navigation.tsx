@@ -9,7 +9,7 @@ export default function App() {
         <Stack.Screen name="Onboarding" />
         <Stack.Screen name="Login" />
         <Stack.Screen name="Registration"  />
-        <Stack.Screen name="Mensa"  />
+        <Stack.Screen name="Canteen"  />
         <Stack.Screen name="landingPage"/>
         <Stack.Screen name="BorsaDiStudio"  />
         <Stack.Screen name="DatiBorsaDiStudio" />

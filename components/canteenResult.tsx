@@ -1,11 +1,11 @@
 import { TypeCanteen } from "@/app/lib/definitions";
-import { navigateToChangeMensa, navigateToPasti } from "@/app/nav/utils";
+import { navigateToChangeCanteen, navigateToDailyMeals } from "@/app/nav/utils";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Button } from 'react-native-paper';
 
 
-const CanteenResult = ({ canteen }: { canteen: TypeCanteen }) => {
+const CanteenResult = ({ canteen, groups }: { canteen: TypeCanteen, groups: string[] }) => {
     return (
         <View style={styles.mensaItem}>
             <Icon
@@ -16,19 +16,22 @@ const CanteenResult = ({ canteen }: { canteen: TypeCanteen }) => {
             />
             <View style={styles.mensaInfo}>
                 <View style={styles.headerContainer}>
-                    <Button
-                        icon="pencil"
-                        mode="text"
-                        onPress={() => navigateToChangeMensa(canteen.id.toString())}
-                        style={styles.editButton}
-                        contentStyle={styles.editButtonContent} 
-                        children={undefined}
-                    />
+                    {
+                        groups.includes("Admin") && <Button
+                            icon="pencil"
+                            mode="text"
+                            onPress={() => navigateToChangeCanteen(canteen.id.toString())}
+                            style={styles.editButton}
+                            contentStyle={styles.editButtonContent}
+                            children={undefined}
+                        />
+                    }
                     <Text style={styles.mensaName}>{canteen.name}</Text>
                 </View>
+
                 <Text>{canteen.address}</Text>
                 <Text>
-                    {canteen.city} ({canteen.postal_code}), {canteen.province} 
+                    {canteen.city} ({canteen.postal_code}), {canteen.province}
                 </Text>
                 <View style={styles.ratingContainer}>
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -45,7 +48,7 @@ const CanteenResult = ({ canteen }: { canteen: TypeCanteen }) => {
             </View>
             <TouchableOpacity
                 style={styles.goButton}
-                onPress={() => navigateToPasti(canteen.id.toString())}
+                onPress={() => navigateToDailyMeals(canteen.id.toString())}
             >
                 <Text style={styles.buttonText}>
                     <Icon
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        
+
     },
     mensaItem: {
         width: "100%",
