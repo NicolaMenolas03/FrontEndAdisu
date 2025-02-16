@@ -5,7 +5,6 @@ import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useScholarshipRequestState } from "@/context/SelectionScholarshipRequestContext";
 import { apiService } from "@/services/api";
-import EsterEgg from "@/components/EsterEgg";
 
 export default function BorsaDiStudioPage() {
   const router = useRouter();
@@ -54,7 +53,6 @@ export default function BorsaDiStudioPage() {
         >
           <Text style={styles.buttonText}>Simulazione Borsa di Studio</Text>
         </TouchableOpacity>
-        <EsterEgg />
       </View>
 
       {/* Barra di navigazione */}
