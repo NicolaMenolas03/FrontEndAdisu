@@ -83,7 +83,7 @@ export default function Registration() {
                 <TouchableOpacity onPress={register} style={styles.RegisterButton}>
                     <Text style={styles.RegisterButtonText}>Registrati</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/login")}>
+                <TouchableOpacity onPress={() => router.push("/Login")}>
                     <Text style={styles.Login}>
                         Non hai un account ?{" "}
                         <Text style={{ textDecorationLine: "underline" }}>Login</Text>
