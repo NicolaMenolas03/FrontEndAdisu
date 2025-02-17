@@ -1,10 +1,7 @@
 import HomeButton from "@/components/HomeButton";
 import React, { useState, useRef } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Dimensions, } from "react-native";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Navbar from "@/components/Navbar";
 import { router } from "expo-router";
 
@@ -177,7 +174,7 @@ export default function LandingPage() {
 
       {/* navbar */}
       <View>
-        <Navbar namePage="landingPage" />
+        <Navbar namePage="LandingPage" />
       </View>
     </View>
   );

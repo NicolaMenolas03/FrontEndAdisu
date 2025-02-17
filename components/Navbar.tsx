@@ -14,25 +14,25 @@ const Navbar = ({ namePage }: NavbarProps) => {
     <View style={styles.navbar}>
       <TouchableOpacity
         style={styles.navButton}
-        onPress={() => router.push("./app/(tabs)/landingPage")}
+        onPress={() => router.push("./app/(tabs)/LandingPage")}
       >
         <Icon name="home" size={30} color="white" />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.navButton}
-        onPress={() => router.push("./app/(tabs)/landingPage")}
+        onPress={() => router.push("./app/(tabs)/LandingPage")}
       >
         <Icon name="newspaper" size={30} color="#6fa3ff" />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.navButton}
-        onPress={() => router.push("./app/(tabs)/landingPage")}
+        onPress={() => router.push("./app/(tabs)/LandingPage")}
       >
         <Icon name="help-circle" size={30} color="#6fa3ff" />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.navButton}
-        onPress={() => router.push("./app/(tabs)/landingPage")}
+        onPress={() => router.push("./app/(tabs)/LandingPage")}
       >
         <Icon name="account" size={30} color="#6fa3ff" />
       </TouchableOpacity>

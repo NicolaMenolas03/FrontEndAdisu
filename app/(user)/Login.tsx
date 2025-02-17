@@ -21,7 +21,7 @@ export default function Login() {
       response: { data: { username?: String; password?: String } };
     };
     if (response.status == 200) {
-      router.push("./(tabs)/landingPage");
+      router.push("./(tabs)/LandingPage");
     } else {
       setUsernameError(!!response.response.data.username);
       setPasswordError(!!response.response.data.password);

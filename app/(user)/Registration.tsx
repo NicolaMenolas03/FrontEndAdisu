@@ -20,7 +20,7 @@ export default function Registration() {
             first_name: name, last_name: surname, username: username, email: email, password: password, password2: password2,
         });
         if (response.status == 201) {
-            router.push("./(tabs)/landingPage");
+            router.push("./(tabs)/LandingPage");
         } else {
             // TODO: Create un messaggio di errore
             alert(response);
