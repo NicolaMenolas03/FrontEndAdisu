@@ -1,4 +1,4 @@
-import LogoAdisuERegione from "@/components/logoAdisuERegione";
+import LogoAdisuERegione from "@/components/LogoAdisuERegione";
 import { Stack } from "expo-router";
 
 export default function RootLayout() {

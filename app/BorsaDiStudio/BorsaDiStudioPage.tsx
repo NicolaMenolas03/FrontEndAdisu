@@ -13,9 +13,7 @@ export default function BorsaDiStudioPage() {
   useEffect(() => {
     const checkRequest = async () => {
       const username = await AsyncStorage.getItem("username");
-      const response = await apiService.get(
-        `/request/get-request-by-user/?nrUtente=` + username
-      );
+      const response = await apiService.get(`/request/get-request-by-user/?nrUtente=` + username);
       if (Array.isArray(response.data) && response.data.length > 0) {
         sethasMadeARequest(username);
       } else {

@@ -62,17 +62,12 @@ export default function DatiResidenzaPage() {
   //Controllo campi vuoti
   const validateFields = () => {
     const newErrors = {
-      provincia: formDatiResidenza.provincia
-        ? ""
-        : "Il campo Provincia è obbligatorio.",
+      provincia: formDatiResidenza.provincia ? "" : "Il campo Provincia è obbligatorio.",
       comune: formDatiResidenza.comune ? "" : "Il campo Comune è obbligatorio.",
-      indirizzo: formDatiResidenza.indirizzo
-        ? ""
-        : "Il campo Indirizzo è obbligatorio.",
+      indirizzo: formDatiResidenza.indirizzo ? "" : "Il campo Indirizzo è obbligatorio.",
       cap: formDatiResidenza.cap ? "" : "Il campo CAP è obbligatorio.",
       tipoStudente: formDatiResidenza.tipoStudente ? "" : "Seleziona un tipo.",
     };
-
     setErrors(newErrors);
 
     return Object.values(newErrors).every((error) => error === "");

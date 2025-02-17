@@ -1,14 +1,6 @@
 import HomeButton from "@/components/HomeButton";
-import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-} from "react-native";
+import React, { useState, useRef } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Dimensions, } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,

@@ -39,9 +39,7 @@ export default function DatiScolasticiPage() {
   useEffect(() => {
     const loadformDatiScolastici = async () => {
       try {
-        const savedformDatiScolastici = await AsyncStorage.getItem(
-          "formDatiScolastici"
-        );
+        const savedformDatiScolastici = await AsyncStorage.getItem("formDatiScolastici");
         if (savedformDatiScolastici) {
           setformDatiScolastici(JSON.parse(savedformDatiScolastici));
         }

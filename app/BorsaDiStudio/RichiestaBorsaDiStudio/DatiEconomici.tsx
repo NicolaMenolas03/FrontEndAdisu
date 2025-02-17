@@ -106,20 +106,7 @@ export default function DatiEconomiciPage() {
     if (day > 31 || month > 12) return;
 
     // Verifica i giorni massimi per ogni mese
-    const daysInMonth = [
-      31,
-      year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28,
-      31,
-      30,
-      31,
-      30,
-      31,
-      31,
-      30,
-      31,
-      30,
-      31,
-    ];
+    const daysInMonth = [31, year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,];
 
     if (month > 0 && day > daysInMonth[month - 1]) return;
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 interface propsHomeButton {
@@ -9,9 +9,9 @@ interface propsHomeButton {
     onPress: () => void,
 }
 
-const HomeButton = ({ text, iconName,onPress }: propsHomeButton) => {
+const HomeButton = ({ text, iconName, onPress }: propsHomeButton) => {
     return (
-        <TouchableOpacity style={stylesButton.iconButton} onPress={onPress}> 
+        <TouchableOpacity style={stylesButton.iconButton} onPress={onPress}>
             <Icon name={iconName} size={30} color="white" style={stylesButton.icon} />
             <Text style={stylesButton.iconText}>{text}</Text>
         </TouchableOpacity>
@@ -38,7 +38,7 @@ const stylesButton = StyleSheet.create({
     },
     iconText: {
         padding: 3,
-        margin:3,
+        margin: 3,
         color: '#007fff',
         textAlign: 'center',
         fontWeight: 'bold',

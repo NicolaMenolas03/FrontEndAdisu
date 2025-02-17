@@ -59,9 +59,7 @@ export default function SimulazioneBorsaDiStudio() {
       let importoAlloggio = ``;
       let importoTotale = ``;
       let importoRimborso = ``;
-      let response = await apiService.get(
-        `/iseerange/get-isee-range-by-id/?nr=${selectedRange}`
-      );
+      let response = await apiService.get(`/iseerange/get-isee-range-by-id/?nr=${selectedRange}`);
       const { data } = response;
 
       if (Array.isArray(data) && data.length > 0) {

@@ -3,17 +3,14 @@ import { View, Image, StyleSheet } from 'react-native';
 
 const LogoAdisu = () => {
     return (
-        
-            <Image
-                source={require('@/assets/images/LogoAdisu.png')}
-                style={styles.headerImage}
-            />
-        
+        <Image
+            source={require('@/assets/images/LogoAdisu.png')}
+            style={styles.headerImage}
+        />
     );
 }
 
 const styles = StyleSheet.create({
-  
     headerImage: {
         marginBottom: 20,
         resizeMode: 'contain',

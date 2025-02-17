@@ -1,11 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  Animated,
-} from "react-native";
+import { View, StyleSheet, Dimensions, TouchableOpacity, Animated, } from "react-native";
 const { width, height } = Dimensions.get("window");
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";

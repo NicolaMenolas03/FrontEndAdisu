@@ -13,15 +13,7 @@ import GufoChat from "@/components/Gufochat";
 
 export default function DatiEsamePage() {
   const router = useRouter();
-  const {
-    formDatiEsame,
-    setFormDatiEsame,
-    errori,
-    setErrori,
-    esami,
-    setEsami,
-  } = useStudentExamState();
-
+  const { formDatiEsame, setFormDatiEsame, errori, setErrori, esami, setEsami, } = useStudentExamState();
   const { formDatiScolastici, setformDatiScolastici } = useStudentSchoolState();
 
   //Prossima pagina

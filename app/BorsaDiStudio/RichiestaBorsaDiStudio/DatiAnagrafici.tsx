@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, } from "react-native";
 import { TextInput, Card, HelperText, Switch } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
@@ -37,16 +37,10 @@ export default function DatiAnagraficiPage() {
   const validateFields = () => {
     const newErrors = {
       nome: formDatiAnagrafici.nome ? "" : "Il campo Nome è obbligatorio.",
-      cognome: formDatiAnagrafici.cognome
-        ? ""
-        : "Il campo Cognome è obbligatorio.",
+      cognome: formDatiAnagrafici.cognome ? "" : "Il campo Cognome è obbligatorio.",
       sesso: formDatiAnagrafici.sesso ? "" : "Il campo Sesso è obbligatorio.",
-      etaNascita: formDatiAnagrafici.etaNascita
-        ? ""
-        : "Inserire una età valida (numerica).",
-      cittadinanza: formDatiAnagrafici.cittadinanza
-        ? ""
-        : "Il campo Cittadinanza è obbligatorio.",
+      etaNascita: formDatiAnagrafici.etaNascita ? "" : "Inserire una età valida (numerica).",
+      cittadinanza: formDatiAnagrafici.cittadinanza ? "" : "Il campo Cittadinanza è obbligatorio.",
     };
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => error === "");
@@ -56,10 +50,7 @@ export default function DatiAnagraficiPage() {
     const updatedData = { ...formDatiAnagrafici, [field]: value };
     setformDatiAnagrafici(updatedData);
     try {
-      await AsyncStorage.setItem(
-        "formDatiAnagrafici",
-        JSON.stringify(updatedData)
-      );
+      await AsyncStorage.setItem("formDatiAnagrafici", JSON.stringify(updatedData));
     } catch (error) {
       console.error("Errore nel salvataggio dei dati", error);
     }
