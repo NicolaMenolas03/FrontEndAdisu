@@ -142,13 +142,19 @@ export default function DatiResidenzaPage() {
             <Text style={styles.label}>Tipo Studente</Text>
             <Picker
               selectedValue={formDatiResidenza.tipoStudente}
-              onValueChange={(text) => handleInputChange("tipoStudente", text)}
+              onValueChange={(itemValue) =>
+                handleInputChange("tipoStudente", itemValue)
+              }
               style={styles.picker}
             >
+              <Picker.Item label="Seleziona Tipologia" value="" />
               <Picker.Item label="In sede" value="In sede" />
               <Picker.Item label="Pendolare" value="Pendolare" />
               <Picker.Item label="Fuori sede" value="Fuori sede" />
             </Picker>
+            {errors.tipoStudente ? (
+              <HelperText type="error">{errors.tipoStudente}</HelperText>
+            ) : null}
           </Card.Content>
         </Card>
         <View style={styles.buttonContainer}>
