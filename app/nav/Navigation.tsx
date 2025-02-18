@@ -5,7 +5,7 @@ import { Stack } from "expo-router";
 export default function App() {
   return (
     <Stack>
-      <Stack.Screen name="HomePage" />
+      <Stack.Screen name="InitialRedirect" />
       <Stack.Screen name="Onboarding" />
       <Stack.Screen name="Login" />
       <Stack.Screen name="Registration" />

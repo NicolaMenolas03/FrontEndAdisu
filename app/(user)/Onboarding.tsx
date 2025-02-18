@@ -37,7 +37,7 @@ export default function OnboardingMensa() {
     };
 
     const completeTutorial = () => {
-        router.push("/Login");
+        router.push("./Login");
     };
 
     const getItemLayout = (data: any, index: number) => ({

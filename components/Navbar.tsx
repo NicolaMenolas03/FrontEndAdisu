@@ -32,9 +32,9 @@ const Navbar = ({ namePage }: NavbarProps) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.navButton}
-        onPress={() => router.push("../(tabs)/LandingPage")}
+        onPress={() => router.push("../(user)/InitialRedirect")}
       >
-        <Icon name="account" size={30} color="#6fa3ff" />
+        <Icon name="logout" size={30} color="#6fa3ff" />
       </TouchableOpacity>
     </View>
   );
