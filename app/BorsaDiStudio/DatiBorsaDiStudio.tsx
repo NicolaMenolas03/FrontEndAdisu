@@ -93,7 +93,7 @@ export default function DatiBorsaDiStudio() {
     setTimeout(loadAmounts, 500);
   }, [studentType, iseeMax]);
 
-  //Tenddina per tornare alla home
+  //Tendina per tornare alla home
   const handleHomePress = () => {
     setModalVisible(true);
   };
@@ -101,16 +101,15 @@ export default function DatiBorsaDiStudio() {
   const confirmExit = async () => {
     setModalVisible(false);
     await ClearDB();
-    router.push("/BorsaDiStudio/BorsaDiStudioPage"); // Cambia con la route della tua pagina principale
+    router.push("/BorsaDiStudio/BorsaDiStudioPage");
   };
 
   //Eliminazione dati dal DB
   const ClearDB = async () => {
-    //setDataDeleteRequest({ nrStudent: nrStudent });
     const data = { nrStudent: studentNr };
     await apiService.post('/request/delete-request/', data)
       .then(response => {
-        if (response.status === 200) { // Il tuo backend risponde con 200, non 201
+        if (response.status === 200) {
           console.log('Eliminazione DB avvenuta con successo');
         }
       })
@@ -118,7 +117,6 @@ export default function DatiBorsaDiStudio() {
         console.error('Errore nella Eliminazione del DB', error);
       });
   };
-
 
   return (
     <View style={styles.container}>
@@ -179,8 +177,6 @@ export default function DatiBorsaDiStudio() {
               <Text style={styles.inputLabel}>Importo Totale</Text>
               <TextInput style={styles.input} value={result.importoTotale} editable={false} />
             </View>
-
-
 
           </Card.Content>
         </Card>

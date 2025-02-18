@@ -18,6 +18,7 @@ export const useStudentSchoolState = () => {
         formDatiScolastici, setformDatiScolastici, errors, setErrors
     }
 }
+
 export const useStudentPlaceState = () => {
     const [formDatiResidenza, setformDatiResidenza] = useState({ provincia: "", comune: "", indirizzo: "", cap: "", tipoStudente: "", });
     const [errors, setErrors] = useState({ provincia: "", comune: "", indirizzo: "", cap: "", tipoStudente: "", });
