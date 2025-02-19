@@ -28,3 +28,15 @@ export const navigateToOrders = () => {
     router.push(`/Mensa/Orders`);
 };
 
+
+export const navigateToMeal = () => {
+    router.push(`/Mensa/Meal`);
+};
+
+export const navigateToAddMeal = () => {
+    router.push(`/Mensa/AddMeal`);
+};
+
+export const navigateToChangeMeal = (id: string) => {
+    router.push(`/Mensa/ChangeMeal?id=${id}`);
+};

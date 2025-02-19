@@ -157,7 +157,7 @@ export const authService = {
   },
   refreshToken: (token: string): Promise<AxiosResponse<{ access: string }>> =>
     apiClient.post('/refresh/', { refresh: token }),
-  getGroupsUser: async () => {
+  setGroupsUser: async () => {
     await apiClient.get("/get_groups_user/").then(response => {
       if (response.data) {
         AsyncStorage.setItem('groups', response.data.groups);

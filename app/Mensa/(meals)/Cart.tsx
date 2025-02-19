@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import { useCart } from '../../../context/CartContext';
 import { useEffect, useState } from 'react';;
-import MealCard from '@/components/mealCard';
+import CartMealCard from '@/components/CartMealCard';
 import { useCRUD } from '@/hooks/useCRUD';
 import { TypeBooking, TypeDailyMeal } from '@/app/lib/definitions';
 import { apiService } from '@/services/api';
@@ -87,7 +87,7 @@ export default function Cart() {
                 renderItem={({ item }) => (
                     <View>
 
-                        <MealCard
+                        <CartMealCard
                             meal={item.meal}
                             quantity={item.quantity}
                             incrementQuantity={() => addToCart(item.meal)}

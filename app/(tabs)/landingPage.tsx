@@ -50,7 +50,7 @@ export default function landingPage() {
   const [startYear, setStartYear] = useState(currentYear); // Stato per l'anno corrente
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
-  authService.getGroupsUser()
+  
   const incrementYear = () => {
     setStartYear(startYear + 1);
   };

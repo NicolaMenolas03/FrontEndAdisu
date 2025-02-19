@@ -1,91 +1,84 @@
-import {TypeMeal } from '@/app/lib/definitions';
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Allergen from './allergen';
-import ImagePasto from './imagePasto';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { Button } from 'react-native-paper';
+import { TypeMeal } from '@/app/lib/definitions';
+import { navigateToChangeMeal } from '@/app/nav/utils';
 
+const { width } = Dimensions.get('window');
 
-
-const MealCard = ({ meal, quantity, incrementQuantity, decrementQuantity }: {meal: TypeMeal, quantity : number, incrementQuantity : () => void,decrementQuantity : () => void }) => {
-    
+const MealCard = ({ meal, groups }: { meal:TypeMeal, groups: string[] }) => {
     return (
-        <View style={styles.mealItem}>
-            <ImagePasto meal_type={meal.type} style={styles.mealImage} />
-            <Text style={styles.mealName}>{meal.name}</Text>
-            <Allergen allergen={meal.allergens} />
-            <View style={styles.priceContainer}>
-                <Text style={styles.priceText}>{meal.price}</Text>
-                <Text style={styles.currencySymbol}>€</Text>
+        <View style={styles.card}>
+            <View style={styles.contentContainer}>
+                <View style={styles.headerContainer}>
+                    {
+                        groups.includes("Admin") && <Button
+                            icon="pencil"
+                            mode="text"
+                            onPress={() => navigateToChangeMeal(meal.id.toString())}
+                            style={styles.editButton}
+                            contentStyle={styles.editButtonContent}
+                            children={undefined}
+                        />
+                    }
+                <Text style={styles.mealName}>{meal.name}</Text>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.detailText}>Tipo: {meal.type}</Text>
+                    <Text style={styles.detailText}>Descrizione: {meal.description}</Text>
+                    <Text style={styles.detailText}>Prezzo: €{meal.price}</Text>
+                </View>
             </View>
-            <View style={styles.quantityContainer}>
-                <TouchableOpacity onPress={incrementQuantity}>
-                    <Text style={styles.quantityButton}>+</Text>
-                </TouchableOpacity>
-                <Text style={styles.quantityText}>{quantity}</Text>
-                <TouchableOpacity onPress={decrementQuantity}>
-                    <Text style={styles.quantityButton}>-</Text>
-                </TouchableOpacity>
-            </View>
-            
         </View>
-        
     );
 };
 
 const styles = StyleSheet.create({
-    mealItem: {
+    headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        marginBottom: 10,
     },
-    mealImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 16,
+    editButton: {
+        margin: 0,
+        padding: 0,
+        minWidth: 32,
+        height: 32
+    },
+    editButtonContent: {
+        margin: 0,
+        padding: 0
+    },
+    card: {
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        padding: 16,
+        marginVertical: 8,
+        marginHorizontal: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        width: width * 0.9,
+    },
+    contentContainer: {
+        gap: 8,
     },
     mealName: {
-        flex: 1,
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
+        color: '#005dff',
     },
-    priceContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#f8f8f8',
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 6,
-        marginHorizontal: 8,
+    detailsContainer: {
+        marginTop: 4,
+        gap: 4,
     },
-    priceText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#2c3e50',
-    },
-    currencySymbol: {
+    detailText: {
         fontSize: 14,
-        color: '#2c3e50',
-        marginLeft: 2,
-    },
-    quantityContainer: {
-        alignItems: 'center',
-    },
-    quantityButton: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#007FFF',
-        paddingHorizontal: 10,
-    },
-    quantityText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginVertical: 5,
+        color: '#666',
     },
 });
 

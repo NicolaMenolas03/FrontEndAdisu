@@ -1,20 +1,20 @@
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useState, useEffect, useRef } from 'react';
-import { TypeCanteen } from '@/app/lib/definitions';
+import { TypeMeal } from '@/app/lib/definitions';
 import MensaForm, { MensaFormMethods } from '@/components/form/mensaForm';
 import { navigateToCanteen } from '@/app/nav/utils';
 import ResultModal from "@/components/ResultModal";
 import ConfirmationModal from "@/components/ConfirmationModal";
-import { useCanteen } from '@/context/CanteenContext';
-import BreadCrumbChangeCanteen from '@/components/breadcrumb/BreadCrumbChangeCanteen';
 import GlobalStyles from '@/app/GlobalStyles';
 import Loading from '@/components/Loading';
+import BreadCrumbChangeMeal from '@/components/breadcrumb/BreadCrumbChangeMeal';
+import { useMeal } from '@/context/MealContext';
 
-const ChangeCanteen = () => {
+const ChangeMeal = () => {
     const { id } = useLocalSearchParams();
-    const { getSingleItem, updateItem, deleteItem } = useCanteen();
-    const [mensa, setMensa] = useState<TypeCanteen | null>(null);
+    const { getSingleItem, updateItem, deleteItem } = useMeal();
+    const [meal, setMeal] = useState<TypeMeal | null>(null);
     const formRef = useRef<MensaFormMethods>(null);
     const [resultModalVisible, setResultModalVisible] = useState(false);
     const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
@@ -28,10 +28,10 @@ const ChangeCanteen = () => {
         try {
             const data = await getSingleItem(Number(id));
             if (data !== undefined) {
-                setMensa(data);
+                setMeal(data);
             }
         } catch (error) {
-            console.error('Error loading mensa:', error);
+            console.error('Error loading pasti:', error);
         }
     };
 
@@ -44,7 +44,7 @@ const ChangeCanteen = () => {
             setSuccess(true);
             setResultModalVisible(true);
         } catch (error) {
-            console.error('Error updating mensa:', error);
+            console.error('Error updating pasti:', error);
             setSuccess(false);
             setResultModalVisible(true);
         }
@@ -60,28 +60,22 @@ const ChangeCanteen = () => {
             setSuccess(true);
             setResultModalVisible(true);
         } catch (error) {
-            console.error('Error deleting mensa:', error);
+            console.error('Error deleting pasto:', error);
             setSuccess(false);
             setResultModalVisible(true);
         }
         setConfirmDeleteVisible(false);
     };
 
-    if (!mensa) {
+    if (!meal) {
         return <Loading />;
     }
 
     return (
         <View style={GlobalStyles.mainContainer}>
-            <BreadCrumbChangeCanteen />
+            <BreadCrumbChangeMeal />
             <ScrollView style={GlobalStyles.scrollContainer}>
-                <MensaForm
-                    ref={formRef}
-                    name={mensa.name}
-                    address={mensa.address}
-                    city={mensa.city}
-                    cap={mensa.postal_code.toString()}
-                    province={mensa.province} />
+                <MensaForm/>
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
@@ -115,7 +109,7 @@ const ChangeCanteen = () => {
 
                 <ConfirmationModal
                     visible={confirmDeleteVisible}
-                    message="Sei sicuro di voler eliminare questa mensa?"
+                    message="Sei sicuro di voler eliminare questo pasto?"
                     onConfirm={confirmDelete}
                     onCancel={() => setConfirmDeleteVisible(false)}
                 />
@@ -152,4 +146,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ChangeCanteen;
+export default ChangeMeal;

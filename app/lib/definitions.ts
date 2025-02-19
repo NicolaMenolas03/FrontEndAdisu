@@ -48,6 +48,7 @@ export type TypeRating = {
 export type AuthResponse = {
     access: string;
     refresh: string;
+    groups: string[];
 }
 
 export type LoginData = {

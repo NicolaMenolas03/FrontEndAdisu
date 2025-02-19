@@ -6,42 +6,42 @@ import {
     ScrollView,
     TouchableOpacity,
 } from "react-native";
-import { TypeCanteen } from "../../lib/definitions";
-import { navigateToAddCanteen } from "../../nav/utils";
-import CanteenResult from "@/components/canteenResult";
+import { TypeMeal } from "../../lib/definitions";
+import { navigateToAddMeal } from "../../nav/utils";
 import { Searchbar } from "react-native-paper";
-import { useCanteen } from "@/context/CanteenContext";
-import BreadCrumbCanteen from "@/components/breadcrumb/BreadCrumbCanteen";
+import BreadCrumbMeal from "@/components/breadcrumb/BreadCrumbMeal";
 import GlobalStyles from "@/app/GlobalStyles";
 import Loading from "@/components/Loading";
+import { useMeal } from "@/context/MealContext";
+import MealCard from "@/components/MealCard";
 
 
-const Canteen = () => {
-    const { data, loading, groups } = useCanteen();
-    const [canteenName, setCanteenName] = useState<string>("");
-    const [searchResults, setSearchResults] = useState<TypeCanteen[]>([]);
-    const canteenList: TypeCanteen[] = data;
+const Meal = () => {
+    const { data, loading, groups } = useMeal();
+    const [mealName, setmealName] = useState<string>("");
+    const [searchResults, setSearchResults] = useState<TypeMeal[]>([]);
+    const mealList: TypeMeal[] = data;
     useEffect(() => {
         if (data) {
             setSearchResults(data);
         }
     }, [data]);
 
-    const filterCanteenList = (query: string) => {
+    const filtermealList = (query: string) => {
         if (query) {
-            const results = canteenList.filter((canteen) =>
-                canteen.name.toLowerCase().includes(query.toLowerCase())
+            const results = mealList.filter((meal) =>
+                meal.name.toLowerCase().includes(query.toLowerCase())
             );
             setSearchResults(results);
         } else {
-            setSearchResults(canteenList);
+            setSearchResults(mealList);
         }
-        setCanteenName(query);
+        setmealName(query);
     };
 
     return (
         <View style={GlobalStyles.mainContainer}>
-            <BreadCrumbCanteen />
+            <BreadCrumbMeal />
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.container}>
 
@@ -55,8 +55,8 @@ const Canteen = () => {
                                     <View style={styles.inputContainer}>
                                         <Searchbar
                                             placeholder="Search"
-                                            onChangeText={filterCanteenList}
-                                            value={canteenName}
+                                            onChangeText={filtermealList}
+                                            value={mealName}
                                             style={styles.input}
                                         />
                                     </View>
@@ -66,20 +66,20 @@ const Canteen = () => {
                                     groups.includes("Admin") && <View style={styles.searchContainer}>
                                         <TouchableOpacity
                                             style={styles.addButton}
-                                            onPress={navigateToAddCanteen}
+                                            onPress={navigateToAddMeal}
                                         >
-                                            <Text style={styles.addButtonText}>Aggiungi mensa</Text>
+                                            <Text style={styles.addButtonText}>Aggiungi Pasto</Text>
                                         </TouchableOpacity>
                                     </View>
                                 }
 
-                                <View style={styles.containerTotalSearchCanteen}>
-                                    <Text><Text style={{ color: "#005dff", fontWeight: 'bold', }}>{searchResults.length}</Text> mense trovate</Text>
+                                <View style={styles.containerTotalSearchmeal}>
+                                    <Text><Text style={{ color: "#005dff", fontWeight: 'bold', }}>{searchResults.length}</Text> pasti trovate</Text>
                                 </View>
 
-                                <View style={styles.mensaList}>
-                                    {searchResults.map((canteen) => (
-                                        <CanteenResult key={canteen.id} canteen={canteen} groups={groups} />
+                                <View style={styles.mealList}>
+                                    {searchResults.map((meal) => (
+                                        <MealCard key={meal.id} meal={meal} groups={groups} />
                                     ))}
                                 </View>
                             </>
@@ -108,13 +108,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    containerTotalSearchCanteen: {
+    containerTotalSearchmeal: {
         alignItems: "flex-start",
         width: "90%",
     },
-    mensaList: {
+    mealList: {
         width: "100%",
-        paddingHorizontal: 10,
     },
     scrollContainer: {
     },
@@ -149,4 +148,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Canteen;
+export default Meal;
