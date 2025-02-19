@@ -1,5 +1,13 @@
 import { router } from "expo-router";
 
+export const navigateToRegistration = () => {
+    router.push(`/Registration`);
+};
+
+export const navigateToLogin = () => {
+    router.push(`/login`);
+};
+
 export const navigateToCanteen = () => {
     router.push(`/Mensa/Canteen`);
 };

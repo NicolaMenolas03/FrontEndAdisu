@@ -1,21 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput as PaperTextInput } from 'react-native-paper';
 import LogoAdisu from '@/components/logoAdisu';
 import { authService } from '@/services/api';
-import { useRouter } from "expo-router";
+import { navigateToHome, navigateToRegistration } from '../nav/utils';
 
 export default function Login() {
-    const router = useRouter();
-    const [username, setUsername] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [usernameError, setUsernameError] = React.useState(false);
-    const [passwordError, setPasswordError] = React.useState(false);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [usernameError, setUsernameError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
 
     const handleLogin = async () => {
         let response = await authService.login({ username: username, password: password }) as { status: Number, response: { data: { username?: String, password?: String } } };
         if (response.status == 200) {
-            router.push("/(tabs)/landingPage");
+            navigateToHome();
         } else {
             setUsernameError(!!response.response.data.username);
             setPasswordError(!!response.response.data.password);
@@ -51,7 +50,7 @@ export default function Login() {
             <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
                 <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/Registration")}>
+            <TouchableOpacity onPress={navigateToRegistration}>
             <Text style={[styles.Registrati, { textDecorationLine: 'underline' }]}>
                 Non hai un account ? Registrati
             </Text>

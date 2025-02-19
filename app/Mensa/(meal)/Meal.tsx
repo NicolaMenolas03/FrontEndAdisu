@@ -17,10 +17,12 @@ import MealCard from "@/components/mealCard";
 
 
 const Meal = () => {
-    const { data, loading, groups } = useMeal();
+
+    const { data, loading, groups } = useMeal(); // paramatri che rest useMeal
     const [mealName, setmealName] = useState<string>("");
     const [searchResults, setSearchResults] = useState<TypeMeal[]>([]);
-    const mealList: TypeMeal[] = data;
+    const mealList: TypeMeal[] = data; 
+    
     useEffect(() => {
         if (data) {
             setSearchResults(data);

@@ -149,7 +149,7 @@ export const authService = {
       if (response.data?.access) {
         await AsyncStorage.setItem('accessToken', response.data.access);
       }
-      return response;
+      return response; // success, stato , data
     } catch (error) {
       console.error('Login error:', error);
       return error;

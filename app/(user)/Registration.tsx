@@ -1,35 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import { TextInput, Text, Title } from 'react-native-paper';
 import LogoAdisu from '@/components/logoAdisu';
 import { authService } from '@/services/api';
-import { useRouter } from "expo-router";
+import { navigateToHome, navigateToLogin } from '../nav/utils';
 const { width } = Dimensions.get('window');
 
-type RootStackParamList = {
-    Registration: undefined;
-    landingPage: undefined;
-    login: undefined;
-};
 
 export default function Registration() {
-    const [name, setName] = React.useState('');
-    const [surname, setSurname] = React.useState('');
-    const [username, setUsername] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [password2, setPassword2] = React.useState('');
-    const router = useRouter();
+
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
 
 
 
     const register = async () => {
-        let response = await authService.register({
+        let response = await authService.register({         
             first_name: name, last_name: surname, username: username, email: email, password: password,
             password2: password2
         });
         if (response.status == 201) {
-            router.push("/landingPage")
+            navigateToHome();
         } else {
             // TODO: Create un messaggio di errore
             alert(response);
@@ -46,6 +41,7 @@ export default function Registration() {
                     mode="outlined"
                     style={styles.input}
                     onChangeText={(text) => setName(text)}
+                    //onChangeText={function(text) {setName(text); }}
                     theme={{ colors: { primary: '#007BFF' } }}
                 />
                 <TextInput
@@ -89,7 +85,7 @@ export default function Registration() {
                  <TouchableOpacity onPress={register} style={styles.RegisterButton}>
                                 <Text style={styles.RegisterButtonText}>Registrati</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>router.push("/login")}>
+                            <TouchableOpacity onPress={navigateToLogin}>
                                 <Text style={styles.Login}>
                                     Non hai un account ? <Text style={{ textDecorationLine: 'underline' }}>Login</Text>
                                 </Text>
