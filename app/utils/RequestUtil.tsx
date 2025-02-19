@@ -7,7 +7,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export function useScholarshipRequest() {
     const [itemValue, setItemValue] = useState<Request>({ academicYear: new Date().getFullYear(), physicalCondition: false, studentType: "", yearType: "", studentName: "", nrRange: 0, nrStudent: "" });
 
-    async function createRequest() {
+     //Eliminazione dati dal DB
+    async function ClearDB( studentNr : string) {
+        const data = { nrStudent: studentNr };
+        await apiService.post('/request/delete-request/', data)
+        .then(response => {
+        if (response.status === 200) {
+            console.log('Eliminazione DB avvenuta con successo');
+        }
+        })
+        .catch(error => {
+        console.error('Errore nella Eliminazione del DB', error);
+        });
+    };
+
+    async function CreateRequest() {
         try {
             const [datiAnagrafici, datiEconomici, datiEsami, datiResidenza, datiScolastici, username] =
                 await Promise.all([
@@ -67,5 +81,6 @@ export function useScholarshipRequest() {
             console.error("Errore in createRequest:", error);
         }
     };
-    return { createRequest };
+    return { createRequest: CreateRequest, ClearDB };
+
 }

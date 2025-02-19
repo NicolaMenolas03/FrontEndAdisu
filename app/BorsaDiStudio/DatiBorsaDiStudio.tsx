@@ -6,11 +6,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiService } from '@/services/api';
 import { useScholarshipDataState } from '@/hooks/useScholarshipDataState';
 import { router } from 'expo-router';
+import { useScholarshipRequest } from "../utils/RequestUtil";
 
 
 export default function DatiBorsaDiStudio() {
   const { scholarshipData, setscholarshipData, studentNr, setStudentNr, studentType, setStudentType, nrRange, setNrRange, iseeMin, setIseeMin, iseeMax, setIseeMax, physicalCondition, setPhysicalCondition, result, setResult } = useScholarshipDataState();
   const [isModalVisible, setModalVisible] = useState(false);
+  const { ClearDB } = useScholarshipRequest();
 
   useEffect(() => {
     const checkRequest = async () => {
@@ -100,23 +102,10 @@ export default function DatiBorsaDiStudio() {
 
   const confirmExit = async () => {
     setModalVisible(false);
-    await ClearDB();
+    await ClearDB(studentNr);
     router.push("/BorsaDiStudio/BorsaDiStudioPage");
   };
 
-  //Eliminazione dati dal DB
-  const ClearDB = async () => {
-    const data = { nrStudent: studentNr };
-    await apiService.post('/request/delete-request/', data)
-      .then(response => {
-        if (response.status === 200) {
-          console.log('Eliminazione DB avvenuta con successo');
-        }
-      })
-      .catch(error => {
-        console.error('Errore nella Eliminazione del DB', error);
-      });
-  };
 
   return (
     <View style={styles.container}>

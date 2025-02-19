@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomePage from "@/components/HomePage";
 import GufoChat from "@/components/Gufochat";
 import { useStudentEconomicState } from "@/hooks/useRequestState";
-import { useScholarshipRequest } from "../../utils/CompleteFormUtil";
+import { useScholarshipRequest } from "../../utils/RequestUtil";
 import { deleteAllData } from "@/hooks/useScholarshipRequestState";
 
 export default function DatiEconomiciPage() {
