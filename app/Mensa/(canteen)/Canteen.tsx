@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
 } from "react-native";
 import { TypeCanteen } from "../../lib/definitions";
-import { navigateToAddCanteen, navigateToAddMeal, navigateToMeal } from "../../nav/utils";
+import { navigateToAddCanteen, navigateToMeal } from "../../nav/utils";
 import CanteenResult from "@/components/canteenResult";
 import { Searchbar } from "react-native-paper";
 import { useCanteen } from "@/context/CanteenContext";
@@ -48,7 +48,7 @@ const Canteen = () => {
                     {
                         loading
                             ?
-                            <Loading/>
+                            <Loading />
                             :
                             <>
                                 <View style={styles.inputSection}>
@@ -63,24 +63,25 @@ const Canteen = () => {
                                 </View>
 
                                 {
-                                    groups.includes("Admin") && <View style={styles.searchContainer}>
-                                        <TouchableOpacity
-                                            style={styles.addButton}
-                                            onPress={navigateToAddCanteen}
-                                        >
-                                            <Text style={styles.addButtonText}>Aggiungi mensa</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                }
-                                {
-                                    groups.includes("Admin") && <View style={styles.searchContainer}>
-                                        <TouchableOpacity
-                                            style={styles.addButton}
-                                            onPress={navigateToMeal}
-                                        >
-                                            <Text style={styles.addButtonText}>Gestione Pasto</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                    groups.includes("Admin") &&
+                                    <>
+                                        <View style={styles.searchContainer}>
+                                            <TouchableOpacity
+                                                style={styles.addButton}
+                                                onPress={navigateToAddCanteen}
+                                            >
+                                                <Text style={styles.addButtonText}>Aggiungi mensa</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={styles.searchContainer}>
+                                            <TouchableOpacity
+                                                style={styles.addButton}
+                                                onPress={navigateToMeal}
+                                            >
+                                                <Text style={styles.addButtonText}>Gestione Pasto</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </>
                                 }
 
                                 <View style={styles.containerTotalSearchCanteen}>

@@ -4,7 +4,7 @@ import BookingCard from "@/components/bookingCard";
 import BreadCrumbOrder from "@/components/breadcrumb/BreadCrumbOrder";
 import { useCRUD } from "@/hooks/useCRUD";
 import React from "react";
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
 
 const Orders = () => {
     const { data, deleteItem } = useCRUD<TypeBooking>('/booking/');

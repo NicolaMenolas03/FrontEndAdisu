@@ -7,7 +7,6 @@ export type MealFormMethods = {
     validateForm: () => boolean;
 };
 
-// Add this after your Props type definition
 const ALLERGENS_OPTIONS = [
     { id: 'lattosio', label: 'Lattosio' },
     { id: 'glutine', label: 'Glutine' },

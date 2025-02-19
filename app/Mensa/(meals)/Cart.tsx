@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useCart } from '../../../context/CartContext';
 import { useEffect, useState } from 'react';;
 import CartMealCard from '@/components/CartMealCard';

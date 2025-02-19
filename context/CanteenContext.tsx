@@ -32,7 +32,7 @@ export function CanteenProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         async function fetchGroups() {
             const userGroups = await getGroupsUser();
-            setGroups(userGroups ? [userGroups] : []);
+            setGroups(userGroups ? userGroups : []);
         }
         fetchGroups();
     }, [])

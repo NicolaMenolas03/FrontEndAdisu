@@ -2,7 +2,7 @@ import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-nati
 import { useLocalSearchParams } from 'expo-router';
 import { useState, useEffect, useRef } from 'react';
 import { TypeCanteen } from '@/app/lib/definitions';
-import MensaForm, { MensaFormMethods } from '@/components/form/mensaForm';
+import CanteenForm, { CanteenFormMethods } from '@/components/form/CanteenForm';
 import { navigateToCanteen } from '@/app/nav/utils';
 import ResultModal from "@/components/ResultModal";
 import ConfirmationModal from "@/components/ConfirmationModal";
@@ -15,7 +15,7 @@ const ChangeCanteen = () => {
     const { id } = useLocalSearchParams();
     const { getSingleItem, updateItem, deleteItem } = useCanteen();
     const [mensa, setMensa] = useState<TypeCanteen | null>(null);
-    const formRef = useRef<MensaFormMethods>(null);
+    const formRef = useRef<CanteenFormMethods>(null);
     const [resultModalVisible, setResultModalVisible] = useState(false);
     const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -75,7 +75,7 @@ const ChangeCanteen = () => {
         <View style={GlobalStyles.mainContainer}>
             <BreadCrumbChangeCanteen />
             <ScrollView style={GlobalStyles.scrollContainer}>
-                <MensaForm
+                <CanteenForm
                     ref={formRef}
                     name={mensa.name}
                     address={mensa.address}

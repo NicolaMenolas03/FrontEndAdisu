@@ -2,7 +2,7 @@ import { useState, forwardRef, useImperativeHandle } from "react";
 import { View, StyleSheet } from "react-native";
 import { TextInput, HelperText } from 'react-native-paper';
 
-export type MensaFormMethods = {
+export type CanteenFormMethods = {
     getFormData: () => FormData | null;
     validateForm: () => boolean;
 };
@@ -23,7 +23,7 @@ type Props = {
     province?: string;
 }
 
-const MensaForm = forwardRef<MensaFormMethods, Props>(({name = '', address = '', city = '', cap = '', province = ''}, ref) => {
+const CanteenForm = forwardRef<CanteenFormMethods, Props>(({name = '', address = '', city = '', cap = '', province = ''}, ref) => {
     const [formData, setFormData] = useState({
         name: name,
         address: address,
@@ -168,4 +168,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MensaForm;
+export default CanteenForm;

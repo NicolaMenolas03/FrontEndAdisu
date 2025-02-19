@@ -25,12 +25,11 @@ const apiClient = axios.create({
   },
 });
 
-export async function getGroupsUser(){
+export async function getGroupsUser() {
   const groups = await AsyncStorage.getItem('groups');
-  return groups
+  return groups ? JSON.parse(groups) : null;
 }
 
-// Add request interceptor
 apiClient.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem('accessToken');
@@ -44,7 +43,6 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Add refresh token function
 const refreshToken = async () => {
   try {
     const refreshToken = await AsyncStorage.getItem('refreshToken');
@@ -65,7 +63,6 @@ const refreshToken = async () => {
   }
 };
 
-// Add response interceptor
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -160,7 +157,7 @@ export const authService = {
   setGroupsUser: async () => {
     await apiClient.get("/get_groups_user/").then(response => {
       if (response.data) {
-        AsyncStorage.setItem('groups', response.data.groups);
+        AsyncStorage.setItem('groups', JSON.stringify(response.data.groups));
       }
     }).catch(error => {
       console.log(error)

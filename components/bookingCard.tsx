@@ -29,12 +29,14 @@ const BookingCard = ({ item, deleteItem }: { item: TypeBooking, deleteItem: (id:
         return format(date, 'dd/MM/yyyy HH:mm');
     };
 
-    const deleteOrder = ({ id }: { id: number }) => {
+    const deleteOrder = (id: number) => {
         try {
             deleteItem(id);
+            setConfirmationDelete(false);
             setResultDelete(true);
             setDeleteSuccess(true);
         } catch (error) {
+            setConfirmationDelete(false);
             setDeleteSuccess(false);
             setResultDelete(true);
         }
@@ -143,10 +145,7 @@ const BookingCard = ({ item, deleteItem }: { item: TypeBooking, deleteItem: (id:
             <ConfirmationModal
                 visible={confirmationDelete}
                 message="Sei sicuro di voler eliminare l'ordine?"
-                onConfirm={() => {
-                    setConfirmationDelete(false);
-                    deleteOrder({ id: item.id })
-                }}
+                onConfirm={() => deleteOrder(item.id)}
                 onCancel={() => setConfirmationDelete(false)}
             />
             <ResultModal

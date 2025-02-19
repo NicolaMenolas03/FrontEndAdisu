@@ -93,6 +93,10 @@ export default function landingPage() {
     viewAreaCoveragePercentThreshold: 50,
   };
 
+  useEffect(() => {
+    authService.setGroupsUser();
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* header */}
