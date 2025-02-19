@@ -13,7 +13,7 @@ import BreadCrumbMeal from "@/components/breadcrumb/BreadCrumbMeal";
 import GlobalStyles from "@/app/GlobalStyles";
 import Loading from "@/components/Loading";
 import { useMeal } from "@/context/MealContext";
-import MealCard from "@/components/MealCard";
+import MealCard from "@/components/mealCard";
 
 
 const Meal = () => {

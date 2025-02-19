@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
 } from "react-native";
 import { TypeCanteen } from "../../lib/definitions";
-import { navigateToAddCanteen } from "../../nav/utils";
+import { navigateToAddCanteen, navigateToAddMeal, navigateToMeal } from "../../nav/utils";
 import CanteenResult from "@/components/canteenResult";
 import { Searchbar } from "react-native-paper";
 import { useCanteen } from "@/context/CanteenContext";
@@ -69,6 +69,16 @@ const Canteen = () => {
                                             onPress={navigateToAddCanteen}
                                         >
                                             <Text style={styles.addButtonText}>Aggiungi mensa</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                }
+                                {
+                                    groups.includes("Admin") && <View style={styles.searchContainer}>
+                                        <TouchableOpacity
+                                            style={styles.addButton}
+                                            onPress={navigateToMeal}
+                                        >
+                                            <Text style={styles.addButtonText}>Gestione Pasto</Text>
                                         </TouchableOpacity>
                                     </View>
                                 }

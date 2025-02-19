@@ -1,22 +1,22 @@
 import { TypeMeal } from "@/app/lib/definitions";
 import { useState, useRef } from "react";
 import { Text, TouchableOpacity, StyleSheet, ScrollView, View } from "react-native";
-import { navigateToCanteen } from "@/app/nav/utils";
-import MensaForm, { MensaFormMethods } from "@/components/form/mensaForm";
+import { navigateToCanteen, navigateToMeal } from "@/app/nav/utils";
 import ResultModal from "@/components/ResultModal";
 import GlobalStyles from "@/app/GlobalStyles";
 import Loading from "@/components/Loading";
 import BreadCrumbAddMeal from "@/components/breadcrumb/BreadCrumbAddMeal";
 import { useMeal } from "@/context/MealContext";
+import MealForm, { MealFormMethods } from "@/components/form/MealForm";
 
 const AddMeal = () => {
     const { createItem, loading } = useMeal();
     const [modalVisible, setModalVisible] = useState(false);
     const [success, setSuccess] = useState(false);
-    const formRef = useRef<MensaFormMethods>(null);
+    const formRef = useRef<MealFormMethods>(null);
 
     const handleSubmit = async () => {
-        const formData = formRef.current?.getFormData() as TypeMeal;
+        const formData = formRef.current?.getFormData() as unknown as TypeMeal;
         if (!formData) return;
         try {
             await createItem(formData);
@@ -35,7 +35,7 @@ const AddMeal = () => {
             <ScrollView style={GlobalStyles.scrollContainer}>
 
 
-                <MensaForm
+                <MealForm
                     ref={formRef}
                 />
 
@@ -57,7 +57,7 @@ const AddMeal = () => {
                     onClose={() => {
                         setModalVisible(false);
                         if (success) {
-                            navigateToCanteen();
+                            navigateToMeal();
                         }
                     }} 
                 />
